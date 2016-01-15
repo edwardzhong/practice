@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>swipe,tap模拟</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<style>
+		#btnWrap{
+			width: 400px;
+			height: 300px;
+			border: 1px solid  #ccc;
+			display: table-cell;
+			text-align: center;
+			vertical-align:middle;
+		}
+		input[type="button"]{
+			padding: 10px 20px;
+			border: 1px solid  #ddd;
+			border-radius:5px;
+			background-color: #aaa;
+			color: #fff;
+			font-size:20px;
+		}
+	</style>
+</head>
+<body>
+	<div id="btnWrap">
+		<input type="button" value="click">
+	</div>
+<script>
+	(function(){
+		/**
+		 * 模拟 tap swipe效果
+		 * @Author   jeffzhong(p_jdjfzhong)
+		 * @DateTime 2016-01-15T15:31:58+0800
+		 * @param    {Object}                 opt 
+		 * {
+		 * 	step:移动像素距离
+		 * 	dir:方向(left/right/up/down),触击tap
+		 * 	elem:触发元素
+		 * 	callback:回调
+		 * }
+		 */
+		function touchEvt(opt){
+			var step=opt.step||20,
+				dir=opt.dir||'tap',
+				elem=opt.elem||document,
+				touch={},
+				callback=opt.callback||function(){},
+				evt={
+					start:'touchstart',
+					move:'touchmove',
+					end:'touchend'
+				};
+			// if(!('ontouchstart' in window)){
+			// 	evt={
+			// 		start:'mousedown',
+			// 		start:'mousemove',
+			// 		start:'mouseup'
+			// 	};
+			// }
+			//获取方向
+			var getDirection=function(touch,minStep){
+				if(!touch.x2){return '';}
+				var dir='',
+					disX=touch.x2-touch.x1,disY=touch.y2-touch.y1,
+					absX=Math.abs(disX),absY=Math.abs(disY);
+
+				if(absX>absY&&absX>=minStep){
+					if(disX>0){
+						dir='right';
+					} else {
+						dir='left';
+					}
+				} else if(absX<absY&&absY>=minStep){
+					if(disY>0){
+						dir='down';
+					} else {
+						dir='up';
+					}
+				}
+
+				return dir;
+			};
+
+			var bindEvent=function(){
+				document.addEventListener(evt.start,function(e){
+					if((e.target||e.srcElement)!=elem){return;}
+					var pos=e.touches||e.changedTouches||e.targetTouches;
+					var moveFn=null;
+					touch.x1=pos[0].pageX;
+					touch.y1=pos[0].pageY;
+
+					document.addEventListener(evt.move,moveFn=function(e){
+						var pos2=e.touches||e.changedTouches||e.targetTouches||e;
+						touch.x2=pos2[0].pageX;
+						touch.y2=pos2[0].pageY;
+					});
+
+					document.addEventListener(evt.end,function(e){
+						var moveDir=getDirection(touch,10);
+						if(!moveDir&&dir=='tap'){
+							callback(moveDir||'tap');
+						} else if(dir==moveDir){
+							if((moveDir=='up'||moveDir=='down')&&Math.abs(touch.y2-touch.y1)>step){
+								callback(Math.abs(touch.y2-touch.y1));
+							} else if(Math.abs(touch.x2-touch.x1)>step){
+								callback(Math.abs(touch.x2-touch.x1));
+							}
+						}
+						touch={};
+						document.removeEventListener(evt.move,moveFn);
+						document.removeEventListener(evt.end,arguments.callee);
+					});
+				});
+			};
+
+			bindEvent();
+		}
+
+		touchEvt({step:100,dir:'left',elem:document.getElementsByTagName('input')[0],callback:function(data){
+			console.log(data);
+		}});
+	}());
+</script>
+</body>
+</html>
