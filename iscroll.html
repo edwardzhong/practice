@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>模仿iscroll功能</title>
+	<style>
+	html,body{
+		height: 100%;width: 100%;margin: 0;padding: 0;
+		overflow: hidden;
+		font-family:helvetica, arial;
+	}
+	header,footer{
+		position: absolute;left: 0;
+		height: 50px;width: 100%;background-color: #0767c8;
+		text-align: center;color: #fff;font-size:20px;line-height:50px;
+		z-index: 3;
+	}
+	header{
+		top: 0;
+	}
+	footer{
+		bottom: 0;
+	}
+	#wrap{
+		position: absolute;
+		top: 50px;
+		bottom: 50px;
+		width: 100%;
+		overflow: hidden;
+		background-color: #aaa;
+		z-index: 1;
+	}
+	#content{
+		background-color: #eee;
+		z-index: 2;
+	}
+	#content ul{
+		padding: 0;margin: 0;
+		list-style: none;
+		width: 100%;
+		border:1px solid #ccc;
+	}
+	#content ul li{
+		height: 40px;
+		width: 100%;
+		border:1px solid #ccc;
+		margin-top: -1px;
+	}
+	</style>
+</head>
+<body>
+	<header>header</header>
+	<div id="wrap">
+		<div id="content">
+			<ul>
+				<li>111</li>
+				<li>222</li>
+				<li>333</li>
+				<li>444</li>
+				<li>555</li>
+				<li>666</li>
+				<li>777</li>
+				<li>888</li>
+				<li>999</li>
+				<li>000</li>
+				<li>1111</li>
+				<li>2222</li>
+				<li>3333</li>
+				<li>4444</li>
+				<li>5555</li>
+				<li>6666</li>
+				<li>7777</li>
+				<li>8888</li>
+				<li>9999</li>
+				<li>0000</li>
+				<li>111</li>
+				<li>222</li>
+				<li>333</li>
+				<li>444</li>
+				<li>555</li>
+				<li>666</li>
+				<li>777</li>
+				<li>888</li>
+				<li>999</li>
+				<li>000</li>
+				<li>1111</li>
+				<li>2222</li>
+				<li>3333</li>
+				<li>4444</li>
+				<li>5555</li>
+				<li>6666</li>
+				<li>7777</li>
+				<li>8888</li>
+				<li>9999</li>
+				<li>0000</li>
+				<li>111</li>
+				<li>222</li>
+				<li>333</li>
+				<li>444</li>
+				<li>555</li>
+				<li>666</li>
+				<li>777</li>
+				<li>888</li>
+				<li>999</li>
+				<li>000</li>
+			</ul>
+		</div>
+	</div>
+	<footer>footer</footer>
+	<script src="../js-study/JS/Zepto.js"></script>
+	<script>
+	function IScroll(opts){
+		var options={
+			wrapper:'',
+			scroller:'',
+			callback:function(){}
+		};
+		$.extend(true,options,opts);
+		this.wrapper=$('#'+options.wrapper);
+		this.scroller=$('#'+options.scroller);
+		this.startX=0;//触发起始点
+		this.startY=0;
+		this.endX=0;//触发结束点
+		this.endY=0;
+		this.deltaX=0;//translate移动的距离
+		this.deltaY=0;
+		this.x=0;//上次移动的坐标
+		this.y=0;
+		this.wrapHeight=this.wrapper[0].offsetHeight;//包含节点高度
+		this.conHeight=this.scroller[0].offsetHeight;//内部容器高度
+		this.maxScrollY=this.wrapHeight-this.conHeight;//内部能移动的最大距离
+		this.startTime=new Date();//开始时间
+		this.isMoving=false;//是否正在运动
+		this.slideDown=false;//是否下拉
+		this.slideUp=false;//是否上拉
+		this.callback=options.callback;//回调
+
+		this.init();
+	}
+
+	IScroll.prototype={
+		init:function(){
+			this.bindEvent();
+		},
+		bindEvent:function(){
+			var self=this;
+			this.wrapper.on('touchstart',function(e){
+				self.touchStart.call(self,e);
+			});
+			this.wrapper.on('touchmove',function(e){
+				self.touchMove.call(self,e);
+			});
+			this.wrapper.on('touchend',function(e){
+				self.touchEnd.call(self,e);
+			});
+			this.scroller.on('transitionend',function(e){
+				self.transitionEnd.call(self,e);
+			});
+		},
+		touchStart:function(e){
+			e.preventDefault(); 
+			e.stopPropagation();
+			var touchers=e.changedTouches||e.targetTouches;
+			//开始的坐标点
+			this.x=this.startX=touchers[0].pageX;
+			this.y=this.startY=touchers[0].pageY;
+			this.startTime=new Date();
+			//当正在运动时，触屏马上停止，弹回顶部或底部除外
+			if(this.isMoving&&!this.slideUp&&!this.slideDown){
+				var ot=this.scroller.offset().top;
+				this.deltaY=ot;
+				this.scrollTo(0,ot,0,'linear');
+				this.isMoving=false;
+			}
+		},
+		touchMove:function(e){
+			var self=this
+			if(this.isMoving){return false;}
+			e.preventDefault(); 
+			e.stopPropagation();
+			var touchers=e.changedTouches||e.targetTouches,
+				endTime=new Date();
+			//当前的坐标点
+			this.endX=touchers[0].pageX;
+			this.endY=touchers[0].pageY;
+			//当前移动了多少距离
+			var disX=this.endX-this.x,
+				disY=this.endY-this.y;
+			//记录刚刚移到的坐标点，下次计算用
+			this.x=this.endX;
+			this.y=this.endY;
+			//累计移动了多少距离
+			this.deltaX+=disX;
+			this.deltaY+=disY;
+
+			this.scrollTo(0,this.deltaY,0,'linear');
+
+			//超过300ms，切换开始坐标
+			if(endTime-this.startTime>300){
+				this.startTime=endTime;
+				this.startX=this.x;
+				this.startY=this.y;
+			}
+		},
+		touchEnd:function(e){
+			if(this.isMoving){return false;}
+			e.preventDefault(); 
+			e.stopPropagation();
+			var maxScrollY=this.maxScrollY,
+				duration=new Date()-this.startTime,
+				newX = 0,
+				newY = this.deltaY,
+				time = 0;
+
+	        //是否上滑还是下滑
+	        if(this.deltaY>0){
+	        	this.slideDown=true;
+	        } else if(maxScrollY>this.deltaY) {
+	        	this.slideUp=true;
+	        }
+
+	        //300ms内，快速滑动一段距离
+			if (duration < 300) {
+				var momentumY = this.getSliceData(duration);
+				newY = momentumY.destination;
+				time = momentumY.duration;
+				this.isMoving=true;
+				if (newY != this.deltaY) {
+					this.deltaY=newY;
+					this.scrollTo(newX, newY, time, 'ease-in-out');
+				} else {
+					this.isMoving=false;
+				}
+			} else {//超出范围之后弹回顶部或底部
+				duration=duration>500?500:duration;
+				this.isMoving=true;
+				if(newY>0){
+					this.deltaX=0;
+					this.deltaY=0;
+					this.scrollTo(0,0,duration,'ease-in-out');
+				} else if(maxScrollY>newY){
+					this.deltaX=0;
+					this.deltaY=maxScrollY;
+					this.scrollTo(0,maxScrollY,duration,'ease-in-out');
+				} else {
+					this.isMoving=false;
+				}
+			}
+		},
+		transitionEnd:function(e){
+			this.scroller[0].style.transition='';
+			this.isMoving=false;
+			//下拉刷新
+			if(this.slideDown){
+				this.slideDown=false;
+				this.callback();
+			}
+			//上拉刷新
+			if(this.slideUp){
+				this.slideUp=false;
+				this.callback();
+			}
+		},
+		scrollTo: function (x, y, time, easing) {
+			this.scroller[0].style.transition='transform '+time+'ms '+easing;
+	        this.scroller[0].style.transform='translate3d('+x+'px,'+y+'px,0)';
+	    },
+	    getSliceData:function(time){
+	    	var maxScrollY=this.maxScrollY,
+	    		deltaY=this.deltaY,
+	    		startY=this.startY,
+	    		endY=this.endY,
+	    		disY=endY-startY,
+	    		destination=deltaY+2*disY,
+	    		duration=90000/time;
+
+	    	duration=duration>1000?1000:duration;
+	    	destination=destination<maxScrollY?maxScrollY:destination>0?0:destination;
+
+	    	return {
+	    		destination:destination,
+	    		duration:duration
+	    	};
+	    }
+	};
+
+	new IScroll({
+		wrapper:'wrap',
+		scroller:'content',
+		callback:function(){
+			console.log('refresh');
+		}
+	});
+	</script>
+</body>
+</html>
