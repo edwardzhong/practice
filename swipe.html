@@ -118,9 +118,14 @@
 			bindEvent();
 		}
 
-		touchEvt({step:100,dir:'left',elem:document.getElementsByTagName('input')[0],callback:function(data){
-			console.log(data);
-		}});
+		touchEvt({
+			step:100,
+			dir:'left',
+			elem:document.getElementsByTagName('input')[0],
+			callback:function(data){
+				console.log(data);
+			}
+		});
 	}());
 </script>
 </body>
