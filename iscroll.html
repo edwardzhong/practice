@@ -47,6 +47,24 @@
 		border:1px solid #ccc;
 		margin-top: -1px;
 	}
+	.scroll{
+		position: fixed;
+		width: 7px;
+		top: 50px;
+		bottom:50px;
+		right: 0;
+		background-color: rgba(0, 0, 0, 0.3);
+		z-index: 99;
+	}
+	.scrollbar{
+		position: absolute;
+		top: 0;
+		right: 1px;
+		width: 5px;
+		height: 50%;
+		border-radius:5px;
+		background-color: rgba(0, 0, 0, 0.4);
+	}
 	</style>
 </head>
 <body>
@@ -108,17 +126,31 @@
 		</div>
 	</div>
 	<footer>footer</footer>
-	<script src="js/Zepto.js"></script>
 	<script>
 	function IScroll(opts){
 		var options={
 			wrapper:'',
 			scroller:'',
-			callback:function(){}
+			upCallback:function(){},
+			downCallback:function(){}
 		};
-		$.extend(true,options,opts);
-		this.wrapper=$('#'+options.wrapper);
-		this.scroller=$('#'+options.scroller);
+		for(var v in opts){
+			if(opts[v]){
+				options[v]=opts[v];
+			}
+		}
+		if(!options.wrapper||!options.scroller){
+			throw new Error('element\'s id is null or empty');
+		}
+		
+		this.wrapper=document.getElementById(options.wrapper);
+		this.scroller=document.getElementById(options.scroller);
+		this.scrollBar=null;
+
+		if(!this.wrapper||!this.scroller){
+			throw new Error('element is null or empty');
+		}
+
 		this.startX=0;//触发起始点
 		this.startY=0;
 		this.endX=0;//触发结束点
@@ -127,14 +159,19 @@
 		this.deltaY=0;
 		this.x=0;//上次移动的坐标
 		this.y=0;
-		this.wrapHeight=this.wrapper[0].offsetHeight;//包含节点高度
-		this.conHeight=this.scroller[0].offsetHeight;//内部容器高度
-		this.maxScrollY=this.wrapHeight-this.conHeight;//内部能移动的最大距离
+
+		this.scrollBarHeight=0;//滚动条高度
+		this.wrapHeight=this.wrapper.offsetHeight;//包含节点高度
+		this.conHeight=this.scroller.offsetHeight;//内部容器高度
+		this.maxScrollY=this.wrapHeight>this.conHeight?0:this.wrapHeight-this.conHeight;//内部能移动的最大距离
+
+		this.scrollHideTimer=null;//隐藏滚动条timer
 		this.startTime=new Date();//开始时间
 		this.isMoving=false;//是否正在运动
 		this.slideDown=false;//是否下拉
 		this.slideUp=false;//是否上拉
-		this.callback=options.callback;//回调
+		this.upCallback=options.upCallback;//上拉回调
+		this.downCallback=options.downCallback;//下拉回调
 
 		this.init();
 	}
@@ -142,19 +179,34 @@
 	IScroll.prototype={
 		init:function(){
 			this.bindEvent();
+			this.createScroll();
+		},
+		//创建滚动条
+		createScroll:function(){
+			this.scrollBarHeight=this.wrapHeight/this.conHeight*this.wrapHeight;//滚动条高度
+			if(this.scrollBarHeight-this.wrapHeight>10){return;}
+			var scrollElem=document.createElement('div');
+			scrollElem.className='scroll';
+			scrollElem.style.transition='opacity 1s ease-in-out';
+			scrollElem.innerHTML = '<div class="scrollbar"></div>';
+			this.wrapper.appendChild(scrollElem);
+			this.scrollBar=scrollElem.children[0];
+			this.scrollBar.style.height=this.scrollBarHeight+'px';
+			
+			this.hideScroll();
 		},
 		bindEvent:function(){
 			var self=this;
-			this.wrapper.on('touchstart',function(e){
+			this.wrapper.addEventListener('touchstart', function(e) {
 				self.touchStart.call(self,e);
 			});
-			this.wrapper.on('touchmove',function(e){
+			this.wrapper.addEventListener('touchmove',function(e){
 				self.touchMove.call(self,e);
 			});
-			this.wrapper.on('touchend',function(e){
+			this.wrapper.addEventListener('touchend',function(e){
 				self.touchEnd.call(self,e);
 			});
-			this.scroller.on('transitionend',function(e){
+			this.scroller.addEventListener('transitionend',function(e){
 				self.transitionEnd.call(self,e);
 			});
 		},
@@ -168,7 +220,7 @@
 			this.startTime=new Date();
 			//当正在运动时，触屏马上停止，弹回顶部或底部除外
 			if(this.isMoving&&!this.slideUp&&!this.slideDown){
-				var ot=this.scroller.offset().top;
+				var ot=this.scroller.offsetTop;
 				this.deltaY=ot;
 				this.scrollTo(0,ot,0,'linear');
 				this.isMoving=false;
@@ -202,6 +254,9 @@
 				this.startX=this.x;
 				this.startY=this.y;
 			}
+			//移动之后清除隐藏定时器
+			clearTimeout(this.scrollHideTimer);
+			this.scrollBar.parentNode.style.opacity=1;
 		},
 		touchEnd:function(e){
 			if(this.isMoving){return false;}
@@ -249,23 +304,41 @@
 			}
 		},
 		transitionEnd:function(e){
-			this.scroller[0].style.transition='';
+			//重置各项参数，和调用上拉下拉回调
+			this.scroller.style.transition='';
 			this.isMoving=false;
 			//下拉刷新
 			if(this.slideDown){
 				this.slideDown=false;
-				this.callback();
+				this.downCallback();
 			}
 			//上拉刷新
 			if(this.slideUp){
 				this.slideUp=false;
-				this.callback();
+				this.upCallback();
 			}
 		},
+		//设置包含内容区的位置
 		scrollTo: function (x, y, time, easing) {
-			this.scroller[0].style.transition='transform '+time+'ms '+easing;
-	        this.scroller[0].style.transform='translate3d('+x+'px,'+y+'px,0)';
+			this.scroller.style.transition='transform '+time+'ms '+easing;
+	        this.scroller.style.transform='translate3d('+x+'px,'+y+'px,0)';
+	        this.setCrollBar(x, y, time, easing);
 	    },
+	    //设置滚动条位置
+	    setCrollBar:function(x,y,time,easing){
+	    	if(!this.scrollBar){return;}
+	    	var maxScrollY=this.maxScrollY;
+	    	var scrollY=this.wrapHeight-this.scrollBarHeight;//可以滚动的距离
+	    	var scrollBar=this.scrollBar;
+	    	var percent=Math.abs(y)/Math.abs(maxScrollY);
+	    	if(y<=0&&y>=maxScrollY){//在可移动范围内
+	    		percentY=Math.round(Math.abs(y)/Math.abs(maxScrollY)*100);
+	    		scrollBar.style.transition='transform '+time+'ms '+easing;
+	    		scrollBar.style.transform='translate3d('+x+'px,'+scrollY*percent+'px,0)';
+	    		this.hideScroll();
+	    	}
+	    },
+	    //返回滑动的距离和时间
 	    getSliceData:function(time){
 	    	var maxScrollY=this.maxScrollY,
 	    		deltaY=this.deltaY,
@@ -282,13 +355,21 @@
 	    		destination:destination,
 	    		duration:duration
 	    	};
+	    },
+	    hideScroll:function(){
+    		//4s后隐藏滚动条
+    		var self=this;
+    		clearTimeout(this.scrollHideTimer);
+    		this.scrollHideTimer=setTimeout(function() {
+    			self.scrollBar.parentNode.style.opacity=0;
+    		}, 4000);
 	    }
 	};
 
 	new IScroll({
 		wrapper:'wrap',
 		scroller:'content',
-		callback:function(){
+		upCallback:function(){
 			console.log('refresh');
 		}
 	});
