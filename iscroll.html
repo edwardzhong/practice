@@ -130,7 +130,7 @@
 	function IScroll(opts){
 		var options={
 			wrapper:'',
-			scroller:'',
+			scrollCon:'',
 			upCallback:function(){},
 			downCallback:function(){}
 		};
@@ -140,16 +140,16 @@
 			}
 		}
 
-		if(!options.wrapper||!options.scroller){
+		if(!options.wrapper||!options.scrollCon){
 			throw new Error('element\'s id is null or empty');
 		}
 		
 		//元素节点
 		this.wrapper=document.getElementById(options.wrapper);
-		this.scroller=document.getElementById(options.scroller);
+		this.scrollCon=document.getElementById(options.scrollCon);
 		this.scrollBar=null;
 
-		if(!this.wrapper||!this.scroller){
+		if(!this.wrapper||!this.scrollCon){
 			throw new Error('element is null or empty');
 		}
 
@@ -166,7 +166,7 @@
 		//高度相关
 		this.scrollBarHeight=0;//滚动条高度
 		this.wrapHeight=this.wrapper.offsetHeight;//包含节点高度
-		this.conHeight=this.scroller.offsetHeight;//内部容器高度
+		this.conHeight=this.scrollCon.offsetHeight;//内部容器高度
 		this.maxScrollY=this.wrapHeight>this.conHeight?0:this.wrapHeight-this.conHeight;//内部能移动的最大距离
 
 		//状态标志
@@ -217,7 +217,7 @@
 			this.wrapper.addEventListener('touchend',function(e){
 				self.touchEnd.call(self,e);
 			});
-			this.scroller.addEventListener('transitionend',function(e){
+			this.scrollCon.addEventListener('transitionend',function(e){
 				self.transitionEnd.call(self,e);
 			});
 		},
@@ -231,7 +231,7 @@
 			this.startTime=new Date();
 			//当正在运动时，触屏马上停止，弹回顶部或底部除外
 			if(this.isMoving&&!this.slideUp&&!this.slideDown){
-				var ot=this.scroller.offsetTop;
+				var ot=this.scrollCon.getBoundingClientRect().top;
 				this.deltaY=ot;
 				this.scrollTo(0,ot,0,'linear');
 				this.isMoving=false;
@@ -316,7 +316,7 @@
 		},
 		//动画结束事件，重置各项参数，和调用上拉下拉回调
 		transitionEnd:function(e){
-			this.scroller.style.transition='';
+			this.scrollCon.style.transition='';
 			this.isMoving=false;
 			//下拉刷新
 			if(this.slideDown){
@@ -331,8 +331,8 @@
 		},
 		//设置包含内容区的位置
 		scrollTo: function (x, y, time, easing) {
-			this.scroller.style.transition='transform '+time+'ms '+easing;
-	        this.scroller.style.transform='translate3d('+x+'px,'+y+'px,0)';
+			this.scrollCon.style.transition='transform '+time+'ms '+easing;
+	        this.scrollCon.style.transform='translate3d('+x+'px,'+y+'px,0)';
 	        this.setCrollBar(x, y, time, easing);
 	    },
 	    //设置滚动条位置
@@ -379,7 +379,7 @@
 
 	new IScroll({
 		wrapper:'wrap',
-		scroller:'content',
+		scrollCon:'content',
 		upCallback:function(){
 			console.log('refresh');
 		}
