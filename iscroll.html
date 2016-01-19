@@ -139,10 +139,12 @@
 				options[v]=opts[v];
 			}
 		}
+
 		if(!options.wrapper||!options.scroller){
 			throw new Error('element\'s id is null or empty');
 		}
 		
+		//元素节点
 		this.wrapper=document.getElementById(options.wrapper);
 		this.scroller=document.getElementById(options.scroller);
 		this.scrollBar=null;
@@ -151,6 +153,7 @@
 			throw new Error('element is null or empty');
 		}
 
+		//x,y坐标
 		this.startX=0;//触发起始点
 		this.startY=0;
 		this.endX=0;//触发结束点
@@ -160,19 +163,24 @@
 		this.x=0;//上次移动的坐标
 		this.y=0;
 
+		//高度相关
 		this.scrollBarHeight=0;//滚动条高度
 		this.wrapHeight=this.wrapper.offsetHeight;//包含节点高度
 		this.conHeight=this.scroller.offsetHeight;//内部容器高度
 		this.maxScrollY=this.wrapHeight>this.conHeight?0:this.wrapHeight-this.conHeight;//内部能移动的最大距离
 
+		//状态标志
 		this.scrollHideTimer=null;//隐藏滚动条timer
 		this.startTime=new Date();//开始时间
 		this.isMoving=false;//是否正在运动
 		this.slideDown=false;//是否下拉
 		this.slideUp=false;//是否上拉
+
+		//回调
 		this.upCallback=options.upCallback;//上拉回调
 		this.downCallback=options.downCallback;//下拉回调
 
+		//初始化
 		this.init();
 	}
 
@@ -185,16 +193,19 @@
 		createScroll:function(){
 			this.scrollBarHeight=this.wrapHeight/this.conHeight*this.wrapHeight;//滚动条高度
 			if(this.scrollBarHeight-this.wrapHeight>10){return;}
+
 			var scrollElem=document.createElement('div');
 			scrollElem.className='scroll';
 			scrollElem.style.transition='opacity 1s ease-in-out';
 			scrollElem.innerHTML = '<div class="scrollbar"></div>';
+
 			this.wrapper.appendChild(scrollElem);
 			this.scrollBar=scrollElem.children[0];
 			this.scrollBar.style.height=this.scrollBarHeight+'px';
 			
 			this.hideScroll();
 		},
+		//绑定事件
 		bindEvent:function(){
 			var self=this;
 			this.wrapper.addEventListener('touchstart', function(e) {
@@ -303,8 +314,8 @@
 				}
 			}
 		},
+		//动画结束事件，重置各项参数，和调用上拉下拉回调
 		transitionEnd:function(e){
-			//重置各项参数，和调用上拉下拉回调
 			this.scroller.style.transition='';
 			this.isMoving=false;
 			//下拉刷新
@@ -356,8 +367,8 @@
 	    		duration:duration
 	    	};
 	    },
+	    //4s后隐藏滚动条
 	    hideScroll:function(){
-    		//4s后隐藏滚动条
     		var self=this;
     		clearTimeout(this.scrollHideTimer);
     		this.scrollHideTimer=setTimeout(function() {
