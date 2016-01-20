@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title></title>
+	<style>
+		.wrap{
+			width: 800px;
+			margin: 0 auto;
+			border:1px solid #ddd;
+		}
+		.left,.right{
+			width: 20px;
+			height: 240px;
+			line-height: 240px;
+			background-color: #ddd;
+			cursor: pointer;
+			color:#666;
+			font-size: 40px;
+			font-weight: bold;
+
+		}
+		.clearfix:after{
+			content: '.';
+			display: block;
+			height: 0;
+			visibility: hidden;
+			clear: both;
+		}
+		.clearfix{zoom:1;}
+		.fl{float: left;}
+		.fr{float: right;}
+		.pics{
+			height: 240px;
+			margin:0 20px;
+		}
+		.pics img{
+			width: 100%;
+			opacity: 1;filter: alpha(opacity=100);
+		}
+		.pics ul{
+			list-style-type: none;
+			margin: 0;padding: 0;
+			position: relative;
+		}
+		.pics ul li{
+			position: absolute;
+			top:60px;right:380px;
+			width: 160px;
+			height: 120px;
+			background-color: #000;
+			display: none;
+			cursor: pointer;
+		}
+	</style>
+	<script src="../JS/jquery.min.js"></script>
+	<script>
+	$(function(){
+	//轮播使用到的5张图片
+	var s=[
+		{i:3,zIndex:5,opacity: 1,animate:{top:'0',left:'220px',width:'320px',height:'240px'}},
+		{i:2,zIndex:4,opacity: 0.5,animate:{top:'22px',left:'100px',width:'260px',height:'195px'}},
+		{i:4,zIndex:3,opacity: 0.5,animate:{top:'22px',left:'400px',width:'260px',height:'195px'}},
+		{i:1,zIndex:2,opacity: 0.2,animate:{top:'60px',left:'30px',width:'160px',height:'120px'}},
+		{i:5,zIndex:1,opacity: 0.2,animate:{top:'60px',left:'570px',width:'160px',height:'120px'}}
+	],
+	//隐藏的图片
+	hid={zIndex:0,top:'60px',left:'380px',width:'160px',height:'120px',opacity: 1,display:'none'},
+	lis=[].slice.call($('.pics li')),len=lis.length,slen=s.length,i,
+	timer=null,lflag,rflag;
+	//初始化
+	function init(){
+		if(len<s.length){
+			slen=s.length=len;
+		}
+		s.sort(function(a,b){
+			return a.i-b.i;
+		});
+		i=Math.floor(slen/2);
+		while(i--){
+			slideRight();
+		}
+		animate(400);
+	}
+	//执行动画
+	function animate(interval){
+		$(lis).each(function(i){
+			if(s[i]){
+				$(this).attr("i",i)
+				.css({zIndex:s[i].zIndex})
+				.animate(s[i].animate, interval).show()
+				.children('img').animate({opacity:s[i].opacity}, interval);
+			}else{
+				$(this).css(hid);
+			}
+		});
+	}
+	//将元素第1项移到队列尾部从而实现向右移动的效果
+	function slideLeft(){
+		lis.push(lis.shift());
+	}
+	//将元素最后1项移到队列头部从而实现向左移动的效果
+	function slideRight(){
+		lis.unshift(lis.pop());
+	}
+	//轮播
+	function next(){
+		timer=setInterval(function(){
+			slideLeft();
+			animate(400);
+		},2000);
+	}
+	//绑定向左向右事件
+	//鼠标移入，清除自动播放，移开时添加自动播放，点击执行向/左向右滚动
+	//同时控制点击间隔为300ms
+	lflag=rflag=true;
+	$('.left').click(function(event){
+		if(!lflag){return;}
+		slideLeft();
+		animate(400);
+		lflag=false;
+		setTimeout(function(){
+			lflag=true;
+		},300);
+	}).mouseover(function(){
+		clearInterval(timer);
+	}).mouseout(next);
+	$('.right').click(function(){
+		if(!rflag){return;}
+		slideRight();
+		animate(400);
+		rflag=false;
+		setTimeout(function(){
+			rflag=true;
+		},300);
+	}).mouseover(function(){
+		clearInterval(timer);
+	}).mouseout(next);
+	
+	//鼠标移入ul时，清除自动播放，移开时添加自动播放
+	$('.pics ul').mouseover(function() {
+		clearInterval(timer);
+	}).mouseout(next);
+
+	//点击两侧的图片将立即移动到中间显示
+	$('.pics').on('click', 'li', function(event) {
+		var index=$(this).attr('i'),interval=300;
+		index=index-Math.floor(slen/2);
+		if(index<0){
+			index=Math.abs(index);
+			interval=interval/index;
+			while(index--){
+				slideRight();
+				animate(interval);
+			}
+		}else if(index>0){
+			interval=interval/index;
+			while(index--){
+				slideLeft();
+				animate(interval);
+			}
+		}
+	});
+
+	init();
+	next();
+	});
+	</script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="left fl">&lt;</div>
+		<div class="right fr">&gt;</div>
+		<div class="pics">
+			<ul class="clearfix">
+				<li><img src="../Images/Chrysanthemum.jpg" alt="" /></li>
+				<li><img src="../Images/Desert.jpg" alt="" /></li>
+				<li><img src="../Images/Hydrangeas.jpg" alt="" /></li>
+				<li><img src="../Images/Jellyfish.jpg" alt="" /></li>
+				<li><img src="../Images/Koala.jpg" alt="" /></li>
+				<li><img src="../Images/Lighthouse.jpg" alt="" /></li>
+				<li><img src="../Images/Penguins.jpg" alt="" /></li>
+				<li><img src="../Images/Tulips.jpg" alt="" /></li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>

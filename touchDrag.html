@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>drag and drop</title>
+	<style>
+		.a,.b{
+			height: 300px;
+			width: 100%;
+			border: 1px solid  #ccc;
+			padding: 4px;
+		}
+		.tag{
+			padding: 4px 8px;
+			margin: 2px 4px;
+			border: 1px solid  #ccc;
+			border-radius:3px;
+			font-size:30px;
+		}
+		.h50{
+			height: 100px;
+		}
+	</style>
+</head>
+<body>
+	<div class="a"></div>
+	<div class="h50"></div>
+	<div class="b">
+		<span class="tag">aaa</span>
+		<span class="tag">bbb</span>
+		<span class="tag">ccc</span>
+		<span class="tag">ddd</span>
+	</div>
+<script>
+    var a=document.getElementsByClassName('a')[0],
+        b=document.getElementsByClassName('b')[0],
+        aTop=a.offsetTop+a.offsetHeight;
+
+    b.addEventListener('touchstart', function(e){
+        var touchMoveFn,srcElem,
+            tagWidth,tagHeight;
+        e.preventDefault();
+        e.stopPropagation();
+        srcElem=e.srcElement;
+
+        if(srcElem.className!='tag'){return;}
+
+        tagWidth=srcElem.offsetWidth;
+        tagHeight=srcElem.offsetHeight;
+
+        srcElem.addEventListener('touchmove', touchMoveFn=function(e){
+            this.style.cssText='position: absolute;top:'+(e.touches[0].clientY-tagHeight/2)+'px;left: '+(e.touches[0].clientX-tagWidth/2)+'px;'
+        },false);
+
+        srcElem.addEventListener('touchend', function(e){
+            var y=e.changedTouches[0].clientY;
+            if(y<aTop){
+                b.removeChild(this);
+                a.appendChild(this);
+            }
+            this.style.cssText='';
+            this.removeEventListener('touchmove', touchMoveFn,false);
+            this.removeEventListener('touchend', arguments.callee,false);
+        },false);
+
+    },false);
+
+</script>
+</body>
+</html>
