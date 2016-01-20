@@ -38,12 +38,7 @@
 	</div>
 </div>
 <script>
-/*
- * 动态添加 CSS 样式
- * @param selector {string} 选择器
- * @param rules    {string} CSS样式规则
- * @param index    {number} 插入规则的位置, 靠后的规则会覆盖靠前的
- */
+
 var addCssRule = function() {
   // 创建一个 style， 返回其 stylesheet 对象
   // 注意：IE6/7/8中使用 style.stylesheet/addRule，其它浏览器 style.sheet/insertRule
@@ -69,6 +64,7 @@ var addCssRule = function() {
     }
   }
 }();
+
 
 addCssRule('.restore{-webkit-transition:-webkit-transform .3s linear;}');
 addCssRule('.moving{-webkit-transition:-webkit-transform .2s linear;}');
