@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>仿豆瓣分页</title>
+<style>
+	body{
+		font:14px Helvetica,Arial,"Microsoft Yahei",sans-serif;
+	}
+	.clearfix:after{
+		content: '.';
+		display: block;
+		height: 0;
+		clear: both;
+		visibility: hidden;
+	}
+	.clearfix{zoom:1;}
+	ul{
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+	}
+	ul li{
+		float: left;
+	}
+	.wrap{
+		width: 640px;
+		overflow: hidden;
+		margin: 20px auto;
+		text-align: center;
+	}
+	.list{
+		position: relative;
+		width: 670px;height: 280px;
+		padding: 10px;
+		margin-right: -30px;
+		margin-bottom: -30px;
+	}
+	.list li{
+		position: absolute;
+		top: 10px;left: 10px;
+		margin:0 30px 30px 0;
+		width: 100px;height: 100px;
+		background-color: #f00;
+	}
+	#page{
+		display: inline-block;
+		margin: 20px auto;
+	}
+	#page li{
+		margin: 0 1px;
+	}
+	#page li a{
+		text-decoration: none;
+		padding: 2px 6px;
+		color: #37a;
+	}
+	#page li a:hover{
+		background-color: #37a;
+		color: #fff;
+	}
+	#page li.curr a{
+		background-color: #649fc8;
+		color: #fff;
+	}
+	#page li.dis a{
+		color:#aaa;
+	}
+	#page li.dis a:hover{
+		background-color: inherit;
+		color:#aaa;
+	}
+</style>
+<script src="js/jquery.min.js"></script>
+<script>
+$(function(){
+	$.fn.doubanPage=function(option){
+		var self=this,
+		options={
+			page:10,//每页记录数
+			len:10,//总记录数
+			curr:1,//当前第几页
+			show:5,//中间展示几页
+			side:2,//两侧展示几页
+			callback:null
+		};
+		options=$.extend(options,option);
+		var total=Math.ceil(options.len/options.page);
+		function init(){
+			if(total<options.show){
+				options.show=total;
+			}
+			if(options.curr<=0){
+				options.curr=1;
+			}
+			if(options.curr>total){
+				options.curr=total;
+			}
+			drawPage();
+		}
+		function drawPage(){
+			var temp='',li='',
+				start=Math.min(options.side,Math.ceil(total/2)),
+				end=Math.min(options.side,Math.floor(total/2)),
+				before=Math.ceil((options.show-1)/2),
+				after=Math.floor((options.show-1)/2),
+				index=start,len=total-end,i;
+
+			var left=options.curr-start-before-1;
+			if(left>0){
+				index+=left;
+			}else{
+				after-=left;
+			}
+			
+			var right=len-after-options.curr;
+			if(right>0){
+				len-=right;
+			}else{
+				index+=right;
+			}
+
+			if(index<=0){index=start;}
+
+			if(index-start===1){
+				index--;
+			}
+			if(right===1){
+				len++;
+			}
+
+			temp+='<li class="prev"><a href="javascript:void(0);">&lt;前页</a></li>';
+			for(i=0;i<start;i++){
+				temp+='<li><a href="javascript:void(0);">'+(i+1)+'</a></li>';
+			}
+			if(index>start){
+				temp+='<li class="separator">...</li>';
+			}
+			for(;index<len;index++){
+				temp+='<li><a href="javascript:void(0);">'+(index+1)+'</a></li>';
+			}
+			if(right>1){
+				temp+='<li class="separator">...</li>';
+			}
+			for(i=total-end;i<total;i++){
+				temp+='<li><a href="javascript:void(0);">'+(i+1)+'</a></li>';
+			}
+			temp+='<li class="next"><a href="javascript:void(0);">后页&gt;</a></li>';
+			$(self).empty().append(temp);
+
+			$(self).children('li').filter(function(index) {
+				return $(this).children('a').text()===''+options.curr;
+			}).addClass('curr');
+
+			if(options.curr<=1){
+				$(self).find('.prev').addClass('dis');
+			}
+			if(options.curr===total){
+				$(self).find('.next').addClass('dis');
+			}
+			if(options.callback){
+				options.callback(options.curr,options.page,options.len);
+			}
+		}
+		function bindEvents(){
+			$(self).on('click', 'li', function() {
+				var className=$(this).attr('class')||'';
+				if(className==='curr'||className==='separator'||className.indexOf('dis')>-1){
+					return;
+				}
+				else if(className.indexOf('prev')>-1){
+					options.curr--;
+				}else if(className.indexOf('next')>-1){
+					options.curr++;
+				}else{
+					options.curr=parseInt($(this).children('a').text());
+				}
+				init();
+			});
+		}
+		init();
+		bindEvents();
+	};
+	var arr=[],i;
+	for(i=0;i<116;i++){
+		arr.push({'title':'title'+(i+1)});
+	}
+	var page=10,total=Math.ceil(arr.length/page);
+	$('#page').doubanPage({
+		page:page,
+		len:arr.length,
+		curr:1,
+		show:5,
+		side:2,
+		callback:function(curr,page,len){
+			var list=$('.list'), temp='',lis=list.children('li'),
+				l=lis.length,k=0,
+				w=list.outerWidth(),h=list.outerHeight();
+			if(l>0){		
+				var timerHide=setInterval(function(){
+					$(lis[k]).animate({top: h+'px', left: w/2+'px',width:'0',height:'0'}, 100,
+						function(){
+						$(this).remove();
+					});
+					k++;
+					if(k===l){
+						clearInterval(timerHide);
+						setTimeout(showList,200);
+					}
+				},100);
+			}else{
+				showList();
+			}
+			function showList(){
+				var	i=(curr-1)*page,
+					padding=10,per=130,
+					c=0,r=0,j=0,posArr=[],pos;
+				l=page*curr>len?len:page*curr;
+				for(;i<l;i++){
+					c=i%5;
+					r=Math.floor(j/5);
+					j++;
+					posArr.push({top:(10+r*130),left:(10+c*130)});
+					temp+='<li style="width:0;height:0;top:'+h+'px; left:'+w/2+'px;display:none;">'+arr[i].title+'</li>';
+				}
+				list.append(temp);
+				lis=list.children('li');
+				var timerShow=setInterval(function(){
+					j--;
+					pos=posArr.pop();
+					$(lis[j]).show().animate({'top': pos.top+'px', 'left': pos.left+'px',
+						width:'100px',height:'100px'}, 100);
+
+					if(j<=0){
+						clearInterval(timerShow);
+					}
+				},100);
+			}
+		}
+	});
+});
+</script>
+</head>
+<body>
+<div class="wrap">
+	<ul class="list clearfix"></ul>
+	<ul id="page" class="clearfix"></ul>
+</div>
+
+</body>
+</html>
