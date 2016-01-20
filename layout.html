@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>自适应布局</title>
+	<style>
+	.lside{height: 100px;background-color: #00f;width: 300px;float: left;}
+	.lmain{height: 100px;margin-left:310px;background-color: #f00;}
+	.rside{height: 100px;background-color: #00f;width: 300px;float: right;}
+	.rmain{height: 100px;background-color: #f00;margin-right: 310px;}
+	.cmain{height: 100px;background-color: #f00;margin-right: 310px;margin-left: 310px;}
+	</style>
+</head>
+<body>
+	<!-- 左边固定,右边自适应 -->
+	<div class="lside">lside</div>
+	<div class="lmain">lmain</div>
+	<!-- 右边固定,左边自适应 -->
+	<div class="rside">rside</div>
+	<div class="rmain">rmain</div>
+	<!-- 左右固定,中间自适应 -->
+	<div class="lside">lside</div>
+	<div class="rside">rside</div>
+	<div class="cmain">cmain</div>
+</body>
+</html>

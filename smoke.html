@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+body {background:black; overflow:hidden;}
+div {position:absolute;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>简单烟花特效</title>
+<script type="text/javascript">
+//获取随机颜色
+function getRndAndFillZero(){
+	var str=Math.ceil(Math.random()*16777215).toString(16);
+	while(str.length<6){
+		str='0'+str;
+	}
+	return str;
+}
+
+document.onclick=function (ev){
+	var oEvent=ev||event;
+	var t=oEvent.clientY;
+	var l=oEvent.clientX;
+	var oRedDiv=document.createElement('div');
+	
+	oRedDiv.style.width='4px';
+	oRedDiv.style.height='30px';
+	oRedDiv.style.background='red';
+	oRedDiv.style.top=document.documentElement.clientHeight+'px';
+	oRedDiv.style.left=oEvent.clientX+'px';
+	document.body.appendChild(oRedDiv);
+	
+	var timer=setInterval(function (){
+		oRedDiv.style.top=oRedDiv.offsetTop-20+'px';
+		
+		if(oRedDiv.offsetTop<=t){
+			clearInterval(timer);
+			document.body.removeChild(oRedDiv);
+			
+			//随机产生100个元素
+			var aDivs=[];
+			for(var i=0;i<100;i++){
+				var oDiv=document.createElement('div');
+				oDiv.style.background='#'+getRndAndFillZero();
+				oDiv.style.width='4px';
+				oDiv.style.height='4px';
+				oDiv.style.left=l+'px';
+				oDiv.style.top=t+'px';
+				
+				document.body.appendChild(oDiv);
+				aDivs.push(oDiv);
+				
+				oDiv.speedX=Math.random()*40-20;
+				oDiv.speedY=Math.random()*40-20;
+			}
+			
+			//定时更新每个元素状态
+			var newTimer=setInterval(function (){
+				for(var i=0;i<aDivs.length;i++){
+
+					aDivs[i].style.left=aDivs[i].offsetLeft+aDivs[i].speedX+'px';
+					aDivs[i].style.top=aDivs[i].offsetTop+aDivs[i].speedY+'px';
+					aDivs[i].speedY++;
+					//超出边界后移除
+					if(aDivs[i].offsetLeft<0 || aDivs[i].offsetLeft>document.documentElement.clientWidth || aDivs[i].offsetTop>document.documentElement.clientHeight){
+						document.body.removeChild(aDivs[i]);
+						aDivs.splice(i--,1);
+					}
+				}
+				
+				if(!aDivs.length){
+					clearInterval(newTimer);
+				}
+			}, 30);
+			
+			//背景闪动效果
+			var flashCount=0;
+			var flashTimer=setInterval(function (){
+				if(++flashCount%2==0){
+					clearInterval(flashTimer);
+				}
+				document.body.style.background=flashCount%2?'#CCC':'';
+			}, 30);
+		}
+	}, 30);
+};
+</script>
+</head>
+
+<body>
+</body>
+</html>

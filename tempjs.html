@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>简单模板引擎</title>
+    <style type="text/css">
+    </style>
+	<script src="js/jquery-1.7.2.js" type="text/javascript"></script>
+	<script src="js/MyLib.js" type="text/javascript"></script>
+	<script src="js/md5.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function(){
+			var ul=document.getElementsByTagName("div")[0].innerHTML;
+			console.log(generateDOM(ul));
+			console.log(hex_md5('123456'));
+			console.log(' d{0} D{1}FDFD '.format('11','22'));
+			var d=new Date();
+			var obj={a:'aa',b:123,c:d};
+			console.log(MyLib.objToJson(obj));
+			console.log(JSON.stringify(new Date()))
+		});
+	</script>
+</head>
+<body>
+<div>
+<ul>
+<li><a>aaa</a></li>
+<li><a>bbb</a></li>
+<li><a>ccc</a></li>
+<li><a>ddd</a></li>
+</ul>
+<img src="images/Desert.jpg" width="300" alt="pic"/>
+<div id="box" style="border: 1px solid red;width: 100px;height: 100px;margin-left: 200px;"></div>
+</div><input type="text" name="txt" id="txt"/>
+<div id="results"></div>
+<script type="text/html" id="user_tmpl">
+	<ul>
+		<% for ( var i = 0; i < users.length; i++ ) { %>
+		<li><a href="<%=users[i].url%>"><%=users[i].name%></a></li>
+		<% } %>
+	</ul>
+</script>
+<script type="text/javascript">
+	var results = document.getElementById("results");
+	var users=[
+		{"name":"Byron", "url":"http://localhost"},
+		{"name":"Casper", "url":"http://localhost"},
+		{"name":"Frank", "url":"http://localhost"}
+	];
+	function tmpl(id,data){
+		var html=document.getElementById(id).innerHTML;
+		var result="var p=[];p.push('"
+				+html.replace(/[\r\n\t]/g," ")
+				.replace(/<%=(.*?)%>/g,"');p.push($1);p.push('")
+				.replace(/<%/g,"');")
+				.replace(/%>/g,"p.push('")
+				+"');return p.join('');";
+		console.log(result);
+		var fn=new Function(result);
+		return fn();
+	}
+	results.innerHTML = tmpl("user_tmpl", users);
+</script>
+</body>
+</html>

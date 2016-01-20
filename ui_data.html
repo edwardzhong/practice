@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>如何数据和界面相分离</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="JS/jquery.min.js"></script>
+	<script src="JS/bootstrap.min.js"></script>
+    <script src="JS/jsdeferred.js"></script>
+	<script>
+	$(document).ready(function(){
+        var Countries = function () { };
+        Countries.prototype = {
+            _items: [],
+            _getData: function () {
+                var items = [
+                   { id: 0, name: '中国' },
+                   { id: 1, name: '日本' },
+                   { id: 2, name: '美国' },
+                   { id: 3, name: '德国' },
+                   { id: 4, name: '法国' }
+                ];
+                $.extend(this._items, items);
+            },
+            //Events
+            on_loaded: $.Callbacks(),
+            //Methods
+            load: function () {
+                var self = this;
+                this._getData(); 
+                self.on_loaded.fire({sender: self,items: self._items});
+            },
+            insert: function (item) {
+                this._items.push(item);
+                this.on_loaded.fire({sender: this,items: this._items});
+            },
+            del:function(item){
+            	var self=this;
+            	$(this._items).each(function(i){
+            		if(this.id==item.id){
+            			self._items.splice(i,1);
+            			return false;
+            		}
+            	});
+                self.on_loaded.fire({sender: self,items: self._items});
+            },
+            addCallBack:function(cb){
+                this.on_loaded.add(cb);
+            }
+        };
+
+        //=======================================================================
+        // 以下为界面代码，当要调整界面，改这里就行啦~~~
+        var countries = new Countries();
+        countries.addCallBack(function (args) {
+            $('#countries').empty();
+            $(args.items).each(function () {
+                $('#countries').append($('<option>').attr('value', this.id).text(this.name));
+            });
+        });
+        countries.addCallBack(function (args){
+            $('#ulCoun').empty();
+            $(args.items).each(function () {
+                $('#ulCoun').append($("<li>").attr('id',this.id).text(this.name));
+            });
+        });
+        var id = 10;
+        $('#btnAdd').click(function () {
+            countries.insert({ id: ++id, name: $('#countryName').val() });
+            $('#countryName').val('');
+        });
+        $('#btnDel').click(function(){
+        	countries.del({id:$('#countries').val()});
+        });
+        countries.load();
+	});
+	</script>
+</head>
+<body>
+	<span data-content="hello" data-placement="right">div</span>
+	<br/>
+	<ul id="cart"></ul>
+	<ul id="products"></ul>
+	<br>
+    <select id="countries"></select>
+    <button id="btnDel">删除</button>
+    <ul id="ulCoun"></ul>
+    <div>
+        <input id="countryName" />
+        <button id="btnAdd">添加</button>
+    </div>
+</body>
+</html>
