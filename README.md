@@ -37,3 +37,4 @@
 36.[mac命令行总结](https://github.com/edwardzhong/practice/blob/master/macShell.txt)  
 37.[css3d实现3d效果](https://github.com/edwardzhong/practice/blob/master/css3d.html)  
 38.[animation动画steps的应用](https://github.com/edwardzhong/practice/blob/master/animationSteps.html)  
+39.[history&hashchange的使用](https://github.com/edwardzhong/practice/blob/master/history&hashchange.html)  
