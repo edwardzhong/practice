@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>pc版拖拽</title>
+	<style>
+	*{margin: 0;padding: 0;}
+	ul:after{content: "";display: block;clear: both;}
+	ul li{list-style: none;float: left;background-color: #ccc;padding: 5px 10px;cursor: pointer;}
+	ul li.active{background-color: #f00;color:#fff;}
+	#div div{height: 100px;width: 200px;display: none;border: 1px solid #000;}
+	#div div.active{display: block;}
+	#drop{height: 100px;width: 100px;background-color: #f00;position: absolute;}
+	#drop2{height: 100px;width: 100px;background-color: #ff0;position: absolute;top:100px;}
+	</style>
+	<script>
+	window.onload=function () {
+		// var lis=document.getElementsByTagName('li'),
+		// 	divs=document.getElementsByTagName('div'),
+		// 	len=lis.length,
+		// 	i;
+
+		// for(i=0;i<len;i++){
+		// 	lis[i].index=i;
+		// 	lis[i].onclick=function(){
+		// 		for(i=0;i<len;i++){
+		// 			lis[i].className='';
+		// 			divs[i].className='';	
+		// 		}
+		// 		this.className='active';
+		// 		divs[this.index].className='active';
+		// 	}
+		// }
+		new tab('div');
+		new Drop('drop');
+		new LimitDrop('drop2');
+	}
+	//面向对象版
+	function tab(id){
+		var div=document.getElementById(id),
+			_this=this,
+			i;
+		this.lis=div.getElementsByTagName('li');
+		this.divs=div.getElementsByTagName('div'),
+		this.len=this.lis.length;
+
+		for(i=0;i<this.len;i++){
+			this.lis[i].index=i;
+			this.lis[i].onclick=function(){
+				_this.clickEvts.call(_this,this);
+			}
+		}
+	}
+
+	tab.prototype.clickEvts=function(li){
+		for(var i=0;i<this.len;i++){
+			this.lis[i].className='';
+			this.divs[i].className='';	
+		}
+		li.className='active';
+		this.divs[li.index].className='active';
+	};
+	//面向对象拖拽
+	function Drop(id){
+		var _this=this;
+		this.div=document.getElementById(id);
+		this.disX=0;
+		this.disY=0;
+		this.div.onmousedown=function(evt){
+			var evt=evt||event;
+			this.disX=evt.clientX-this.offsetLeft;
+			this.disY=evt.clientY-this.offsetTop;
+
+			document.onmousemove=function(evt){
+				_this.fnMove.call(_this,evt);
+			}
+			document.onmouseup=_this.fnUp;
+			return false;
+		};
+	}
+	Drop.prototype.fnMove=function(evt){
+		var evt=evt||event;
+
+		this.div.style.left=evt.clientX-this.disX+'px';
+		this.div.style.top=evt.clientY-this.disY+'px';
+	};
+	Drop.prototype.fnUp=function(){
+		document.onmousemove=null;
+		document.onmouseup=null;
+	};
+	//继承拖拽,增加限制框
+	function LimitDrop(id){
+		Drop.call(this,id);
+	}
+	function inherits(child,parent){
+		var f=function(){};
+		f.prototype=parent.prototype;
+		child.prototype=new f();
+		child.prototype.constructor=child;//注意修正constructor
+	}
+	// for(var attr in Drop.prototype){
+	// 	LimitDrop.prototype[attr]=Drop.prototype[attr];
+	// }
+	inherits(LimitDrop,Drop);
+	// LimitDrop.prototype=new Drop();
+	LimitDrop.prototype.fnMove=function(evt){
+		var evt=evt||event;
+		var l=evt.clientX-this.disX;
+		var t=evt.clientY-this.disY;
+
+		if(l<0){l=0;}
+		else if(l>document.documentElement.clientWidth-this.div.offsetWidth){
+			l=document.documentElement.clientWidth-this.div.offsetWidth;
+		}
+		if(t<0){t=0;}
+		else if(t>document.documentElement.clientHeight-this.div.offsetHeight){
+			t=document.documentElement.clientHeight-this.div.offsetHeight;
+		}
+		this.div.style.left=l+'px';
+		this.div.style.top=t+'px';
+	};
+	</script>
+</head>
+<body>
+	<div id="div">
+		<ul>
+			<li class="active">aaa</li>
+			<li>bbb</li>
+			<li>ccc</li>
+		</ul>
+		<div class="active">aaa</div>
+		<div>bbb</div>
+		<div>ccc</div>
+	</div>
+	<div id="drop"></div>
+	<div id="drop2"></div>
+</body>
+</html>

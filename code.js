@@ -4,6 +4,28 @@
  * Date: 14-12-27
  * Time: 下午8:38
  */
+/**
+ * [ieRGBA description]
+ * @param    {Number}                 rr 
+ * @param    {Number}                 gg 
+ * @param    {Number}                 bb 
+ * @param    {Number}                 aa 
+ * @return   {String}                 #AARRGGBB (Hex String)
+ * 比如#ffffff半透明：
+ * ieRGBA(255,255,255,0.5)
+ * 生成"#7FFFFFFF"
+ */
+function ieRGBA(rr, gg, bb, aa) {
+  'use strict';
+  return '#' + [
+    parseInt(aa * 255, 10).toString(16),
+    ('00' + (rr).toString(16)).slice(-2),
+    ('00' + (gg).toString(16)).slice(-2),
+    ('00' + (bb).toString(16)).slice(-2)
+  ].join('').toUpperCase();
+}
+
+
 	/**
 	 * head添加css样式
 	 */
