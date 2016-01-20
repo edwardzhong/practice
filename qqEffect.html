@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>QQ好友分组效果</title>
+<style type="text/css">
+    body
+    {
+        width: 120px;
+        margin: 0px auto;
+        font: 75%/120% Arial, Helvetica, sans-serif;
+        margin-left: 0px;
+    }
+    .accordion
+    {
+        left: 0px;
+        width: auto;
+        border-bottom: solid 1px #c4c4c4;
+    }
+    .accordion h3
+    {
+        background: #e9e7e7 url(imgs/arrow-square.gif) no-repeat right -51px;
+        padding: 7px 15px;
+        margin: 0;
+        font: bold 120%/100% Arial, Helvetica, sans-serif;
+        border: solid 1px #c4c4c4;
+        border-bottom: none;
+        cursor: pointer;
+    }
+    .accordion h3:hover
+    {
+        background-color: #e3e2e2;
+    }
+    .accordion h3.active
+    {
+        background-position: right 5px;
+        background-color: Red;
+    }
+    .accordion p
+    {
+        font-size: 12px;
+        line-height: 20px;
+        background: #f7f7f7;
+        margin: 0px;
+        padding: 10px 15px 20px;
+        border-left: solid 1px #c4c4c4;
+        border-right: solid 1px #c4c4c4;
+        transition: all .4s ease-in;
+    }
+    ul .active
+    {
+        background-color: Red;
+    }
+    #div1{width: 100px;height: 100px;background-color: red;float: left;}
+    #div2{width: 100px;height: 200px;margin: 0 10px;background-color: gray;display: none;margin-left: 110px;}
+</style>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript">
+    //qq好友分组效果
+    function accordion() {
+        var ps = document.getElementsByTagName("p");
+        var hs = document.getElementsByTagName("h3");
+        for (var i = 0; i < ps.length; i++) {
+            ps[i].style.display = "none";
+        }
+
+        for (var j = 0, len = hs.length; j < len; j++) {
+            hs[j].onclick = function () {
+                for (var k = 0, klen = hs.length; k < klen; k++) {
+                    var sibling = hs[k].nextElementSibling || hs[k].nextSibling; //w3c:nextElementSibling, ie为nextSibling
+                    hs[k].className = '';
+                    sibling.style.display = 'none';
+                    // if (this == hs[k]) {
+                    //     sibling.style.display = 'block';
+                    //     hs[k].className = 'active';
+                    // }
+                }
+                var next = this.nextElementSibling || this.nextSibling;
+                next.style.display = 'block';
+                this.className = 'active';
+            };
+        }
+    }
+    //使用jq
+    function jqAccordion() {
+        $('p').hide();
+        $('h3').click(function () {
+            $(this).toggleClass('active').next('p').slideToggle('fast');
+            $(this).siblings().removeClass('active').next('p').slideUp('fast');
+        }).first().click();
+    }
+    //li hover效果
+    function lisHover() {
+        var lis = document.getElementsByTagName("li");
+        for (var i = 0; i < lis.length; i++) {
+            lis[i].onmouseover = function () {
+                // for (var i = 0; i < lis.length; i++) {
+                //     if (lis[i] == this) {
+                //         lis[i].className = "active";
+                //     }
+                // }
+                this.className = "active";
+            }
+            lis[i].onmouseout = function () {
+                // for (var i = 0; i < lis.length; i++) {
+                //     if (lis[i] == this) {
+                //         lis[i].className = "";
+                //     }
+                // }
+                this.className = "";
+            }
+        }
+    }
+    //用延时实现mouseenter功能
+    function mouseEnter(){
+        var div1=document.getElementById('div1'),
+            div2=document.getElementById('div2'),
+            timer=null;
+        div1.onmouseover=div2.onmouseover=function(){
+            clearTimeout(timer);            
+            div2.style.display='block';         
+        }
+        div1.onmouseout=div2.onmouseout=function(){
+            timer=setTimeout(function(){
+                div2.style.display=''
+            },1000);
+        }
+    }
+    window.onload = function () {
+        //jqAccordion();
+        accordion();
+        lisHover();
+        mouseEnter();
+    }
+</script>
+</head>
+<body>
+<div class="accordion" align="left">
+    <h3>首页</h3>
+    <p>
+        <a href="ad.asp" target="right">班级广告</a><br />
+        <a href="us.html" target="right">关于我们</a><br />
+    </p>
+    <h3>班委简介</h3>
+    <p>
+        <a href="#" onclick="MM_openBrWindow('banwei/tanchu.asp?act=班长','','width=471,height=384')">
+            班长</a><br />
+        <a href="#" onclick="MM_openBrWindow('banwei/tanchu.asp?act=团支书','','width=471,height=384')">
+            团支书</a><br />
+        <a href="#" onclick="MM_openBrWindow('banwei/tanchu.asp?act=副班长','','width=471,height=384')">
+            副班长</a><br />
+        <a href="#" onclick="MM_openBrWindow('banwei/tanchu.asp?act=学习委员','','width=471,height=384')">
+            学习委员<br />
+            <a href="#" onclick="MM_openBrWindow('banwei/tanchu.asp?act=劳生委员','','width=471,height=384')">
+                劳生委员</a><br />
+            <a href="#" onclick="MM_openBrWindow('banwei/tanchu.asp?act=文体委员','','width=471,height=384')">
+                文体委员</a><br />
+            <a href="#" onclick="MM_openBrWindow('banwei/tanchu.asp?act=宣组委员','','width=471,height=384')">
+                宣组委员</a><br />
+    </p>
+    <h3>新闻追踪</h3>
+    <p>
+        <a href="new/index.asp" target="right">应物新闻</a></p>
+    <h3>班政公务</h3>
+    <p>
+        <a href="chengji/show0.asp" target="right">成绩查询系统</a><br />
+        <a href="document/document.asp" target="right">公文公布系统</a><br />
+        <a href="meeting/login.html" target="right">网络会议系统</a><br />
+        <a href="vote/voting.asp" target="right">在线投票系统</a><br />
+    </p>
+    <h3>青春记忆</h3>
+    <p>
+        <a href="junxun.asp" target="right">军训相册</a><br />
+        <a href="photo/index.asp" target="right">公共相册</a><br />
+        <a href="vidio/t.asp" target="right">视频回放</a><br />
+    </p>
+    <h3>娱乐在线</h3>
+    <p>
+        <a href="music/index.asp" target="right">Music Center</a><br />
+        <a href="coolmusic/index.asp" target="_blank">COOL MUSIC</a><br />
+        <a href="mtv/index.asp" target="right">Mtv Online</a><br />
+    </p>
+    <h3>管理中心</h3>
+    <p>
+        <a href="chengji/admin/login.asp" target="right">成绩查询管理</a><br />
+        <a href="document/admin/login.asp" target="right">公文系统管理</a><br />
+        <a href="meeting/admin.html" target="right">会议系统管理</a><br />
+        <a href="coolmusic/login.asp" target="right">coolmisic 管理</a><br />
+        <a href="vote/admin.asp" target="right">投票系统管理</a><br />
+        <a href="new/admin/login.asp" target="right">新闻发布系统</a><br />
+        <a href="photo/LOGIN.ASP" target="right">公共相册管理</a><br />
+        <a href="vidio/admin/login.asp" target="right">班级视频管理</a><br />
+    </p>
+    <h3>友情连接</h3>
+    <p>
+        <a href="http://210.36.247.125" target="_blank">师院网</a><br />
+        <a href="http://210.36.247.15" target="_blank">物信系</a><br />
+        <a href="http://210.36.247.111" target="_blank">图书馆</a><br />
+        <a href="http://202.103.216.12/" target="_blank">红叶网</a><br />
+        <a href="http://diy.ylu.edu.cn/uers/yw06/" target="_blank">牛人宿舍</a><br />
+        <a href="http://diy.ylu.edu.cn/uers/yww/" target="_blank">应物专业网</a><br />
+    </p>
+    </div>
+    <ul>
+        <li>111</li>
+        <li>222</li>
+        <li>333</li>
+        <li>444</li>
+    </ul>
+    <div id="div1"></div>
+    <div id="div2"></div>
+</body>
+</html>

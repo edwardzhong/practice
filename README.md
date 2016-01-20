@@ -1,5 +1,5 @@
 # practice 常用总结
-1.[常用代码总结](https://github.com/edwardzhong/practice/blob/master/code.js)  
+1.[常用代码总结](https://github.com/edwardzhong/practice/blob/master/js/code.js)  
 2.[pc版焦点图](https://github.com/edwardzhong/practice/blob/master/slidePic.html)  
 3.[拖曳滑动切换页面](https://github.com/edwardzhong/practice/blob/master/scrollPage.html)  
 4.[模仿IScroll效果](https://github.com/edwardzhong/practice/blob/master/iscroll.html)  
@@ -22,3 +22,6 @@
 21.[indexDB的实践](https://github.com/edwardzhong/practice/blob/master/indexDB.html)  
 22.[操作DOM的时机](https://github.com/edwardzhong/practice/blob/master/domTime.md)  
 23.[常用Git命令清单](https://github.com/edwardzhong/practice/blob/master/git.md)  
+24.[原生手风琴效果和延时实现mouseEnter功能](https://github.com/edwardzhong/practice/blob/master/qqEffect.html)  
+25.[简单运动框架](https://github.com/edwardzhong/practice/blob/master/js/Animate.js)  
+26.[封装原生的cookie功能](https://github.com/edwardzhong/practice/blob/master/js/cookie.html)  
