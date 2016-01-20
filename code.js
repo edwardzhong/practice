@@ -120,7 +120,15 @@
     * 时间格式化
     * @param    {String}                 format 格式
     * @param    {String}                 loc 中英文
-     */
+    *   var d=new Date();
+		console.log(d.toString());    //2012-7-27 9:26:52
+		console.log(d.toString(""));    //2012-7-27 9:26:52
+		console.log(d.toString("yyyy-MM-dd HH:mm:ss"));    //2012-07-27 09:26:52
+		console.log(d.toString("yyyy年MM月dd日 HH:mm:ss"));    //2012年07月27日 09:26:52
+		console.log(d.toString("yyyy-MM-dd HH:mm:ss fff"));    //2012-07-27 09:26:52 237
+		console.log(d.toString("yyyy年 MMM dd EEE"));    //2012年 七月 27 星期五
+		console.log(d.toString("yyyy MMM dd EEE","en"));    //2012 Jul 27 Fri
+    */
     if(!Date.ToString){
         Date.prototype.ToString= function(format,loc){
             var time={};
@@ -896,7 +904,18 @@
         }
         return value='auto'?'':value;
     }
-
+    //产生随机数
+    getRandomVal:function(val){
+        return Math.floor(Math.random()*(val+1));
+    },
+    //产生十六进制颜色
+    getRandomColor:function(){
+        var str=Math.ceil(Math.random()*16777215).toString(16);
+        while(str.length<6){
+            str='0'+str;
+        }
+        return str;
+    }
 };
     window.MyLib=MyLib;
 
