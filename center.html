@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>居中</title>
+	<style>
+	body {
+  	font: 14px "Helvetica Neue",Helvetica,"Hiragino Sans GB","Segoe UI","Microsoft Yahei",Tahoma,Arial,STHeiti,sans-serif;
+	}
+	.clearfix:after{content: ".";display: block;visibility: visible;clear: both;}
+	.clearfix{*zoom:1;}
+	h3{background-color: #2B6695;color:#fff;padding: 5px 10px;border: 1px solid  #2B6695;border-radius: 5px;cursor: pointer;}
+	div{width: 100px;height: 100px;border: 1px solid  #f00;}
+	table{border-collapse: collapse;border: 1px solid  #aaa;}
+	tr td{height: 80px;width: 80px;border: 1px solid #aaa;text-align: center;vertical-align: middle;}
+	</style>
+	<script>
+	window.onload=function(){
+		var hs=document.getElementsByTagName('h3'),
+			len=hs.length,i,j,nextElem;
+		for(i=0;i<len;i++){
+			hs[i].onclick=function(evt){
+				for(j=0;j<len;j++){
+					nextElem=hs[j].nextElementSibling||hs[j].nextSibling;
+					nextElem.style.display='none';
+				}
+				nextElem=this.nextElementSibling||this.nextSibling;
+				nextElem.style.display='';
+			};
+		};
+		hs[0].click();
+	};
+	</script>
+</head>
+<body>
+	<h3>margin设为auto水平居中</h3>
+	<section>
+		<div style="height:80px;">
+			<div style="width:50px;height:50px;margin:0 auto;"></div>
+		</div>
+		<p>只能水平居中,必须指定宽度,且对浮动或绝对定位元素无效</p>
+		<p>关键样式:margin:0 auto;</p>
+	</section>
+	<h3>text-align文字水平居中</h3>
+	<section>
+		<div style="text-align:center;">
+			<span>行内元素span</span><br>
+			<p>块级元素p</p>
+			文字内容
+		</div>
+		<p>只能对图片,文字,按钮等行内元素水平居中, 但是ie6,ie7能对任何元素居中</p>
+		<p>关键样式:text-align:center;</p>
+	</section>
+	<h3>单行文字垂直居中</h3>
+	<section>
+		<div style="height:40px;line-height:40px;">单行文字内容</div>
+		<p>line-height 和height 设置为等高, 单行文字垂直居中,只适用一行文字情况</p>
+		<p>关键样式:height:40px;line-height:40px;</p>
+	</section>
+		<h3>用padding使多行文字垂直居中</h3>
+	<section>
+		<div style="padding:20px;width:auto;height:auto;">多行文字内容<br>多行文字</div>
+		<p>使用padding上下左右一致</p>
+		<p>关键样式:padding:40px;</p>
+		<p>缺点：高度不固定</p>
+	</section>
+	<h3>表格内容居中</h3>
+	<section>
+		<table>
+		<tr>
+			<td>文字内容</td>
+			<td><span>行内元素</span></td>
+			<td><div style="height:50px;width:50px;display:inline-block;">块级元素</div></td>
+		</tr>
+	</table>
+	<p>vertical-align垂直居中,text-align:水平居中 块级元素使用display:inline-block;才能水平居中</p>
+	<p>关键样式:text-align: center;vertical-align: middle;</p>	
+	</section>
+	<h3>转化为table-cell进行居中</h3>
+	<section>
+		<div style="display:table-cell;vertical-align:middle;text-align:center;">
+			<div style="display:inline-block;height:50px;width:50px;background-color:#00f;"></div>
+		</div>
+		<p>父元素:display:table-cell;vertical-align:middle;text-align:center; 子元素:dislay:inline-block;<br>
+		text-align:center可以使inline-block的子元素水平居中；<br>
+		vertical-align:middle可以使块或行内元素垂直居中<br>
+		可以用于实现多行文字居中</p>
+	</section>
+	<h3>多个块级水平居中</h3>
+	<section>
+		<div style="text-align:center;width: 400px;height: 50px;">
+			<div style="display: inline-block; width: 50px;height: 50px;background-color: #00f;"></div>
+			<div style="display: inline-block; width: 50px;height: 50px;background-color: #00f;"></div>
+			<div style="display: inline-block; width: 50px;height: 50px;background-color: #00f;"></div>
+		</div>
+		<p>关键样式：父元素text-align:center; 子元素display: inline-block;</p>
+		<div style=" display:flex;justify-content:center;width: 400px;height: 50px;">
+			<div style="width: 50px;height: 50px;background-color: #00f;"></div>
+			<div style="width: 50px;height: 50px;background-color: #00f;"></div>
+			<div style="width: 50px;height: 50px;background-color: #00f;"></div>
+		</div>
+		<p>使用flex布局，父级元素display:flex;justify-content:center;</p>
+		<p></p>
+	</section>
+	<h3>绝对定位居中</h3>
+		<section>
+			<div style="position: relative;">
+				<div style="height:50px;width:50px;background-color:#00f;position:absolute;left:50%;top:50%;margin-left:-25px;margin-top:-25px;"></div>
+			</div>
+			<p>只适用于已经知道宽度和高度的元素</p>
+			<p>关键样式:父元素position: relative; 子元素:position:absolute;left:50%;top:50%;margin-left:-25px;margin-top:-25px;</p>
+
+			<div style="position: relative;">
+				<div style="height:50px;width:50px;background-color:#00f;position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;"></div>
+			</div>
+			<p>只适用于已经知道宽度和高度的元素,只支持ie9+,firefox,chrome</p>
+			<p>父元素position: relative; 子元素:position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;</p>
+
+			<div style="position: relative;">
+				<div style="height:50px;width:50px;background-color:#00f;position:absolute;left:50%;top:50%;-webkit-transform:translate(-50%,-50%);"></div>
+			</div>
+			<p>绝对定位+css3 transform:translate(-50%，-50%)</p>
+			<p>关键样式：left:50%;top:50%;-webkit-transform:translate(-50%,-50%);</p>
+			<p>适用于未知高度和宽度的居中</p>
+
+		</section>
+	<h3>flex布局居中</h3>
+	<section>
+		<div style="display:flex;justify-content:center;">
+			<div style="height:50px;width:50px;background-color:#00f;align-self:center;"></div>
+		</div>
+		<p>关键样式：父元素：display:flex;justify-content:center; 子元素：align-self:center;</p>
+	</section>
+</body>
+</html>
