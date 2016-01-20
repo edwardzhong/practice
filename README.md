@@ -1,5 +1,5 @@
 # practice 常用总结
-1.[常用代码总结](https://github.com/edwardzhong/practice/blob/master/code.js)
+1.[常用代码总结](https://github.com/edwardzhong/practice/blob/master/code.js)  
 2.[pc版焦点图](https://github.com/edwardzhong/practice/blob/master/slidePic.html)
 3.[拖曳滑动切换页面](https://github.com/edwardzhong/practice/blob/master/scrollPage.html)
 4.[模仿IScroll效果](https://github.com/edwardzhong/practice/blob/master/iscroll.html)
