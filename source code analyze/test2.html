@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test2</title>
+	<!-- <script src="jquery2.0.3源码分析.js"></script> -->
+	<script src="z.js"></script>
+	<!-- <script src="aQuery.js"></script> -->
+	<script>
+	window.onload=function(){
+		var cbs=zQuery.callBacks('once');
+		function a(arg){
+			console.log(arg);
+		}
+		function b(arg){
+			console.log(arg);
+		}
+		cbs.add(a);
+		cbs.add(b);
+		
+		cbs.remove(b);
+		cbs.fire('1');
+		//====================
+/*		<script src="../jQuery2.0.3源码分析/src/Sizzle-annotation.js"><\/script>
+var test={
+            foo:function(){
+                console.log(this);
+            }
+        };
+        (test.foo)();
+        (test.foo=test.foo)();
+        (true&&test.foo)();
+        var t=test.foo;
+        t();//标志符
+
+        function test2(){
+            console.log('t2');
+        }(1)// 这只是一个分组操作符，不是函数调用！
+        // test2(); // 这才是一个真正的函数调用
+
+        var foo = {
+            bar: function (x) {//周围的括号不是必须的，因为函数已经处在表达式的位置，解析器知道它处理的是在函数执行阶段应该被创建的FE，这样在函数创建后立即调用了函数。
+                return x % 2 != 0 ? 'yes' : 'no';
+            }(1)
+        };
+     
+        alert(foo.bar); // 'yes'*/
+        //=========================
+
+			// function fn1(name){
+	 //        console.log('fn1:'+name);
+	 //    }
+	 //    function fn2(name){
+	 //        console.log('fn2:'+name);
+	 //    }
+		// aObserver.add('1 2 3',fn1);
+		// aObserver.add('1',fn2);
+		// console.log(aObserver.events);
+		// aObserver.one('2',fn2);
+		// aObserver.fire('2','jeff');
+		// aObserver.fire('1','fire');
+		// aObserver.fire('3','alex');
+
+		var matchReg={	
+			ID: /^#((?:\\.|[\w-]|[^\x00-\xa0])+)/,
+			TAG: /^((?:\\.|[\w*-]|[^\x00-\xa0])+)/,
+			NAME: /^\[name=['"]*((?:[\w\u00c0-\uFFFF\-]|\\.)+)['"]*\]/,
+			CLASS: /^\.((?:\\.|[\w-]|[^\x00-\xa0])+)/,
+			ATTR: /^\[[\x20\t\r\n\f]*((?:\\.|[\w-]|[^\x00-\xa0])+)[\x20\t\r\n\f]*(?:([*^$|!~]?=)[\x20\t\r\n\f]*(?:(['"])((?:\\.|[^\\])*?)\3|((?:\\.|[\w#-]|[^\x00-\xa0])+)|)|)[\x20\t\r\n\f]*\]/,
+			CHILD: /^:(only|first|last|nth|nth-last)-(child|of-type)(?:\([\x20\t\r\n\f]*(even|odd|(([+-]|)(\d*)n|)[\x20\t\r\n\f]*(?:([+-]|)[\x20\t\r\n\f]*(\d+)|))[\x20\t\r\n\f]*\)|)/i,
+			// BOOL: /^(?:checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped)$/i,
+			POS: /^:(even|odd|eq|gt|lt|nth|first|last)(?:\([\x20\t\r\n\f]*((?:-\d)?\d*)[\x20\t\r\n\f]*\)|)(?=[^-]|$)/i,
+			PSEUDO: /^:((?:\\.|[\w-]|[^\x00-\xa0])+)(?:\(((['"])((?:\\.|[^\\])*?)\3|((?:\\.|[^\\()[\]]|\[[\x20\t\r\n\f]*((?:\\.|[\w-]|[^\x00-\xa0])+)[\x20\t\r\n\f]*(?:([*^$|!~]?=)[\x20\t\r\n\f]*(?:(['"])((?:\\.|[^\\])*?)\8|((?:\\.|[\w#-]|[^\x00-\xa0])+)|)|)[\x20\t\r\n\f]*\])*)|.*)\)|)/
+		};
+		var ExprFind={
+			ID: function( match, context ) {
+				if ( typeof context.getElementById !== "undefined") {
+					var m = context.getElementById(match[1]);
+					return m && m.parentNode ? [m] : [];
+				}
+			},
+			TAG: function( match, context ) {
+				if ( typeof context.getElementsByTagName !== "undefined" ) {
+					var ret= context.getElementsByTagName( match[1] );
+					if(ret&&ret.length){
+						ret=[].slice.call(ret);
+					}
+					return ret;
+				}
+			},
+			NAME: function( match, context ) {
+				if ( typeof context.getElementsByName !== "undefined" ) {
+					var ret = [],
+						results = context.getElementsByName( match[1] );
+
+					for ( var i = 0, l = results.length; i < l; i++ ) {
+						if ( results[i].getAttribute("name") === match[1] ) {
+							ret.push( results[i] );
+						}
+					}
+					return ret.length === 0 ? null : ret;
+				}
+			},
+			CLASS:function (match,context){
+			    if ( typeof context.getElementsByClassName !== "undefined") {
+					return context.getElementsByClassName(match[1]);
+				}
+	            var all=context.getElementsByTagName('*'),
+	            	len=all.length,i,
+	            	matchElemets=[],
+	            	regex=new RegExp("(?:^|\\s)"+match[1]+"(?:\\s|$)");
+	            	element;
+	            for(i=0;i<len;i++){
+	                element=all[i];
+	                if(regex.test(element.className)){
+	                    matchElemets.push(element);
+	                }
+	            }
+	            return matchElemets;
+	        }
+		};
+		var RelativeValid={
+			"+":function(rets,seed){
+				var i=0,l=seed.length||0,
+					elem,next,ret=[];
+				while(elem=rets.pop()){
+					next=elem.nextSibling;
+					while(next&&next.nodeType===3){
+						next=next.nextSibling;
+						if(next&&next.nodeType===1){break;}
+					}
+					for(;i<l;i++){
+						if(next===seed[i]){
+							ret.push(seed[i]);
+						}
+					}
+				}
+				return ret;
+			},
+			">":function(rets,seed){
+				var i=0,l=seed.length||0,
+					j,len=rets.length,
+					elem,ret=[];
+				for(;i<l;i++){
+					elem=seed[i]
+					for(j=0;j<len;j++){
+						if(elem.parentNode===rets[j]){
+							ret.push(elem);
+						}
+					}
+				}
+				return ret;
+			},
+			" ":function(rets,seed){
+				var i=0,l=seed.length||0,
+					j,len=rets.length||0,
+					elem,node,ret=[];
+				for(;i<l;i++){
+					node=seed[i];
+					elem=seed[i].parentNode;
+					for(j=0;j<len;j++){
+						if(elem===rets[j]){
+							ret.push(node);
+						}else{
+							while(elem=elem.parentNode){
+								if(elem===rets[j]){
+									ret.push(node);
+								}
+							}
+						}
+					}
+				}
+				return ret;
+			},
+			"~":function(rets,seed){
+				var i=0,l=seed.length||0,
+					elems,sibling,ret=[];
+				while(sibling=rets.pop()){
+					elems=[].slice.call(sibling.parentNode.children);
+					for(;i<l;i++){
+						if(seed[i]===sibling){continue;}
+						if(elems.indexOf(seed[i])>=0){
+							ret.push(seed[i]);
+						}
+					}
+				}
+				return ret;
+			}
+		}
+		var RelativeFilter={
+			"+": function(node){
+				var prev=node.previousSibling;
+				while(prev){
+					if(prev.nodeType===1){
+						return prev;
+					}
+					if(prev.nodeType===3){
+						prev=prev.previousSibling;
+					}
+				}
+				return false;
+			},
+
+			">": function(node) {
+				var parent=node.parentNode;
+				if(parent){
+					return parent;
+				}
+				return false;
+			},
+
+			" ": function(node){
+				var ancestor=node.parentNode,ret=[];
+				while(ancestor&&ancestor.nodeType===1&&ancestor.nodeName!=='HTML'){
+					ret.push(ancestor);
+					ancestor=ancestor.parentNode;
+				}
+				return ret;
+			},
+
+			"~": function( node) {
+				var parent=node.parentNode,ret=[];
+				if(parent&&parent.children.length){
+					ret=ret.concat([].slice.call(parent.children));
+				}
+				return ret;
+			}
+		};
+		var ExprFilter={
+			ID: function( node, match ) {
+				if(node.nodeType === 1 && node.getAttribute("id") === match[1]){
+					return node;
+				}
+				return false;
+			},
+
+			TAG: function( node, match ) {
+				if((match[1] === "*" && node.nodeType === 1) || node.nodeName && node.nodeName.toLowerCase() === match[1]){
+					return node;
+				}
+				return false;
+			},
+
+			NAME:function(node,match){
+				if(node.nodeType===1&&node.getAttribute('name')===match[1]){
+					return node;
+				}
+				return false;
+			},
+			CLASS: function( node, match ) {
+				if(node.nodeName==='HTML'||node.nodeType!==1){return false;}
+				if((" " + (node.className || node.getAttribute("class")) + " ")
+				.indexOf( match[1] ) > -1){
+					return node;
+				}
+				return false;
+			},
+			ATTR: function( node, match ) {
+				var isCheck,
+					operator=match[2],
+					check=match[5],
+					result = node.getAttribute(match[1]);
+					
+				if(result==null&&operator==="!="){
+					return node;
+				}
+				if(!operator){
+					return node;
+				}
+				result += "";
+				//如果是等号，判断目标值跟当前属性值相等是否为真
+				isCheck = operator === "=" ? result === check :
+				   //如果是不等号，判断目标值跟当前属性值不相等是否为真
+					operator === "!=" ? result !== check :
+					//如果是起始相等，判断目标值是否在当前属性值的头部
+					operator === "^=" ? check && result.indexOf(check) === 0 :
+					//这样解释： lang*=en 匹配这样 <html lang="xxxxenxxx">的节点
+					operator === "*=" ? check && result.indexOf(check) > -1 :
+					//如果是末尾相等，判断目标值是否在当前属性值的末尾
+					operator === "$=" ? check && result.slice(-check.length) === check :
+					//这样解释： lang~=en 匹配这样 <html lang="zh_CN en">的节点
+					operator === "~=" ? (" " + result + " ").indexOf(check) > -1 :
+					//这样解释： lang=|en 匹配这样 <html lang="en-US">的节点
+					operator === "|=" ? result === check || result.slice(0, check.length + 1) === check + "-" :
+					//其他情况的操作符号表示不匹配
+					false;
+				if(isCheck){
+					return node;
+				}
+				return false;
+			},
+
+			CHILD: function( node, match ) {
+				var type = match[1],
+					index,nIndex,n,first,cal,
+					parent,count,diff,elem;
+				switch(type){
+					case 'only':
+					case 'first':
+						elem=node.previousSibling;
+						while(elem){
+							if(elem.nodeType===1){
+								return false;
+							}
+							elem=elem.previousSibling;
+						}
+						return node;
+					case 'last':
+						elem=node.nextSibling;
+						while(elem){
+							if(elem.nodeType===1){
+								return false;
+							}
+							elem=elem.nextSibling;
+						}
+						return node;
+					case 'nth':
+						index=match[3];
+						n=match[6];
+						cal=match[7];
+						first=match[8]||0;
+
+						if(!index){return false;}
+						if(index==='even'){
+							n=2;first=0;
+						}
+						if(index==='odd'){
+							n=2;first=1;
+						}
+						parent=node.parentNode;
+						if(parent&&!parent.setIndex){
+							count=0;
+							parent.setIndex=true;
+							for(elem=parent.firstChild;elem;elem=elem.nextSibling){
+								if(elem.nodeType===1){
+									elem.cIndex=++count;
+								}
+							}
+						}
+
+						n=Number(n);
+						first=Number(first);
+						index=Number(index);
+						nIndex=Number(node.cIndex);
+						if(index===first){
+							if(nIndex===index){
+								return node;
+							}
+						}
+						diff=cal==='-'?(nIndex+first):(nIndex-first);
+						if(diff % n === 0 && diff / n >= 0){
+							return node;
+						}
+						break;
+					default:break;
+				}
+				return false;
+			},
+			POS: function( node, match ) {
+				var elem,index,nIndex,
+					type = match[1],
+					parent=node.parentNode;
+				if(parent&&!parent.posIndex){
+					count=0;
+					parent.posIndex=true;
+					for(elem=parent.firstChild;elem;elem=elem.nextSibling){
+						if(elem.nodeType===1){
+							elem.cIndex=count++;
+						}
+					}
+				}
+				nIndex=Number(node.cIndex);
+				index=Number(match[2]);
+				switch(type){
+					case 'first':
+						elem=node.previousSibling;
+						while(elem){
+							if(elem.nodeType===1){
+								return false;
+							}
+							elem=elem.previousSibling;
+						}
+						return node;
+					case 'last':
+						elem=node.nextSibling;
+						while(elem){
+							if(elem.nodeType===1){
+								return false;
+							}
+							elem=elem.nextSibling;
+						}
+						return node;
+					case 'even':
+						if((nIndex+1) % 2===0&&nIndex / 2 >= 0){
+							return node;
+						}
+						break;
+					case 'odd':
+						if(nIndex % 2===0&&nIndex / 2 >=0){
+							return node;
+						}
+						break;
+					case 'eq':
+						if(nIndex==index){
+							return node;
+						}
+						break;
+					case 'gt':
+						if(nIndex>index){
+							return node;
+						}
+						break;
+					case 'lt':
+						if(nIndex<index){
+							return node;
+						}
+						break;
+					default:break;
+				}
+				return false;
+			},
+			PSEUDO: function( elem, match ) {
+				var type=match[1];
+				switch(type){
+					case 'focus':
+						if(elem === document.activeElement && (!document.hasFocus || document.hasFocus()) && !!(elem.type || elem.href || ~elem.tabIndex)){
+							return elem;
+						}
+						break;
+					case 'enabled':
+						if(elem.disabled===false){return elem;}
+						break;
+					case 'disabled':
+						if(elem.disabled===true){return elem;}
+						break;
+					case 'checked':
+						var nodeName = elem.nodeName.toLowerCase();
+						if((nodeName === "input" && !!elem.checked) || (nodeName === "option" && !!elem.selected)){
+							return elem;
+						}
+						break;
+					case 'selected':
+						if ( elem.parentNode ) {
+							elem.parentNode.selectedIndex;
+						}
+
+						if(elem.selected === true){return elem;}
+						break;
+					case 'empty':
+						for ( elem = elem.firstChild; elem; elem = elem.nextSibling ) {
+							if ( elem.nodeName > "@" || elem.nodeType === 3 || elem.nodeType === 4 ) {
+								return false;
+							}
+						}
+						return elem;
+					case 'parent':
+						if(!ExprFilter.PSEUDO["empty"]( elem )){
+							return elem;
+						}
+						break;
+					case 'input':
+						if(/^(?:input|select|textarea|button)$/i.test( elem.nodeName )){
+							return elem;
+						}
+						break;
+					case 'button':
+						var name = elem.nodeName.toLowerCase();
+						if(name === "input" && elem.type === "button" || name === "button"){
+							return elem;
+						}
+						break;
+					case 'text':
+						var attr;
+						if(elem.nodeName.toLowerCase() === "input" &&
+						elem.type === "text" &&
+						( (attr = elem.getAttribute("type")) == null || attr.toLowerCase() === elem.type )){
+							return elem;
+						}
+						break;
+					default:break;
+				}
+				return false;
+			}
+		};
+		//去重复的选项
+		function unique(results){
+			for(var i=0;i<results.length;i++){
+				for(var j=0;j<results.length;j++){
+					if(i==j){continue;}
+					if(results[i]===results[j]){
+						results.splice(j,1);
+					}
+				}
+			}
+			return results;
+		}
+		//分词
+		function tokenize(selector){
+			var	whitespace = "[\\x20\\t\\r\\n\\f]",
+				groupReg = new RegExp( "^" + whitespace + "*," + whitespace + "*" ),
+				relReg = new RegExp("^"+whitespace+"*([>+~]|"+whitespace+")"+whitespace+"*"),
+				sofar=selector,
+				groups=[],
+				match,
+				token;
+			while(sofar){
+				if(!match||(match=groupReg.exec(sofar))){//按,进行分组
+					if(match){
+						sofar=sofar.slice(match[0].length)||sofar;
+					}
+					groups.push(token=[]);
+				}
+				match=false;
+				if(match=sofar.match(relReg)){//关系选择符
+					token.push({
+							value:match[1],
+							type:'RELATIVE',
+							matches:match
+						});
+					sofar=sofar.slice(match[0].length);
+				}
+				for(type in matchReg){//tag,class,attr等其他选择符
+					if ( match = sofar.match(matchReg[ type ])){
+						token.push({
+							value:match[1],
+							type:type,
+							matches:match
+						});
+						sofar=sofar.slice(match[0].length);
+						if(match){break;}
+					}
+				}
+				if(!match){break;}
+			}
+			return groups;
+		}
+		//入口
+		function query(selector,context,results,seed){
+			results = results || [];//结果集
+			context = context || document;//运行上下文
+			var origContext = context;
+			if(context.nodeType!==1&&context.nodeType!==9){
+				return [];
+			}
+			if(!selector||typeof selector!=='string'){
+				return results;
+			}
+			
+			return select(selector,context,seed);
+		}
+		function select(selector,context,seed){
+			var matches=tokenize(selector),
+				tokens,
+				token,
+				results=[],
+				rel,
+				relatives,
+				part,
+				curParts=[],
+				elems,
+				matchElems;
+
+			while(tokens=matches.shift()){
+				matchElems=[];
+				relatives=[];
+				while(token=tokens.pop()){
+					if(token.type==='RELATIVE'){
+						relatives.push(token.value);
+						if(matchElems[0]&&matchElems[0].length){
+							while(part=curParts.pop()){
+								if(ExprFilter[part.type]){
+									matchElems[0]=filterFn(matchElems[0],ExprFilter[part.type],part.matches);
+									if(!matchElems[0].length){break;}
+								}
+							}
+							elems=matchElems[0].length?filterFn(matchElems[0],RelativeFilter[token.value]):null;
+							if(elems){
+								matchElems.unshift(elems);
+								curParts=[];
+							}else{
+								matchElems=[];break;
+							}
+							
+						}else{//第一轮如果没有找到种子集
+							matchElems=[];break;
+						}
+					}
+					if(ExprFind[token.type]){
+						if(matchElems[0]&&matchElems[0].length){//过滤
+							matchElems[0]=filterFn(matchElems[0],ExprFilter[token.type],token.matches);
+						}else{//第一次查找
+							matchElems[0]=ExprFind[token.type](token.matches,context);
+						}
+						if(!matchElems[0].length){matchElems=[];break;}
+					}else if(ExprFilter[token.type]){
+						curParts.push(token);
+					}
+				}
+				if(matchElems.length){
+					if(seed){//find
+						relatives.push(' ');
+						matchElems.unshift(seed);
+					}
+					while(rel=relatives.pop()){//将每一级元素集过滤直到最终的种子集
+						matchElems[0]=RelativeValid[rel](matchElems.shift(),matchElems[0]);
+						if(!matchElems[0]||!matchElems[0].length){
+							matchElems[0]=[];break;
+						}
+					}
+					results=results.concat(matchElems[0]);
+				}
+			}
+			return results;
+		}
+		//过滤主函数
+		function filterFn(elems,filter,match){
+			var node,
+				i=0,
+				l=elems.length,
+				results=[],ret;
+			for(;i<l;i++){
+				ret=filter(elems[i],match);
+				if(ret instanceof Array){
+					results=results.concat(ret);
+				}else if(ret){
+					results.push(ret);
+				}
+			}
+			return match?results:unique(results);
+		}
+
+
+		// console.log(query('#div :input,p'));
+		// var link=$('#div ul li a:eq(2)');
+		// console.log(link)
+		// var arr=$.grep([1,2,3],function(i,item){
+		// 	return i>1;
+		// });
+
+		// var arr=$('li').filter(function(i,item){
+		// 	return i>1;
+		// });
+
+		// var arr=$.each([1,2,3],function(i,item){
+		// 	console.log(item);
+		// });
+		// var arr=$.map([1,2,3],function(i,item){
+		// 	return item*2;
+		// });
+		// console.log(arr);
+	};
+</script>
+</head>
+<body>
+	<div id="div" name="top">
+		<div class="content" name="sec">
+		<ul id="ul" class="list">
+			<li class="item" aa="bb"><a href="#">111</a></li>
+			<li class="item"><a href="#">222</a></li>
+			<li class="item"><a href="#">333</a></li>
+		</ul>
+		</div>
+		<a href="">444</a>
+		<input type="text">
+		<input type="button" value="btn">
+		<textarea name="" id="" cols="30" rows="10"></textarea>
+		<input type="checkbox" name="" id="">
+	</div>
+	<p>aaa</p>
+</body>
+</html>
