@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>继承</title>
+	<script type="text/javascript">
+	//原型链 问题:1.通过原型实现继承,原型实际会变成另一个类型的实例;2.不能向超类型的构造函数传递参数
+	function Super(){
+		this.property=true;
+	}
+	Super.prototype.getSuperValue=function(){
+		return this.property;
+	}
+
+	function Sub(){
+		this.subProperty=false;
+	}
+	Sub.prototype=new Super();
+	Sub.prototype.getSubValue=function(){
+		return this.subProperty;
+	}
+	//借用构造函数 问题:方法都在构造函数中定义,因此无法复用函数; 在超类型中定义的方法,子类型不可见
+	function Super2(){
+		this.colors=['red','green','blue'];
+	}
+	Super2.prototype.getColors=function(){
+		alert(this.colors);
+	}
+	function Sub2(){
+		Super2.call(this);
+	}
+	//组合继承 避免了原型链和借构造函数的缺陷,融合它们的优点
+	//问题:无论何种情况下,都会调用两次超类的构造函数,这样就产生了两组name和colors属性，一组在实例上，一组在SubType原型中。
+	function Super3(name){
+		this.name=name;
+		this.colors=['red','green','blue'];
+	}
+	Super3.prototype.sayName=function(){
+		alert(this.name);
+	}
+	function Sub3(name,age){
+		Super3.call(this,name);//第一次
+		this.age=age;
+	}
+	Sub3.prototype=new Super3();//继承方法 第二次
+	Sub3.prototype.sayAge=function(){
+		alert(this.age);
+	};
+	//原型式继承 相当于创建了o对象的副本
+	function object(o){
+		function F(){}
+		F.prototype=o;
+		return new F();
+	}
+	//寄生式继承 与原型继承紧密相关的一种思路
+	function createAnother(original){
+		var clone=object(original);
+		clone.sayHi=function(){
+			alert('Hi');
+		}
+		return clone;
+	}
+
+	//寄生组合式继承
+	//完美解决了组合式继承中产生两组相同属性的问题
+	function Super4(name){
+		this.name=name;
+		this.colors=['red','green','blue'];
+	}
+	Super4.prototype.sayName=function(){
+		alert(this.name);
+	}
+	function Sub4(name,age){
+		Super4.call(this,name);
+		this.age=age;
+	}
+	function inhPrototype(subType,superType){
+		var prototype=object(superType.prototype);
+		prototype.constructor=subType;
+		subType.prototype=prototype;
+	}
+	//将object函数和inhPrototype函数合二为一		
+	function inherits(child,parent){
+		var f=function(){};
+		f.prototype=parent.prototype;
+		child.prototype=new f();
+		child.prototype.constructor=child;//注意修正constructor
+	}
+
+	inhPrototype(Sub4,Super4);
+	// Sub4.prototype=new Super4();
+	Sub4.prototype.sayAge=function(){
+		alert(this.age);
+	};
+	(function(){
+		var s=new Sub4('aa',24);
+		console.log(s);
+		var s2=new Sub2();
+		console.log(s2);
+	}());
+	</script>
+</head>
+<body>
+	
+</body>
+</html>

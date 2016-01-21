@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>面向对象</title>
+	<script type="text/javascript">
+	//工程模式 虽然解决了创建多个相似对象问题,但没能解决对象识别问题(怎样知道对象的类型)
+	function createPerson(name,age){
+		var o=new Object();
+		o.name=name;
+		o.age=age;
+		o.sayName=function(){
+			alert(this.name);
+		};
+		return o;
+	}
+	//构造函数模式 没有显示创建对象,直接将属性和方法赋值给this对象,没有return语句;
+	//主要问题:每个方法都要在实例上重新创建一次
+	function Person(name,age){
+		this.name=name;
+		this.age=age;
+		this.sayName=function(){
+			alert(this.name);
+		};
+	}
+	//原型模式
+	function Person2(){}
+	Person2.prototype.age=29;
+	Person2.prototype.name='chart';
+	Person2.prototype.sayName=function(){
+		alert(this.name);
+	};
+	//更简洁的原型语法 以对象字面量的形式创建新对象,constructor属性将不再指向Person3,因此需要修正
+	//原型对象问题:原型中所有属性被很多实例共享
+	function Person3(){}
+	Person3.prototype={
+		constructor:Person3,
+		name:'david',
+		friends:['shelby','court'],
+		age:30,
+		sayName:function(){
+			alert(this.name);
+		}
+	};
+	
+	//混合使用构造函数和原型模式
+	function Person4(name,age){
+		this.name=name;
+		this.age=age;
+		this.friends=['shelby','court'];
+	}
+	Person4.prototype={
+		constructor:Person4,
+		sayName:function(){
+			alert(ths.name);
+		}
+	};
+	//动态原型模式 不能使用对象字面量重写原型,否则会切断现有实例与原型之间的联系
+	function Person5(name,age){
+		this.name=name;
+		this.age=age;
+		if(typeof this.sayName!='function'){
+			Person5.prototype.sayName=function(){
+				alert(this.name);
+			};
+		}
+	}
+	//寄生构造函数模式 与工厂模式一样,但是使用new操作,返回的对象与构造函数或构造函数的原型属性之间没有关系,
+	//在可以使用其他模式的情况下,不要使用该模式
+	function Person6(name,age){
+		var o=new Object();
+		o.name=name;
+		o.age=age;
+		o.sayName=function(){
+			alert(this.name);
+		};
+		return o;
+	}
+	//稳妥构造函数模式
+	function Person7(name,age){
+		var o=new Object();
+		//可以在这里定义私有变量和函数
+		o.sayName=function(){
+			alert(name);
+		};
+		return o;
+	}
+	(function(){
+		// var p1=createPerson('alex',25);
+		// p1.sayName();
+
+		// var p2=new Person('bob',24);
+		// p2.sayName();
+
+		// var p3=new Person4();
+		// var p4=new Person4();
+		// p3.friends.push('van');
+		// alert(p3.friends);
+		// alert(p4.friends);
+
+		var friend=new Person6('edward',28);
+	}());
+	</script>
+</head>
+<body>
+	
+</body>
+</html>

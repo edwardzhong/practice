@@ -36,8 +36,8 @@
 
 
 ###文档
-1. [工作常用的东东](https://github. com/edwardzhong/practice/blob/master/work. md)
-2. [ssi的总结](https://github. com/edwardzhong/practice/blob/master/ssi. md)
-3. [操作DOM的时机](https://github. com/edwardzhong/practice/blob/master/domTime. md)
-4. [常用Git命令清单](https://github. com/edwardzhong/practice/blob/master/git. md)
-5. [mac命令行总结](https://github. com/edwardzhong/practice/blob/master/macShell. txt)
+1. [工作常用的东东](https://github. com/edwardzhong/practice/blob/master/work. md)  
+2. [ssi的总结](https://github. com/edwardzhong/practice/blob/master/ssi. md)  
+3. [操作DOM的时机](https://github. com/edwardzhong/practice/blob/master/domTime. md)  
+4. [常用Git命令清单](https://github. com/edwardzhong/practice/blob/master/git. md)  
+5. [mac命令行总结](https://github. com/edwardzhong/practice/blob/master/macShell. txt)  

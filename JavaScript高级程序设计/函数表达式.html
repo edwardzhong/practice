@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>函数表达式</title>
+	<script type="text/javascript">
+	//模块模式
+	function baseComponent(){}
+	var application=function(){
+		var components=[];
+		components.push(new baseComponent());
+		return {
+			getComponentsCounts:function(){
+				return components.length;
+			},
+			registerComponents:function(component){
+				if(typeof component=="object"){
+					components.push(component);					
+				}
+			}
+		}
+	}();
+	//增强
+	var application2=function(){
+		var components=[];
+		components.push(new baseComponent());
+		var app=new baseComponent();
+		app.getComponentsCounts=function(){
+				return components.length;
+		};
+		app.registerComponents=function(component){
+			if(typeof component=="object"){
+				components.push(component);					
+			}
+		};
+		return app;
+	}();
+	(function(){
+		console.log(application.getComponentsCounts());
+	}());
+	</script>
+</head>
+<body>
+	
+</body>
+</html>
