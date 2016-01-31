@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>二叉树</title>
+	<style>
+
+	</style>
+</head>
+<body>
+
+<script>
+	function BTree(list,parent){
+		this.key=list[0];
+		this.parent=parent||null;
+		this.left=null;
+		this.right=null;
+		for(var i=1,len=list.length;i<len;i++){
+			this.insert(list[i]);
+		}
+	}
+
+	BTree.prototype={
+		insert:function(key){
+			if(this.key>key){
+				if(!this.left){
+					this.left=new BTree([key],this);
+				} else {
+					this.left.insert(key);
+				}
+			} else {
+				if(!this.right){
+					this.right=new BTree([key],this);
+				} else {
+					this.right.insert(key);
+				}
+			}
+		},
+		delete:function(key){
+			if(this.key==key){
+				if(this.left&&this.right){
+					var node=this.right;
+					while (node.left) {//找到最左的节点
+						node=node.left;
+					}
+					node.left=this.left;
+					if(node.right){//如果还存在右节点，将右节点上移
+						return this.delete(node.key);
+					}
+					node.right=this.right;
+					node.parent=this.parent;
+					// return node;
+
+				} else {
+					var prop=this.parent.left==this?'left':'right';
+					if(this.left) {//只有左子树
+						this.left.parent=this.parent;
+						this.parent[prop]=this.left;
+					} else if(this.right){//只有右子树
+						this.right.parent=this.parent;
+						this.parent[prop]=this.right;
+					} else {//叶子节点
+						this.parent[prop]=null;
+					}
+
+				}			
+			} else if(this.key>key){
+				this.left.delete(key);
+			} else {
+				this.right.delete(key);
+			}
+
+		},
+		search:function(key){
+			if(this.key==key){
+				return this;
+			} else if(this.key>key){
+				return this.left?this.left.search(key):null;
+			} else {
+				return this.right?this.right.search(key):null;
+			}
+		},
+		mTravelTree:function(){
+
+		}
+	};
+	var b=new BTree([3,1,4,2,5,6,7]);
+	console.log(b);
+	console.log(b.search(5));
+	b.delete(3);
+	console.log(b);
+</script>	
+</body>
+</html>
