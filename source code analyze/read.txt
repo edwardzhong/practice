@@ -1,0 +1,66 @@
+jQuery 2.0.3 源代码结构
+
+(function(){
+	(21 , 94) 定义了一些变量和函数 jQuery = function(){};
+	(96 , 283) 给JQ对象，添加一些方法和属性
+	(285 , 347) extend : JQ的继承方法
+	(349 , 870) jQuery.extend() : 扩展一些工具方法
+	(877 , 2856)  Sizzle : 复杂选择器的实现
+	(2880 , 3042) Callbacks : 回调对象 : 对函数的统一管理
+	(3043 , 3183) Deferred : 延迟对象 : 对异步的统一管理
+	(3184 , 3295) support : 功能检测
+	(3308 , 3652) data() : 数据缓存
+	(3653 , 3797) queue() : 队列方法 : 执行顺序的管理
+	(3803 , 4299) attr() prop() val() addClass()等 : 对元素属性的操作
+	(4300 , 5128) on() trigger() : 事件操作的相关方法
+	(5140 , 6057) DOM操作 : 添加 删除 获取 包装 DOM筛选
+	(6058 , 6620) css() : 样式的操作
+	(6621 , 7854) 提交的数据和ajax() : ajax() load() getJSON()
+	(7855 , 8584) animate() : 运动的方法
+	(8585 , 8792) offset() : 位置和尺寸的方法
+	(8804 , 8821) JQ支持模块化的模式
+	(8826)  window.jQuery = window.$ = jQuery;
+})();
+
+
+jQuery.extend({
+        
+        expando  :  生成唯一JQ字符串(内部)
+        noConflict()  :  防止冲突
+        isReady  :  DOM是否加载完(内部)
+        readyWait  :  等待多少文件的计数器(内部)
+        holdReady()  :  推迟DOM触发
+        ready()  :  准备DOM触发
+        isFunction()  :  是否为函数
+        isArray()  :  是否为数组
+        isWindow()  :  是否为window
+        isNumeric()  :  是否为数字 
+        type()  :  判断数据类型
+        isPlainObject()  :  是否为对象自变量
+        isEmptyObject()  :  是否为空的对象
+        error()  :  抛出异常
+        parseHTML()  :  解析节点
+        parseJSON()  :  解析JSON
+        parseXML()  :  解析XML
+        noop()  :  空函数
+        globalEval()  :  全局解析JS
+        camelCase()  :  转驼峰
+        nodeName()  :  是否为指定节点名(内部)
+        each()  :  遍历集合
+        trim()  :  去前后空格
+        makeArray()  :  类数组转真数组
+        inArray()  :  数组版indexOf
+        merge()  :  合并数组
+        grep()  :  过滤新数组
+        map()  :  映射新数组
+        guid  :  唯一标识符(内部)
+        proxy()  :  改this指向
+        access()  :  多功能值操作(内部)
+        now()  :  当前时间
+        swap()  :  CSS交换(内部)
+        
+});
+
+jQuery.ready.promise = function(){};  监测DOM的异步操作(内部)
+
+function isArraylike(){}  类似数组的判断(内部)

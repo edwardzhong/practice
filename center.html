@@ -103,27 +103,26 @@
 		<p></p>
 	</section>
 	<h3>绝对定位居中</h3>
-		<section>
-			<div style="position: relative;">
-				<div style="height:50px;width:50px;background-color:#00f;position:absolute;left:50%;top:50%;margin-left:-25px;margin-top:-25px;"></div>
-			</div>
-			<p>只适用于已经知道宽度和高度的元素</p>
-			<p>关键样式:父元素position: relative; 子元素:position:absolute;left:50%;top:50%;margin-left:-25px;margin-top:-25px;</p>
+	<section>
+		<div style="position: relative;">
+			<div style="height:50px;width:50px;background-color:#00f;position:absolute;left:50%;top:50%;margin-left:-25px;margin-top:-25px;"></div>
+		</div>
+		<p>只适用于已经知道宽度和高度的元素</p>
+		<p>关键样式:父元素position: relative; 子元素:position:absolute;left:50%;top:50%;margin-left:-25px;margin-top:-25px;</p>
 
-			<div style="position: relative;">
-				<div style="height:50px;width:50px;background-color:#00f;position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;"></div>
-			</div>
-			<p>只适用于已经知道宽度和高度的元素,只支持ie9+,firefox,chrome</p>
-			<p>父元素position: relative; 子元素:position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;</p>
+		<div style="position: relative;">
+			<div style="height:50px;width:50px;background-color:#00f;position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;"></div>
+		</div>
+		<p>只适用于已经知道宽度和高度的元素,只支持ie9+,firefox,chrome</p>
+		<p>父元素position: relative; 子元素:position:absolute;left:0;top:0;right:0;bottom:0;margin:auto;</p>
 
-			<div style="position: relative;">
-				<div style="height:50px;width:50px;background-color:#00f;position:absolute;left:50%;top:50%;-webkit-transform:translate(-50%,-50%);"></div>
-			</div>
-			<p>绝对定位+css3 transform:translate(-50%，-50%)</p>
-			<p>关键样式：left:50%;top:50%;-webkit-transform:translate(-50%,-50%);</p>
-			<p>适用于未知高度和宽度的居中</p>
-
-		</section>
+		<div style="position: relative;">
+			<div style="height:50px;width:50px;background-color:#00f;position:absolute;left:50%;top:50%;-webkit-transform:translate(-50%,-50%);"></div>
+		</div>
+		<p>绝对定位+css3 transform:translate(-50%，-50%)</p>
+		<p>关键样式：left:50%;top:50%;-webkit-transform:translate(-50%,-50%);</p>
+		<p>适用于未知高度和宽度的居中</p>
+	</section>
 	<h3>flex布局居中</h3>
 	<section>
 		<div style="display:flex;justify-content:center;">

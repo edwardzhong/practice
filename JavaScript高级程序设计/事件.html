@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>事件</title>
+	<style>
+	.darg{position: absolute;width: 100px;height: 200px;background-color: #f00;}
+	</style>
+	<script type="text/javascript">
+	//事件辅助类
+	var EventUtil={
+		addHandler:function(element,type,handler){
+			if(element.addEventListener){
+				element.addEventListener(type,handler,false);
+			}else if(element.attachEvent){
+				element.attachEvent('on'+type,handler);
+			}else{
+				element['on'+type]=handler;
+			}
+		},
+		removeHandler:function(element,type,handler){
+			if(element.removeEventListener){
+				element.removeEventListener(type,handler,false);
+			}else if(element.detachEvent){
+				element.detachEvent('on'+type,handler);
+			}else{
+				element['on'+type]=null;
+			}
+		},
+		getEvent:function(event){
+			return event?event:window.event;
+		},
+		getTarget:function(event){
+			return event.target||event.srcElement;
+		},
+		getRelatedTarget:function(event){
+			if(event.relatedTarget){
+				return event.relatedTarget;
+			}else if(event.toElement){
+				return event.toElement;
+			}else if(event.fromElement){
+				return event.fromElement;
+			}else{
+				return null;
+			}
+		},
+		preventDefault:function(event){
+			if(event.preventDefault){
+				event.preventDefault();
+			}else{
+				event.returnValue=false;
+			}
+		},
+		stopPropagation:function(event){
+			if(event.stopPropagation){
+				event.stopPropagation();
+			}else{
+				event.cancelBubble=true;
+			}
+		},
+		//获取鼠标滚轮增量值(delta)
+		getWheelDelta:function(event){
+			if(event.wheelDelta){
+				return (client.engine.opera&&client.engine.opera<9.5?-event.wheelDelta:event.wheelDelta);
+			}else{
+				return -event.detail*40;
+			}
+		},
+		//keypress事件时才有值,键所代表字符的ascii编码
+		getCharCode:function(event){
+			if(typeof event.charCode=='number'){
+				return event.charCode;
+			}else{
+				return event.keyCode;
+			}
+		},
+		//剪贴板
+		// getClipboardText:function(event){
+		// 	var clipboardData=(event.clipboardData||window.clipboardData);
+		// 	return clipboardData.getData('text');
+		// },
+		// setClipboardText:function(event,value){
+		// 	if(event.clipboardData){
+		// 		return event.clipboardData.setData('text/plain',value);
+		// 	}else if(window.clipboardData){
+		// 		return.window.clipboardData.setData('text',value);
+		// 	}
+		// }
+	}
+
+	</script>
+</head>
+<body>
+	<form action="">
+	<input id="btn" type="button" value="hi,there!" onclick="alert('hi,there');"><br>
+	<input type="text" name="txt" id="txt" maxlength='5'><br>
+	<input type="text" name="txt2" id="txt2" maxlength='5'><br>
+	<select name="sel" id="sel"></select>
+	<div id="drag" draggable="true" class="darg draggable"></div>
+	</form>
+	<script type="text/javascript">
+	(function(){
+		//模拟事件
+		//模拟鼠标事件
+			var btn=document.getElementById('btn');
+			var evt=document.createEvent('MouseEvents');
+			evt.initMouseEvent('click',true,true,document.defaultView,0,0,0,0,0,false,false,false,false,0,null);
+			btn.dispatchEvent(evt);
+		//过滤输入,只允许数字
+		EventUtil.addHandler(document.getElementById('txt'),'keypress',function(event){
+			event=EventUtil.getEvent(event);
+			var target=EventUtil.getTarget(event);
+			var charCode=EventUtil.getCharCode(event);
+			if(!/\d/.test(String.fromCharCode(charCode))&&charCode>9&&!event.ctrlKey){
+				EventUtil.preventDefault(event);
+			}
+		});
+		//自动切换焦点
+		function tabForward(event){
+			event=EventUtil.getEvent(event);
+			var target=EventUtil.getTarget(event);
+			if(target.value.length==target.maxLength){
+				var form=target.form;
+				for(var i=0,len=form.elements.length;i<len;i++){
+					if(form.elements[i]==target){
+						if(form.elements[i+1]){
+							form.elements[i+1].focus();
+						}
+						return;
+					}
+				}
+			}
+		}
+		EventUtil.addHandler(document.getElementById('txt'),'keyup',tabForward);
+		EventUtil.addHandler(document.getElementById('txt2'),'keyup',tabForward);
+
+		var select=document.getElementById('sel');
+		// var option=document.createElement('option');
+		// option.appendChild(document.createTextNode('option text'));
+		// option.setAttribute('value','option value');
+		//select.appendChild(option);
+		//最佳方案
+		var newOption=new Option('option text','option value');
+		select.add(newOption,undefined);
+		//表单序列化
+		function serialize(form){
+			var parts=[],
+			field=null,i,len,j,optLen,option,optValue;
+			for(i=0,len=form.elements.length;i<len;i++){
+				field=form.elements[i];
+				switch(field.type){
+					case 'select-one':
+					case 'select-multiple':
+					if(field.name.length){
+						for(j=0,optLen=field.options.length;j<optLen;j++){
+							option=field.options[j];
+							if(option.selected){
+								optValue='';
+								if(option.hasAttribute){
+									optValue=option.hasAttribute('value')?option.value:option.text;
+								}else{
+									optValue=option.attributes['value'].specified?option.value:option.text;
+								}
+								parts.push(encodeURIComponent(field.name)+'='+encodeURIComponent(optValue));
+							}
+						}
+					}
+					break;
+					case undefined:
+					case 'file':
+					case 'submit':
+					case 'reset':
+					case 'button':break;
+					case 'radio':
+					case 'checkbox':if(!field.checked){break;}
+					default:if(field.name.length){
+						parts.push(encodeURIComponent(field.name)+'='+encodeURIComponent(field.value));
+					}
+				}
+			}
+			return parts.join('&');
+		}
+		console.log(serialize(document.forms[0]));
+		//富文本编辑 what you see is what you get
+		//使用contentditable属性;使用document.execCommand()
+
+		//自定义事件
+		function EventTarget(){
+			this.handlers={};
+		}
+		EventTarget.prototype={
+			constructor:EventTarget,
+			addHandler:function(type,handler){
+				if(typeof this.handlers[type]=='undefined'){
+					this.handlers[type]=[];
+				}
+				this.handlers[type].push(handler);
+			},
+			fire:function(event){
+				if(!event.target){event.target=this;}
+				if(this.handlers[event.type] instanceof Array){
+					var handlers=this.handlers[event.type];
+					for(var i=0,len=handlers.length;i<len;i++){
+						handlers[i](event);
+					}
+				}
+			},
+			removeHandler:function(type,handler){
+				if(this.handlers[type] instanceof Array){
+					var handlers=this.handlers[type];
+					for(var i=0,len=handlers.length;i<len;i++){
+						if(handlers[i]==handler){break;}
+					}
+					handlers.splice(i,1);
+				}
+			}
+		};
+		//拖放
+		var DrapDrop=function(){
+			var dragdrop=new EventTarget(),
+				dragging=null,
+				diffX=0,
+				diffY=0;
+			function handleEvent(event){
+				event=EventUtil.getEvent(event);
+				var target=EventUtil.getTarget(event);
+
+				switch(event,type){
+					case 'mousedown':
+						if(target.className.indexof('draggable')>-1){
+							dragging=target;
+							diffX=event.clientX-target.offsetLeft;
+							diffY=event.clientY-target.offsetTop;
+							dragdrop.fire({type:'dragstart',target:dragging,x:event.clientX,y:clientY});
+						}
+						break;
+					case 'mousemove':
+						if(dragging!==null){
+							dragging.style.left=(event.clientX-diffX)+'px';
+							dragging.style.top=(event.clientY-diffY)+'px';
+							//触发自定义事件
+							dragdrop.fire({type:'darg',target:dragging,x:event.clientX,y:event.clientY});
+						}
+						break;
+					case 'mouseup':
+						dragdrop.fire({type:'dargend',target:dragging,x:event.clientX,y:event.clientY});
+						dragdrop=null;
+						break;
+				}
+			}
+			//公共接口
+			dragdrop.enable=function(){
+				EventUtil.addHandler(document,'mousedown',handleEvent);
+				EventUtil.addHandler(document,'mousemove',handleEvent);
+				EventUtil.addHandler(document,'mouseup',handleEvent);
+			}
+			dragdrop.disable=function(){
+				EventUtil.removeHandler(document,'mousedown',handleEvent);
+				EventUtil.removeHandler(document,'mousemove',handleEvent);
+				EventUtil.removeHandler(document,'mouseup',handleEvent);
+			}
+			return dragdrop;
+		}();
+		var d=document.getElementById('drag');
+		DrapDrop.addHandler('dragstart',function(event){
+			d.innerHTML='start dragging: '+event.target.id; 
+		});
+		DrapDrop.addHandler('drag',function(event){
+			d.innerHTML='dragging: '+event.target.id; 
+		});
+		DrapDrop.addHandler('dargend',function(event){
+			d.innerHTML='end dragging: '+event.target.id; 
+		});
+		//Yielding Processes
+		//1.数组分块
+		function chunk(array,process,context){
+			setTimeout(function(){
+				var item=array.shift();
+				process.call(context,item);
+				if(array.length>0){
+					setTimeout(arguments.callee,100);
+				}
+			},100);
+		}
+		var data=[12,4545,34367,90,45,34,87,29,45];
+		function printValue(item){
+			d.innerHTML+=item+'<br>';
+		}
+		chunk(data,printValue);
+		//2.函数节流
+		function throttle(method,context){
+			clearTimeout(method.tId);
+			method.tId=setTimeout(function(){
+				method.call(context);
+			},100);
+		}
+		function resizeDiv(){
+			d.style.height=d.offsetWidth+'px';
+		}
+		window.onresize=function(){
+			throttle(resizeDiv);
+		}
+	}());
+	</script>
+</body>
+</html>
