@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>排序</title>
+	<script>
+	var arr=[2,7,6,8,4,5,3,1];
+	/**
+	 * 冒泡排序
+	 * 每次直接进行交换
+	 */
+	function bubbleSort(){
+		var isSort=true,//是否已经排好序
+			temp,i,j,
+			len=arr.length;
+
+		for(i=0;i<len-1;i++){
+			isSort=true;
+			for(j=i+1;j<len;j++){
+				if(arr[i]>arr[j]){
+					isSort=false;
+					temp=arr[i];
+					arr[i]=arr[j];
+					arr[j]=temp;
+				}
+			}
+			if(isSort){break; }
+		}
+	}
+
+	/**
+	 * 选择排序
+	 * 每次选出最小的下标，然后再与当前左边的项进行交换
+	 */
+	function selectSort(){
+		var temp,i,j,
+			minIndex=0,
+			len=arr.length;
+		for(i=0;i<len-1;i++){
+			minIndex=i;
+			for(j=i+1;j<len;j++){
+				if(arr[minIndex]>arr[j]){//找出值最小的下标
+					minIndex=j;
+				}
+			}
+			if(minIndex!=i){
+				temp=arr[minIndex];
+				arr[minIndex]=arr[i];
+				arr[i]=temp;
+			}
+		}
+	}
+
+	/**
+	 * 插入排序
+	 * 将无序数列的第一项与有序数列的项从后往前逐个比较，找到插入位置
+	 */
+	function insertSort(){
+		var temp,i,j,
+			len=arr.length;
+
+		for(i=1;i<len;i++){
+			temp=arr[i];
+			for(j=i-1;j>-1;j--){
+				if(temp>=arr[j]){
+					break;
+				}
+				arr[j+1]=arr[j];
+			}
+			arr[j+1]=temp;
+		}
+	}
+
+	/**
+	 * 希尔排序，直接插入排序的改进，又称为缩小增量排序
+	 * 先将序列分成几个子序列，分别进行插入排序，最后合并
+	 */
+	function shellSort(){
+		var temp,i,j,
+			len=arr.length,
+			d=Math.floor(len/2);
+
+		while (d) {
+			for(i=d;i<len;i++){
+				temp=arr[i];
+				for(j=i-d;j>-1;j-=d){
+					if(temp>=arr[j]){
+						break;
+					}
+					arr[j+d]=arr[j];	
+				}
+				arr[j+d]=temp;
+			}
+			d=Math.floor(d/2);
+		}
+	}
+
+	/**
+	 * 快速排序
+	 * @param  {[type]} low  [description]
+	 * @param  {[type]} high [description]
+	 */
+	function quickSort(low,high){
+		if(low>high){return;}
+		var first=low,
+			last=high,
+			key=arr[first];
+
+		while (first<last) {
+			while(first<last&&arr[last]>=key){//从右向左找第一个小于key的数
+				last--;
+			}
+			arr[first]=arr[last];
+
+			while (first<last&&arr[first]<key) {//从左向右找第一个大于等于key的数
+				first++;
+			}
+			arr[last]=arr[first];
+		}
+		arr[first]=key;//当在当组内找完一遍以后就把中间数key回归
+		quickSort(low,first-1);//递归左边的分组
+		quickSort(first+1,high);//递归右边的分组
+	}
+	// [2,7,6,8,4,5,3,1]
+	// bubbleSort();
+	// selectSort();
+	// insertSort();
+	// shellSort();
+	quickSort(0,arr.length-1);
+	console.log(arr);
+	</script>
+</head>
+<body>
+	
+</body>
+</html>
