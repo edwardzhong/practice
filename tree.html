@@ -4,11 +4,32 @@
 	<meta charset="UTF-8">
 	<title>btree</title>
 	<style>
-
+		html,body{
+			height: 100%;
+		}
+		body{
+			font:14px Helvetica,Arial,"Microsoft Yahei",sans-serif;
+		}
+		.wrap{
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+		.node{
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			border: 1px solid  #aaa;
+			border-radius:50%;
+			color: #555;
+			font-size:30px;
+			text-align:center;
+			line-height: 50px;
+		}
 	</style>
 </head>
 <body>
-
+<div class="wrap"></div>
 <script>
 	//二叉树	
 	function BTree(list,parent){
@@ -102,8 +123,28 @@
 			callback(this);
 		}
 	};
+	var list={};
+	var wrap=document.getElementsByClassName('wrap')[0];
+	var wrapWidth=wrap.offsetWidth;
+	var nodeElem=null;
 	function drawTree(node){
 		console.log(node);
+		
+		nodeElem=document.createElement('div');
+		nodeElem.innerHTML=node.key;
+		nodeElem.className='node';
+		nodeElem.setAttribute('key',node.key);
+		wrap.appendChild(nodeElem);
+		nodeElem.style.top=node.level*100+20+'px';
+		if(!node.level){
+			nodeElem.style.left=(wrapWidth/2-nodeElem.offsetWidth/2)+'px';
+		} else {
+			var parentLeft=parseFloat(list[''+node.parent.key].style.left,10);
+			var isLeft=node.parent.left&&(node.parent.left.key==node.key?true:false);
+			var gap=100;
+			nodeElem.style.left=(isLeft?(parentLeft-gap):(parentLeft+gap))+'px';
+		}
+		list[''+node.key]=nodeElem;
 	}
 	var b=new BTree([4,1,6,7,3,2,5,0,8]);
 	console.log(b);
