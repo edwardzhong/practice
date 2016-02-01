@@ -10,48 +10,50 @@
 <body>
 
 <script>
+	//二叉树	
 	function BTree(list,parent){
-		this.key=list[0];
-		this.parent=parent||null;
-		this.left=null;
-		this.right=null;
+		this.key=list[0];//值
+		this.parent=parent||null;//父节点
+		this.left=null;//左节点
+		this.right=null;//右节点
+		this.level=parent?parent.level+1:0;//树的深度
 		for(var i=1,len=list.length;i<len;i++){
 			this.insert(list[i]);
 		}
 	}
 
 	BTree.prototype={
-		insert:function(key){
+		insert:function(key){//插入
 			if(this.key>key){
 				if(!this.left){
-					this.left=new BTree([key],this);
+					return this.left=new BTree([key],this);
 				} else {
-					this.left.insert(key);
+					return this.left.insert(key);
 				}
 			} else {
 				if(!this.right){
-					this.right=new BTree([key],this);
+					return this.right=new BTree([key],this);
 				} else {
-					this.right.insert(key);
+					return this.right.insert(key);
 				}
 			}
 		},
-		delete:function(key){
+		delete:function(key){//删除
 			if(this.key==key){
 				if(this.left&&this.right){
 					var node=this.right;
 					while (node.left) {//找到最左的节点
 						node=node.left;
 					}
-					if(this.key==node.parent.key){//直接将右子树上移
+					if(this.key==node.parent.key){//没有左节点的情况，直接将右子树上移
 						this.key=node.key;
 						this.right=node.right;
-					} else {
+					} else {//有左节点的情况
 						this.key=node.key;
 						if(node.right){//如果还存在右节点，将右节点上移
 							node.right.parent=node.parent;
 							node=node.right;
-						} else {//直接将该节点清楚
+						} else {//直接将该节点清除
 							node.parent.left=null;
 						}
 					}
@@ -75,7 +77,7 @@
 			}
 
 		},
-		search:function(key){
+		search:function(key){//搜索
 			if(this.key==key){
 				return this;
 			} else if(this.key>key){
@@ -84,18 +86,32 @@
 				return this.right?this.right.search(key):null;
 			}
 		},
-		mTravelTree:function(){
-
+		lTravelTree:function(callback){//先序遍历
+			callback(this);
+			this.left&&this.left.lTravelTree(callback);
+			this.right&&this.right.lTravelTree(callback);
+		},
+		mTravelTree:function(callback){//中序遍历
+			this.left&&this.left.mTravelTree(callback);
+			callback(this);
+			this.right&&this.right.mTravelTree(callback);
+		},
+		rTravelTree:function(callback){//后序遍历
+			this.left&&this.left.rTravelTree(callback);
+			this.right&&this.right.rTravelTree(callback);
+			callback(this);
 		}
 	};
-	function drawTree(tree){
-
+	function drawTree(node){
+		console.log(node);
 	}
-	var b=new BTree([3,1,6,7,4,2,5,0,3.5,4.5,8]);
+	var b=new BTree([4,1,6,7,3,2,5,0,8]);
 	console.log(b);
-	// console.log(b.search(5));
-	console.log(b.delete(6));
-	console.log(b);
+	// console.log(b.search(15));
+	// console.log(b.delete(2));
+	b.lTravelTree(drawTree);
+	// console.log(b.insert(1.5));
+	// console.log(b.insert(2.5));
 </script>
 </body>
 </html>
