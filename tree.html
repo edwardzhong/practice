@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>二叉树</title>
+	<title>btree</title>
 	<style>
 
 	</style>
@@ -43,16 +43,20 @@
 					while (node.left) {//找到最左的节点
 						node=node.left;
 					}
-					node.left=this.left;
-					if(node.right){//如果还存在右节点，将右节点上移
-						return this.delete(node.key);
+					if(this.key==node.parent.key){//直接将右子树上移
+						this.key=node.key;
+						this.right=node.right;
+					} else {
+						this.key=node.key;
+						if(node.right){//如果还存在右节点，将右节点上移
+							node.right.parent=node.parent;
+							node=node.right;
+						} else {//直接将该节点清楚
+							node.parent.left=null;
+						}
 					}
-					node.right=this.right;
-					node.parent=this.parent;
-					// return node;
-
 				} else {
-					var prop=this.parent.left==this?'left':'right';
+					var prop=this.parent.left.key==this.key?'left':'right';
 					if(this.left) {//只有左子树
 						this.left.parent=this.parent;
 						this.parent[prop]=this.left;
@@ -62,12 +66,12 @@
 					} else {//叶子节点
 						this.parent[prop]=null;
 					}
-
-				}			
+				}
+				return this;			
 			} else if(this.key>key){
-				this.left.delete(key);
+				return this.left?this.left.delete(key):null;
 			} else {
-				this.right.delete(key);
+				return this.right?this.right.delete(key):null;
 			}
 
 		},
@@ -84,11 +88,14 @@
 
 		}
 	};
-	var b=new BTree([3,1,4,2,5,6,7]);
+	function drawTree(tree){
+
+	}
+	var b=new BTree([3,1,6,7,4,2,5,0,3.5,4.5,8]);
 	console.log(b);
-	console.log(b.search(5));
-	b.delete(3);
+	// console.log(b.search(5));
+	console.log(b.delete(6));
 	console.log(b);
-</script>	
+</script>
 </body>
 </html>
