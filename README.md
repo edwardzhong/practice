@@ -41,3 +41,4 @@
 3. [操作DOM的时机](https://github.com/edwardzhong/practice/blob/master/domTime.md)  
 4. [常用Git命令清单](https://github.com/edwardzhong/practice/blob/master/git.md)  
 5. [mac命令行总结](https://github.com/edwardzhong/practice/blob/master/macShell.txt)  
+6. [gulp入门](https://github.com/edwardzhong/practice/blob/master/studyGulp.md)  
