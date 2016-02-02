@@ -2,41 +2,15 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>btree</title>
+	<title>二叉树</title>
 	<style>
-		html,body{
-			height: 100%;
-		}
 		body{
 			font:14px Helvetica,Arial,"Microsoft Yahei",sans-serif;
-		}
-		.wrap{
-			position: relative;
-			width: 100%;
-			height: 100%;
-		}
-		.node{
-			position: absolute;
-			width: 50px;
-			height: 50px;
-			border: 1px solid  #aaa;
-			border-radius:50%;
-			color: #555;
-			font-size:30px;
-			text-align:center;
-			line-height: 50px;
-		}
-		.line{
-			position: absolute;
-			height: 0;
-			border-top: 1px solid  #aaa;
-			transform-origin: 0 0;
 		}
 	</style>
 </head>
 <body>
 <canvas id="canvas" width="1000" height="750"></canvas>
-<!-- <div class="wrap"></div> -->
 <script>
 	//二叉树	
 	function BTree(list,parent){
@@ -131,120 +105,108 @@
 		}
 	};
 
-	var list={};
-	// var wrap=document.getElementsByClassName('wrap')[0];
-	// var wrapWidth=wrap.offsetWidth;
-	var canvas=document.getElementById('canvas'),
-		ctx=canvas.getContext('2d');
 
-	function drawTree(node){
-		console.log(node);
-		var top=0,left=0,
+
+	//使用canvas画出二叉树
+	function drawTree(tree){
+		var list={},
+			draw=canvasDraw(),
+			top=0,left=0,
 			parentNode=null,
 			parentLeft=0,
 			isLeft=true,
 			gap=100,
+			r=25,
 			nodeElem=null,
 			lineElem=null,
 			isLR=0;//0根，1左，2右，3中间
-
-		// nodeElem=document.createElement('div');
-		// nodeElem.innerHTML=node.key;
-		// nodeElem.className='node';
-		// nodeElem.setAttribute('key',node.key);
-		// wrap.appendChild(nodeElem);
-		top=node.level*100+20;
-		// nodeElem.style.top=top+'px';
-		if(!node.level){
-			isLR=0;
-			left=canvas.width/2;
-			// nodeElem.style.left=left+'px';
-		} else {
-			parentNode=list[''+node.parent.key];
-			parentLeft=parentNode.left;
-			isLeft=node.parent.left&&(node.parent.key>node.key?true:false);
-			if(!parentNode.isLR){
-				isLR=isLeft?1:2;
-			} else if(parentNode.isLR==1){
-				isLR=isLeft?1:3;
-			} else if(parentNode.isLR==2){
-				isLR=!isLeft?2:3;
+		//先序遍历
+		tree.fTravelTree(function(node){
+			console.log(node);
+			top=node.level*100+50;
+			if(!node.level){
+				isLR=0;
+				left=canvas.width/2;
 			} else {
-				isLR=3;
+				parentNode=list[''+node.parent.key];
+				parentLeft=parentNode.left;
+				parentTop=parentNode.top;
+				isLeft=node.parent.left&&(node.parent.key>node.key?true:false);
+				if(!parentNode.isLR){
+					isLR=isLeft?1:2;
+				} else if(parentNode.isLR==1){
+					isLR=isLeft?1:3;
+				} else if(parentNode.isLR==2){
+					isLR=!isLeft?2:3;
+				} else {
+					isLR=3;
+				}
+				gap=isLR==3?(10-node.level)*6:150;
+				left=isLeft?parentLeft-gap:parentLeft+gap;
+				var a=Math.abs(left-parentLeft),
+					b=Math.abs(top-parentTop),
+					c=Math.sqrt(a*a+b*b),
+					cy=b/c*r,cx=a/c*r,
+					x1=isLeft?parentLeft-cx:parentLeft+cx,
+					y1=parentTop+cy,
+					x2=isLeft?left+cx:left-cx,
+					y2=top-cy;
+
+				draw.line(x1,y1,x2,y2);
 			}
-			gap=isLR==3?50:150;
-			left=isLeft?parentLeft-gap:parentLeft+gap;
-			lineTo(parentNode.left,parentNode.top,left,top,isLeft);
-			// nodeElem.style.left=left+'px';
-			// var x=Math.abs(left-parentNode.left);
-			// var y=Math.abs(top-parentNode.top);
-			// var c=Math.sqrt(x*x+y*y);
-			// var angle=Math.tan(y/x)*180/Math.PI;// 弧度=角度*PI/180
-			// console.log(angle);
-			// lineElem=document.createElement('div');
-			// lineElem.className="line";
-			// lineElem.style.width=c+'px';
-			// if(isLeft){
-			// 	lineElem.style.transform='translate3d('+(parentNode.left)+'px,'+(parentNode.top)+'px,0) rotate('+(180-angle)+'deg)';
-			// } else {
-			// 	lineElem.style.transform='translate3d('+(parentNode.left+25)+'px,'+(parentNode.top+25)+'px,0) rotate('+(angle)+'deg)';
-			// }
-			// wrap.appendChild(lineElem);
-		}
-		drawRound(left,top,25,node.key);
-		list[''+node.key]={
-			node:node,
-			// elem:nodeElem,
-			top:top,
-			left:left,
-			isLR:isLR
-		};
+			draw.round(left,top,r,node.key);
+			list[''+node.key]={
+				node:node,
+				top:top,
+				left:left,
+				isLR:isLR
+			};
+		});
 	}
 
-	//画线
-	function lineTo(x1,y1,x2,y2,isLeft){
-		ctx.strokeStyle='#d43f3a';
-		ctx.lineWidth=1.5;
-		ctx.beginPath();
-		var r=25;
-		var x=Math.abs(x2-x1);
-		var y=Math.abs(y2-y1);
-		var c=Math.sqrt(x*x+y*y);
-		var cy=Math.sin(y/c)*r;
-		var cx=Math.cos(x/c)*r;
-		if(isLeft){
-			ctx.moveTo(x1-cx,y1+cy);
-			ctx.lineTo(x2+cx,y2-cy);
-		} else {
-			ctx.moveTo(x1+cx,y1+cy);
-			ctx.lineTo(x2-cx,y2-cy);
-		}
+	function canvasDraw(){
+		var	canvas=document.getElementById('canvas'),
+			ctx=canvas.getContext('2d');
 
-		ctx.stroke();
-	}
-
-	//画圆
-	function drawRound(x,y,r,txt){
 		ctx.font='28px Palatino';
 		ctx.fillStyle='#2e6da4';
 		ctx.textAlign="center";
 		ctx.textBaseline='middle';
-		ctx.lineWidth=2;
-		ctx.strokeStyle='#337ab7';
-		ctx.beginPath();
-		ctx.arc(x,y,r,0,Math.PI*2,false);
-		ctx.fillText(txt,x,y);
-		ctx.stroke();
+
+		//画线
+		function line(x1,y1,x2,y2){
+			ctx.strokeStyle='#d43f3a';
+			ctx.lineWidth=1.5;
+			ctx.beginPath();
+			ctx.moveTo(x1,y1);
+			ctx.lineTo(x2,y2);
+			ctx.stroke();
+		}
+
+		//画圆
+		function round(x,y,r,txt){
+			ctx.strokeStyle='#337ab7';
+			ctx.lineWidth=2;
+			ctx.beginPath();
+			ctx.arc(x,y,r,0,Math.PI*2,false);
+			ctx.fillText(txt,x,y);
+			ctx.stroke();
+		}
+
+		return {
+			line:line,
+			round:round
+		};
 	}
 
-	// var b=new BTree([4,1,6,9,3,2,5,0,8,7,10]);
-	var b=new BTree([5,1,6,9,3,2,4,0,8,7,10]);
-	console.log(b);
-	// console.log(b.search(15));
-	// console.log(b.delete(2));
-	b.fTravelTree(drawTree);
-	// console.log(b.insert(1.5));
-	// console.log(b.insert(2.5));
+
+	// var tree=new BTree([4,1,6,9,3,2,5,0,8,7,10]);
+	var tree=new BTree([5,1,6,9,3,2,4,0,8,7,10,5.5,5.2,5.6,9.5,8.5,5.7]);
+	drawTree(tree);
+	// console.log(tree.search(15));
+	// console.log(tree.delete(2));
+	// console.log(tree.insert(1.5));
+	// console.log(tree.insert(2.5));
 </script>
 </body>
 </html>
