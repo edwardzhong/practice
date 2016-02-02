@@ -26,10 +26,17 @@
 			text-align:center;
 			line-height: 50px;
 		}
+		.line{
+			position: absolute;
+			height: 0;
+			border-top: 1px solid  #aaa;
+			transform-origin: 0 0;
+		}
 	</style>
 </head>
 <body>
-<div class="wrap"></div>
+<canvas id="canvas" width="1000" height="750"></canvas>
+<!-- <div class="wrap"></div> -->
 <script>
 	//二叉树	
 	function BTree(list,parent){
@@ -79,7 +86,7 @@
 						}
 					}
 				} else {
-					var prop=this.parent.left.key==this.key?'left':'right';
+					var prop=this.parent.key>this.key?'left':'right';
 					if(this.left) {//只有左子树
 						this.left.parent=this.parent;
 						this.parent[prop]=this.left;
@@ -107,50 +114,133 @@
 				return this.right?this.right.search(key):null;
 			}
 		},
-		lTravelTree:function(callback){//先序遍历
+		fTravelTree:function(callback){//先序遍历
 			callback(this);
-			this.left&&this.left.lTravelTree(callback);
-			this.right&&this.right.lTravelTree(callback);
+			this.left&&this.left.fTravelTree(callback);
+			this.right&&this.right.fTravelTree(callback);
 		},
 		mTravelTree:function(callback){//中序遍历
 			this.left&&this.left.mTravelTree(callback);
 			callback(this);
 			this.right&&this.right.mTravelTree(callback);
 		},
-		rTravelTree:function(callback){//后序遍历
-			this.left&&this.left.rTravelTree(callback);
-			this.right&&this.right.rTravelTree(callback);
+		lTravelTree:function(callback){//后序遍历
+			this.left&&this.left.lTravelTree(callback);
+			this.right&&this.right.lTravelTree(callback);
 			callback(this);
 		}
 	};
+
 	var list={};
-	var wrap=document.getElementsByClassName('wrap')[0];
-	var wrapWidth=wrap.offsetWidth;
-	var nodeElem=null;
+	// var wrap=document.getElementsByClassName('wrap')[0];
+	// var wrapWidth=wrap.offsetWidth;
+	var canvas=document.getElementById('canvas'),
+		ctx=canvas.getContext('2d');
+
 	function drawTree(node){
 		console.log(node);
-		
-		nodeElem=document.createElement('div');
-		nodeElem.innerHTML=node.key;
-		nodeElem.className='node';
-		nodeElem.setAttribute('key',node.key);
-		wrap.appendChild(nodeElem);
-		nodeElem.style.top=node.level*100+20+'px';
+		var top=0,left=0,
+			parentNode=null,
+			parentLeft=0,
+			isLeft=true,
+			gap=100,
+			nodeElem=null,
+			lineElem=null,
+			isLR=0;//0根，1左，2右，3中间
+
+		// nodeElem=document.createElement('div');
+		// nodeElem.innerHTML=node.key;
+		// nodeElem.className='node';
+		// nodeElem.setAttribute('key',node.key);
+		// wrap.appendChild(nodeElem);
+		top=node.level*100+20;
+		// nodeElem.style.top=top+'px';
 		if(!node.level){
-			nodeElem.style.left=(wrapWidth/2-nodeElem.offsetWidth/2)+'px';
+			isLR=0;
+			left=canvas.width/2;
+			// nodeElem.style.left=left+'px';
 		} else {
-			var parentLeft=parseFloat(list[''+node.parent.key].style.left,10);
-			var isLeft=node.parent.left&&(node.parent.left.key==node.key?true:false);
-			var gap=100;
-			nodeElem.style.left=(isLeft?(parentLeft-gap):(parentLeft+gap))+'px';
+			parentNode=list[''+node.parent.key];
+			parentLeft=parentNode.left;
+			isLeft=node.parent.left&&(node.parent.key>node.key?true:false);
+			if(!parentNode.isLR){
+				isLR=isLeft?1:2;
+			} else if(parentNode.isLR==1){
+				isLR=isLeft?1:3;
+			} else if(parentNode.isLR==2){
+				isLR=!isLeft?2:3;
+			} else {
+				isLR=3;
+			}
+			gap=isLR==3?50:150;
+			left=isLeft?parentLeft-gap:parentLeft+gap;
+			lineTo(parentNode.left,parentNode.top,left,top,isLeft);
+			// nodeElem.style.left=left+'px';
+			// var x=Math.abs(left-parentNode.left);
+			// var y=Math.abs(top-parentNode.top);
+			// var c=Math.sqrt(x*x+y*y);
+			// var angle=Math.tan(y/x)*180/Math.PI;// 弧度=角度*PI/180
+			// console.log(angle);
+			// lineElem=document.createElement('div');
+			// lineElem.className="line";
+			// lineElem.style.width=c+'px';
+			// if(isLeft){
+			// 	lineElem.style.transform='translate3d('+(parentNode.left)+'px,'+(parentNode.top)+'px,0) rotate('+(180-angle)+'deg)';
+			// } else {
+			// 	lineElem.style.transform='translate3d('+(parentNode.left+25)+'px,'+(parentNode.top+25)+'px,0) rotate('+(angle)+'deg)';
+			// }
+			// wrap.appendChild(lineElem);
 		}
-		list[''+node.key]=nodeElem;
+		drawRound(left,top,25,node.key);
+		list[''+node.key]={
+			node:node,
+			// elem:nodeElem,
+			top:top,
+			left:left,
+			isLR:isLR
+		};
 	}
-	var b=new BTree([4,1,6,7,3,2,5,0,8]);
+
+	//画线
+	function lineTo(x1,y1,x2,y2,isLeft){
+		ctx.strokeStyle='#d43f3a';
+		ctx.lineWidth=1.5;
+		ctx.beginPath();
+		if(isLeft){
+			x1-=20;
+			y1+=12;
+			x2+=10;
+			y2-=25;
+		} else {
+			x1+=25;
+			y1+=12;
+			x2-=5;
+			y2-=25;
+		}
+		ctx.moveTo(x1,y1);
+		ctx.lineTo(x2,y2);
+		ctx.stroke();
+	}
+
+	//画圆
+	function drawRound(x,y,r,txt){
+		ctx.font='28px Palatino';
+		ctx.fillStyle='#2e6da4';
+		ctx.textAlign="center";
+		ctx.textBaseline='middle';
+		ctx.lineWidth=2;
+		ctx.strokeStyle='#337ab7';
+		ctx.beginPath();
+		ctx.arc(x,y,r,0,Math.PI*2,false);
+		ctx.fillText(txt,x,y);
+		ctx.stroke();
+	}
+
+	var b=new BTree([4,1,6,9,3,2,5,0,8,7,10]);
 	console.log(b);
 	// console.log(b.search(15));
 	// console.log(b.delete(2));
-	b.lTravelTree(drawTree);
+	b.fTravelTree(drawTree);
 	// console.log(b.insert(1.5));
 	// console.log(b.insert(2.5));
 </script>
