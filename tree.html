@@ -18,6 +18,8 @@
 		this.parent=parent||null;//父节点
 		this.left=null;//左节点
 		this.right=null;//右节点
+		this.leftThread=false;//左线索，默认是节点 
+		this.rightThread=false;//右线索
 		this.level=parent?parent.level+1:0;//树的深度
 		for(var i=1,len=list.length;i<len;i++){
 			this.insert(list[i]);
@@ -102,6 +104,46 @@
 			this.left&&this.left.lTravelTree(callback);
 			this.right&&this.right.lTravelTree(callback);
 			callback(this);
+		},
+		mThreadTreeCreate:function(prevNode){
+			//先左子树遍历，寻找起始点
+			this.left&&this.left.mThreadTreeCreate(prevNode);
+			//如果left为空，则说明该节点可以放“线索”
+			this.leftThread=this.left?false:true;
+			//如果right为空，则说明该节点可以放“线索”
+			this.rightThread=this.right?false:true;
+			if(prevNode){
+				if(this.leftThread){
+					this.left=prevNode;
+				}
+				if(prevNode.rightThread){
+					prevNode.right=this;
+				}
+			}
+			prevNode=this;
+			this.right&&this.right.mThreadTreeCreate(prevNode);
+		},
+		mThreadPrev:function(){
+			if(this.leftThread){
+				return this.left;
+			} else {
+				var leftNode=this.left;
+				while (leftNode&&!leftNode.rightThread) {
+					leftNode=leftNode.right;
+				}
+				return leftNode;
+			}
+		},
+		mThreadNext:function(){
+			if(this.rightThread){
+				return this.right;
+			} else {
+				var rightNode=this.right;
+				while (rightNode&&!rightNode.leftThread) {
+					rightNode=rightNode.left;
+				}
+				return rightNode;
+			}
 		}
 	};
 
@@ -201,6 +243,8 @@
 	// var tree=new BTree([4,1,6,9,3,2,5,0,8,7,10]);
 	var tree=new BTree([5,1,6,9,3,2,4,0,8,7,10,5.5,5.2,5.6,9.5,8.5,5.7]);
 	drawTree(tree);
+	tree.mThreadPrev();
+	console.log(tree.mThreadPrev())
 	// console.log(tree.search(15));
 	// console.log(tree.delete(2));
 	// console.log(tree.insert(1.5));
