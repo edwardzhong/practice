@@ -206,19 +206,20 @@
 		ctx.strokeStyle='#d43f3a';
 		ctx.lineWidth=1.5;
 		ctx.beginPath();
+		var r=25;
+		var x=Math.abs(x2-x1);
+		var y=Math.abs(y2-y1);
+		var c=Math.sqrt(x*x+y*y);
+		var cy=Math.sin(y/c)*r;
+		var cx=Math.cos(x/c)*r;
 		if(isLeft){
-			x1-=20;
-			y1+=12;
-			x2+=10;
-			y2-=25;
+			ctx.moveTo(x1-cx,y1+cy);
+			ctx.lineTo(x2+cx,y2-cy);
 		} else {
-			x1+=25;
-			y1+=12;
-			x2-=5;
-			y2-=25;
+			ctx.moveTo(x1+cx,y1+cy);
+			ctx.lineTo(x2-cx,y2-cy);
 		}
-		ctx.moveTo(x1,y1);
-		ctx.lineTo(x2,y2);
+
 		ctx.stroke();
 	}
 
@@ -236,7 +237,8 @@
 		ctx.stroke();
 	}
 
-	var b=new BTree([4,1,6,9,3,2,5,0,8,7,10]);
+	// var b=new BTree([4,1,6,9,3,2,5,0,8,7,10]);
+	var b=new BTree([5,1,6,9,3,2,4,0,8,7,10]);
 	console.log(b);
 	// console.log(b.search(15));
 	// console.log(b.delete(2));
