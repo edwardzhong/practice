@@ -157,32 +157,38 @@
 	};
 
 	function bulidHuffManTree(list){
-		var minList=[],item=null,tempNode=null,len=0;
-
+		var arr=[],minList=[],parent=null,left=null,right=null;
 		if(!list||!Array.isArray(list)||(len=list.length)<2){return;}
-
-		list.sort(function(a,b){
+		list.forEach( function(item, index) {
+			arr.push(new huffManTree(item.key,item.weight));
+		});
+		arr.sort(function(a,b){
 			return a.weight-b.weight;
 		});
-		var minLeft=list.shift(),
-			minRight=list.shift(),
-			minParentNode=new huffManNode('',minLeft.weight+minRight.weight,len-2);
-
-		minParentNode.left=new huffManNode(minLeft.key,minLeft.weight,len-1);
-		minParentNode.right=new huffManNode(minRight.key,minRight.weight,len-1);
-		minParentNode.left.parent=minParentNode;
-		minParentNode.right.parent=minParentNode;
-		len--;
-		while(item=list.shift()){
-			tempNode=new huffManNode('',item.weight+minParentNode.weight,len-2); 
-			tempNode.left=item.weight<minParentNode.weight?new huffManNode(item.key,item.weight,len-1):minParentNode;
-			tempNode.right=item.weight<minParentNode.weight?minParentNode:new huffManNode(item.key,item.weight,len-1);
-			tempNode.left.parent=tempNode;
-			tempNode.right.parent=tempNode;
-			minParentNode=tempNode;
-			len--
+		//找出最小的两项
+		while (minList=arr.splice(0,2)) {
+			if(minList.length==1){break;}//只有一项说明已经是根节点，构建哈夫曼树完成
+			left=minList[0];
+			right=minList[1];
+			parent=new huffManTree('',left.weight+right.weight);
+			parent.left=left;
+			parent.right=right;
+			left.parent=parent;
+			right.parent=parent;
+			arr.push(parent);
+			arr.sort(function(a,b){
+				return a.weight-b.weight;
+			});
 		}
-		return minParentNode;
+		//先序添加level
+		parent.fTravelTree(function(node){
+			if(!node.parent){
+				node.level=0;
+			} else {
+				node.level+=node.parent.level+1;
+			}
+		});
+		return parent;
 	}
 
 	//压缩字符串
@@ -216,17 +222,17 @@
 		return arr.join('');
 	}
 
-	function huffManNode(key,weight,level){
-		this.level=level||0;
-		this.key=key||'';
-		this.weight=weight;
+	function huffManTree(key,weight){
+		this.level=0;//深度
+		this.key=key||'';//字符
+		this.weight=weight;//权重
 		this.code='';
 		this.parent=null;
 		this.left=null;
 		this.right=null;
 	}
 
-	huffManNode.prototype={
+	huffManTree.prototype={
 		fTravelTree:function(callback){//先序遍历
 			callback(this);
 			this.left&&this.left.fTravelTree(callback);
@@ -242,7 +248,7 @@
 			callback(this);
 			this.right&&this.right.mTravelTree(callback);
 		},
-		getCodes:function(){
+		getCodes:function(){//获取编码
 			var codes={};
 			this.fTravelTree(function(node){
 				if(!node.level){return true;}
@@ -257,7 +263,7 @@
 			});
 			return codes;
 		}
-	}
+	};
 
 	//使用canvas画出二叉树
 	function drawTree(tree,isHuffMan){
@@ -307,8 +313,12 @@
 					y2=top-cy;
 
 				draw.line(x1,y1,x2,y2);
+				if(isHuffMan&&node.parent){
+					draw.text(isLeft?parentLeft-a/2:parentLeft+a/2,parentTop+b/2,node.weight==node.parent.left.weight?0:1);
+				}
 			}
-			draw.round(left,top,r,isHuffMan?node.key+':'+node[keyName]:node[keyName]);
+			var txt=isHuffMan?node.key?node.key+':'+node[keyName]:node[keyName]:node[keyName]
+			draw.round(left,top,r,txt);
 			list[''+node[keyName]]={
 				node:node,
 				top:top,
@@ -339,6 +349,7 @@
 
 		//画圆
 		function round(x,y,r,txt){
+			ctx.fillStyle='#2e6da4';
 			ctx.strokeStyle='#337ab7';
 			ctx.lineWidth=2;
 			ctx.beginPath();
@@ -347,9 +358,17 @@
 			ctx.stroke();
 		}
 
+		function text(x,y,txt){
+			ctx.fillStyle='#088CF7';
+			ctx.lineWidth=1;
+			ctx.beginPath();
+			ctx.fillText(txt,x,y);
+		}
+
 		return {
 			line:line,
-			round:round
+			round:round,
+			text:text
 		};
 	}
 
@@ -363,12 +382,15 @@
 	// console.log(tree.delete(2));
 	// console.log(tree.insert(1.5));
 	// console.log(tree.insert(2.5));
-	var hTree=bulidHuffManTree([{key:'c',weight:4},{key:'d',weight:5},{key:'b',weight:3},{key:'a',weight:2},{key:'e',weight:6}]);
+	var hTree=bulidHuffManTree([
+		{key:'c',weight:4},
+		{key:'d',weight:5},
+		{key:'b',weight:3},
+		{key:'a',weight:2},
+		{key:'e',weight:6}]);
+
 	drawTree(hTree,true);
 
-	// hTree.lTravelTree(function(node){
-	// 	console.log(node);
-	// });
 	var codes=hTree.getCodes();
 	console.log(codes)
 	var str='eaabcddcbaeb';
