@@ -10,9 +10,9 @@
 	</style>
 </head>
 <body>
-<canvas id="canvas" width="1000" height="750"></canvas>
+<canvas id="canvas" width="1200" height="750"></canvas>
 <script>
-	//二叉树	
+	//普通二叉树	
 	function BTree(list,parent){
 		this.key=list[0];//值
 		this.parent=parent||null;//父节点
@@ -79,7 +79,6 @@
 			} else {
 				return this.right?this.right.delete(key):null;
 			}
-
 		},
 		search:function(key){//搜索
 			if(this.key==key){
@@ -144,21 +143,133 @@
 				}
 				return rightNode;
 			}
+		},
+		mTravelThreadTree:function(){
+			// while(this.leftThread){
+			// 	this=this.left;
+			// }
+			// do{
+			// 	console.log(this.key);
+			// 	this=this.mTravelThreadTree();
+			// }
+			// while(this);
 		}
 	};
 
+	function bulidHuffManTree(list){
+		var minList=[],item=null,tempNode=null,len=0;
 
+		if(!list||!Array.isArray(list)||(len=list.length)<2){return;}
+
+		list.sort(function(a,b){
+			return a.weight-b.weight;
+		});
+		var minLeft=list.shift(),
+			minRight=list.shift(),
+			minParentNode=new huffManNode('',minLeft.weight+minRight.weight,len-2);
+
+		minParentNode.left=new huffManNode(minLeft.key,minLeft.weight,len-1);
+		minParentNode.right=new huffManNode(minRight.key,minRight.weight,len-1);
+		minParentNode.left.parent=minParentNode;
+		minParentNode.right.parent=minParentNode;
+		len--;
+		while(item=list.shift()){
+			tempNode=new huffManNode('',item.weight+minParentNode.weight,len-2); 
+			tempNode.left=item.weight<minParentNode.weight?new huffManNode(item.key,item.weight,len-1):minParentNode;
+			tempNode.right=item.weight<minParentNode.weight?minParentNode:new huffManNode(item.key,item.weight,len-1);
+			tempNode.left.parent=tempNode;
+			tempNode.right.parent=tempNode;
+			minParentNode=tempNode;
+			len--
+		}
+		return minParentNode;
+	}
+
+	//压缩字符串
+	function encodeHuffMan(codes,str){
+		var arr=[],charCode=null;
+		for(var i=0,len=str.length;i<len;i++){
+			charCode=codes[str.charAt(i)];
+			if(charCode){
+				arr.push(charCode);
+			}
+		}
+		return arr.join('');
+	}
+
+	//解压字符串
+	function decodeHuffMan(codes,str){
+		var arr=[],key,regs=[],match;
+		for(key in codes){
+			regs.push({reg:new RegExp('^'+codes[key]),key:key});
+		}
+		for(var i=1;i<str.length+1;i++){
+			for(var j=0,len=regs.length;j<len;j++){
+				if(match=str.substr(0,i).match(regs[j].reg)){
+					arr.push(regs[j].key);
+					str=str.substr(match[0].length);
+					i=1;
+					break;
+				}
+			}
+		}
+		return arr.join('');
+	}
+
+	function huffManNode(key,weight,level){
+		this.level=level||0;
+		this.key=key||'';
+		this.weight=weight;
+		this.code='';
+		this.parent=null;
+		this.left=null;
+		this.right=null;
+	}
+
+	huffManNode.prototype={
+		fTravelTree:function(callback){//先序遍历
+			callback(this);
+			this.left&&this.left.fTravelTree(callback);
+			this.right&&this.right.fTravelTree(callback);
+		},
+		lTravelTree:function(callback){//后序遍历
+			this.left&&this.left.lTravelTree(callback);
+			this.right&&this.right.lTravelTree(callback);
+			callback(this);
+		},
+		mTravelTree:function(callback){//中序遍历
+			this.left&&this.left.mTravelTree(callback);
+			callback(this);
+			this.right&&this.right.mTravelTree(callback);
+		},
+		getCodes:function(){
+			var codes={};
+			this.fTravelTree(function(node){
+				if(!node.level){return true;}
+				if(node.weight==node.parent.left.weight){
+					node.code+=node.parent.code+'0';
+				} else {
+					node.code+=node.parent.code+'1';
+				}
+				if(node.key){
+					codes[''+node.key]=node.code;
+				}
+			});
+			return codes;
+		}
+	}
 
 	//使用canvas画出二叉树
-	function drawTree(tree){
-		var list={},
+	function drawTree(tree,isHuffMan){
+		var list={},keyName=isHuffMan?'weight':'key',
 			draw=canvasDraw(),
 			top=0,left=0,
 			parentNode=null,
 			parentLeft=0,
 			parentTop=0,
 			isLeft=true,
-			gap=100,r=25,
+			gap=100,
+			r=25,
 			isLR=0;//0根，1左，2右，3中间
 		//先序遍历
 		tree.fTravelTree(function(node){
@@ -168,10 +279,13 @@
 				isLR=0;
 				left=canvas.width/2;
 			} else {
-				parentNode=list[''+node.parent.key];
+				parentNode=list[''+node.parent[keyName]];
 				parentLeft=parentNode.left;
 				parentTop=parentNode.top;
-				isLeft=node.parent.left&&(node.parent.key>node.key?true:false);
+				isLeft=node.parent.left&&(node.parent[keyName]>node[keyName]?true:false);
+				if(isHuffMan){//哈夫曼树
+					isLeft=node.parent.left[keyName]==node[keyName]?true:false;
+				}
 				if(!parentNode.isLR){
 					isLR=isLeft?1:2;
 				} else if(parentNode.isLR==1){
@@ -194,8 +308,8 @@
 
 				draw.line(x1,y1,x2,y2);
 			}
-			draw.round(left,top,r,node.key);
-			list[''+node.key]={
+			draw.round(left,top,r,isHuffMan?node.key+':'+node[keyName]:node[keyName]);
+			list[''+node[keyName]]={
 				node:node,
 				top:top,
 				left:left,
@@ -242,13 +356,26 @@
 
 	// var tree=new BTree([4,1,6,9,3,2,5,0,8,7,10]);
 	var tree=new BTree([5,1,6,9,3,2,4,0,8,7,10,5.5,5.2,5.6,9.5,8.5,5.7]);
-	drawTree(tree);
-	tree.mThreadPrev();
-	console.log(tree.mThreadPrev())
+	// drawTree(tree);
+	// tree.mThreadPrev();
+	// console.log(tree.mThreadPrev())
 	// console.log(tree.search(15));
 	// console.log(tree.delete(2));
 	// console.log(tree.insert(1.5));
 	// console.log(tree.insert(2.5));
+	var hTree=bulidHuffManTree([{key:'c',weight:4},{key:'d',weight:5},{key:'b',weight:3},{key:'a',weight:2},{key:'e',weight:6}]);
+	drawTree(hTree,true);
+
+	// hTree.lTravelTree(function(node){
+	// 	console.log(node);
+	// });
+	var codes=hTree.getCodes();
+	console.log(codes)
+	var str='eaabcddcbaeb';
+	console.log(str)
+	var eStr=encodeHuffMan(codes,str);
+	console.log(eStr);
+	console.log(decodeHuffMan(codes,eStr));
 </script>
 </body>
 </html>
