@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>map</title>
+</head>
+<body>
+<canvas id="canvas" width="1200" height="750"></canvas>
+<script>
+	function canvasDraw(){
+		var	canvas=document.getElementById('canvas'),
+			ctx=canvas.getContext('2d');
+
+		ctx.font='28px Palatino';
+		ctx.fillStyle='#2e6da4';
+		ctx.textAlign="center";
+		ctx.textBaseline='middle';
+
+		//画线
+		function line(x1,y1,x2,y2){
+			ctx.strokeStyle='#d43f3a';
+			ctx.lineWidth=1;
+			ctx.beginPath();
+			ctx.moveTo(x1,y1);
+			ctx.lineTo(x2,y2);
+			ctx.stroke();
+		}
+
+		//画圆
+		function round(x,y,r,txt){
+			ctx.fillStyle='#2e6da4';
+			ctx.strokeStyle='#337ab7';
+			ctx.lineWidth=2;
+			ctx.beginPath();
+			ctx.arc(x,y,r,0,Math.PI*2,false);
+			ctx.fillText(txt,x,y);
+			ctx.stroke();
+		}
+
+		//字符
+		function text(x,y,txt){
+			ctx.fillStyle='#088CF7';
+			ctx.lineWidth=1;
+			ctx.beginPath();
+			ctx.fillText(txt,x,y);
+		}
+
+		return {
+			line:line,
+			round:round,
+			text:text
+		};
+	}
+
+	//使用邻接矩阵建立图
+	function Map(type,vertexNum,edges){
+		this.vertexNum=vertexNum;
+		this.vertexs=[];
+		this.edges=[];
+		this.type=0;//0无向，1有向
+		var temp=[],start=0,end=0,weight=0;
+		for(var i=0;i<this.vertexNum;i++){
+			this.vertexs.push(i);
+			temp=[];
+			for(var j=0;j<this.vertexNum;j++){
+				temp.push(0); 
+			}
+			this.edges.push(temp);
+		}
+
+		for(var i=0,len=edges.length;i<len;i++){
+			start=edges[i].start;
+			end=edges[i].end;
+			weight=edges[i].weight;
+			this.edges[start][end]=weight;
+			if(!type){//无向图
+				this.edges[end][start]=weight;
+			}
+		}
+		// console.log(this.edges);
+	}
+	Map.prototype={
+		bTravel:function(callback){//广度优先遍历
+			var edges=this.edges,
+				isTrav=[],
+				nexts=[],
+				temp=null;
+			for(var i=0;i<this.vertexNum;i++){
+				isTrav.push(false);
+			}
+			for(var i=0;i<this.vertexNum;i++){
+				nexts=[];
+				if(!isTrav[i]){
+					isTrav[i]=true;
+					nexts.push(i);
+					callback(i);//顶点
+					while((temp=nexts.shift()) !=null){
+						for(var j=0;j<this.vertexNum;j++){
+							if(!isTrav[j]&&edges[temp,j]){
+								isTrav[j]=true;
+								nexts.push(j);
+								callback(j,edges[temp][j]);
+							}
+						}
+					}
+				}
+			}
+		},
+		dTravel:function(callback){//深度优先遍历
+			var edges=this.edges,
+				isTrav=[],
+				vertexNum=this.vertexNum;
+			for(var i=0;i<vertexNum;i++){
+				isTrav.push(false);
+			}
+			for(var i=0;i<vertexNum;i++){
+				if(!isTrav[i]){
+					travel(i);
+				}
+			}
+
+			function travel(index,weight){
+				isTrav[index]=true;
+				callback(index,weight);
+				for(var j=0;j<vertexNum;j++){
+					if(!isTrav[j]&&edges[index][j]){
+						travel(j,edges[index][j]);
+					}
+				}
+			}
+		}
+	};
+	new Map(0,5,
+		[{start:0,end:1,weight:1},
+		{start:0,end:2,weight:3},
+		{start:0,end:4,weight:2},
+		{start:1,end:3,weight:2},
+		{start:2,end:4,weight:4},
+		{start:3,end:4,weight:1}]
+		).bTravel(function(i,weight){
+			var w=weight?':'+weight+'-->':'-->'
+			console.log(i+w);
+		});
+</script>
+</body>
+</html>
