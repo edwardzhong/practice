@@ -11,6 +11,8 @@
 		var	canvas=document.getElementById('canvas'),
 			ctx=canvas.getContext('2d');
 
+		ctx.translate(canvas.width/2,canvas.height/2);//变换坐标系
+
 		ctx.font='28px Palatino';
 		ctx.fillStyle='#2e6da4';
 		ctx.textAlign="center";
@@ -128,19 +130,180 @@
 					}
 				}
 			}
+		},
+		prim:function(){//prim算法
+			var edges=this.edges,
+				num=this.vertexNum,
+				paths=[],
+				list=[],
+				min,
+				index=0;
+			// 初始化根节点
+			for(var i=0;i<num;i++){
+				list.push({
+					prev:i==0?-1:0,
+					curr:i,
+					weight:edges[0][i],
+					visit:false
+				});
+			}
+			//根节点
+			paths.push(list[0]);
+			for(var i=1;i<num;i++){
+				index=1;
+				min=9999;
+				//找出最小权值的路径
+				for(var j=1;j<num;j++){
+					if(!list[j].visit&&list[j].weight>0&&list[j].weight<min){
+						min=list[j].weight;
+						index=j;
+					}
+				}
+
+				list[index].visit=true;
+				//当前最小的节点
+				paths.push(list[index]);
+				//从最新节点出发
+				for(var j=1;j<num;j++){
+					// 如果比上一节点的边短或上一节点没连接，则替换上一节点
+					if(!list[j].visit&&edges[index][j]>0&&(edges[index][j]<list[j].weight||list[j].weight==0)){
+						list[j]={
+							prev:index,
+							curr:j,
+							weight:edges[index][j],
+							visit:false
+						};
+					}
+				}
+			}
+			return paths;
+		},
+		dijkstra:function(vertex){//Dijkstra算法
+			var edges=this.edges,
+				num=this.vertexNum,
+				paths=[],
+				list=[],
+				min,
+				index=0;
+			// 初始化根节点
+			var vertexItem={					
+					prevList:[],
+					prev:-1,
+					curr:vertex,
+					currWeight:0,
+					weight:0,
+					visit:true
+				}
+			for(var i=0;i<num;i++){
+				if(i==vertex){
+					list.push(vertexItem);
+					continue;
+				}
+				list.push({
+					prevList:[vertexItem],
+					prev:vertex,
+					curr:i,
+					currWeight:edges[vertex][i],
+					weight:edges[vertex][i],
+					visit:false
+				});
+			}
+
+			for(var i=0;i<num-1;i++){
+				index=0;
+				min=9999;
+				for(var j=0;j<num;j++){
+					if(j==vertex){continue;}
+					if(!list[j].visit&&list[j].weight>0&&list[j].weight<min){
+						min=list[j].weight;
+						index=j;
+					}
+				}
+
+				list[index].visit=true;
+				paths.push(list[index]);
+
+				for(var j=0;j<num;j++){
+					if(j==vertex){continue;}
+					if(!list[j].visit&&edges[index][j]>0&&(list[j].weight==0||list[index].weight+edges[index][j]<list[j].weight)){
+						var prevList=list[j].prevList;
+						list[j]={
+							prevList:prevList,
+							prev:index,
+							curr:j,
+							currWeight:edges[index][j],
+							weight:list[index].weight+edges[index][j],
+							visit:false
+						};
+					}
+				}
+			}
+			paths.unshift(vertexItem);
+			paths.forEach( function(item, index) {
+				if(item.curr==vertex||item.prev==vertex){return true;}
+				var prevList=[],temp=item;
+				while(temp.curr!=vertex){
+					temp=getPrev(temp.prev);
+					prevList.unshift(temp);
+				}
+				item.prevList=prevList;
+			});
+
+			paths.forEach( function(item, index) {
+				console.log(item);
+			});
+			function getPrev(index){
+				for(var i=0;i<paths.length;i++){
+					if(paths[i].curr==index){
+						return paths[i];
+					}
+				}
+
+				return null;
+			}
+
+			return paths;
 		}
 	};
-	new Map(0,5,
-		[{start:0,end:1,weight:1},
-		{start:0,end:2,weight:3},
-		{start:0,end:4,weight:2},
-		{start:1,end:3,weight:2},
-		{start:2,end:4,weight:4},
-		{start:3,end:4,weight:1}]
-		).bTravel(function(i,weight){
-			var w=weight?':'+weight+'-->':'-->'
-			console.log(i+w);
-		});
+
+
+	function drawMap(map){
+		var draw=canvasDraw(),
+			edges=map.edges,
+			num=map.vertexNum,
+			mapR=200,r=20,
+			x=0,y=0,i=0,j=0,
+			angle=360/num,
+			list=[];
+		for(var i=0;i<num;i++){
+			x=mapR*Math.cos(angle*i*Math.PI/180);
+			y=mapR*Math.sin(angle*i*Math.PI/180);
+			list.push({x:x,y:y});
+			draw.round(x,y,r,i);
+		}
+		for(i=0;i<num;i++){
+			for(j=i;j<num;j++){
+				if(!edges[i][j]){continue;}
+				var x1=list[i].x,y1=list[i].y,x2=list[j].x,y2=list[j].y;
+				draw.line(x1,y1,x2,y2);
+			}
+		}
+	}
+
+	var map=new Map(0,5,
+			[{start:0,end:1,weight:1},
+			{start:0,end:2,weight:3},
+			{start:0,end:4,weight:2},
+			{start:1,end:3,weight:5},
+			{start:2,end:4,weight:4},
+			{start:3,end:4,weight:1}]
+		);	
+	map.bTravel(function(i,weight){
+		var w=weight?':'+weight+'-->':'-->'
+		console.log(i+w);
+	});
+	map.dijkstra(1);
+	drawMap(map);
 </script>
 </body>
 </html>
