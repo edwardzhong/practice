@@ -60,6 +60,7 @@
 		this.vertexs=[];
 		this.edges=[];
 		this.type=0;//0无向，1有向
+		this.edgeList=[];
 		var temp=[],start=0,end=0,weight=0;
 		for(var i=0;i<this.vertexNum;i++){
 			this.vertexs.push(i);
@@ -79,7 +80,18 @@
 				this.edges[end][start]=weight;
 			}
 		}
-		// console.log(this.edges);
+		//优先队列
+		for(var i=0;i<vertexNum;i++){
+			for(var j=i;j<vertexNum;j++){
+				if(this.edges[i][j]){
+					edgeList.push({
+						start:i,
+						end:j,
+						this.edges[i][j]
+					});
+				}
+			}
+		}
 	}
 	Map.prototype={
 		bTravel:function(callback){//广度优先遍历
@@ -263,6 +275,9 @@
 			}
 
 			return paths;
+		},
+		kruskal:function(){
+
 		}
 	};
 

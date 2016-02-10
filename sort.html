@@ -121,12 +121,73 @@
 		quickSort(low,first-1);//递归左边的分组
 		quickSort(first+1,high);//递归右边的分组
 	}
+
+	/**
+	 * 奇偶排序 多线程有优势
+	 */
+	function oddEvenSort(){
+		var len=arr.length,
+			isSort=false,
+			temp;
+		while(!isSort){
+			isSort=true;
+			for(var i=0;i<len;i+=2){
+				if(i+1<len&&arr[i]>arr[i+1]){
+					temp=arr[i];
+					arr[i]=arr[i+1];
+					arr[i+1]=temp;
+					isSort=false;
+				}
+			}
+
+			for(var i=1;i<len;i+=2){
+				if(i+1<len&&arr[i]>arr[i+1]){
+					temp=arr[i];
+					arr[i]=arr[i+1];
+					arr[i+1]=temp;
+					isSort=false;
+				}
+			}
+		}
+	}
+
+	/**
+	 * 鸡尾酒排序 头尾分别进行冒泡排序
+	 */
+	function cockTailSort(){
+		var len=arr.length,
+			isSort=false,
+			temp;
+
+		for(var i=1;i<Math.floor(len/2);i++){
+			isSort=true;
+			for(var j=i-1;j<len;j++){
+				if(j+1<len&&arr[j]>arr[j+1]){
+					temp=arr[j];
+					arr[j]=arr[j+1];
+					arr[j+1]=temp;
+					isSort=false;
+				}
+			}
+			for(var j=len-i-1;j>=i;j--){
+				if(j>0&&arr[j-1]>arr[j]){
+					temp=arr[j-1];
+					arr[j-1]=arr[j];
+					arr[j]=temp;
+					isSort=false;
+				}
+			}
+			if(isSort){break;}
+		}
+	}
 	// [2,7,6,8,4,5,3,1]
 	// bubbleSort();
 	// selectSort();
 	// insertSort();
 	// shellSort();
-	quickSort(0,arr.length-1);
+	// quickSort(0,arr.length-1);
+	// oddEvenSort();
+	cockTailSort();
 	console.log(arr);
 	</script>
 </head>

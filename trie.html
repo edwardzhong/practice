@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ac自动机</title>
+	<style></style>
+</head>
+<body>
+<script>
+	function TrieNode(){
+		this.childNodes=[];
+		this.freq=0;
+		this.char='';
+		this.failNode=null;
+		this.hashSet=[];
+	}
+
+	TrieNode.prototype={
+		insert:function(word,id){
+			var charCodeA='a'.charCodeAt(0);
+			var k=word.charCodeAt(0)-charCodeA;
+			var nextWord='';
+			if(!this.childNodes[k]){
+				this.childNodes[k]=new TrieNode();
+				this.childNodes[k].char=word[0];
+			}
+			nextWord=word.substr(1);
+			if(!nextWord.length){
+				this.childNodes[k].freq++;
+				this.childNodes[k].hashSet.push(id);
+				return;
+			}
+			this.childNodes[k].insert(nextWord,id);
+		},
+		buildFailNode:function(){
+			var list=[],temp,self=this;
+			list.push(self);
+			while (temp=list.shift()) {
+				var failNode=null;
+
+				for(var i=0;i<26;i++){
+					if(!temp.childNodes[i]){
+						continue;
+					}
+					if(temp==this){
+						temp.childNodes[i].failNode=self;
+					} else {
+						failNode=temp.failNode;
+						while(failNode){
+							if(failNode.childNodes[i]){
+								temp.childNodes[i].failNode=failNode.childNodes[i];
+								break;
+							}
+							failNode=failNode.failNode;
+						}
+						if(!failNode){
+							temp.childNodes[i].failNode=self;
+						}
+					}
+				}
+				list.push(temp.childNodes[i]);
+			}
+		},
+		search:function(s){
+			var freq=0;
+			var hashSet=[];
+			var charCodeA='a'.charCodeAt(0);
+			var index='';
+			var self=this;
+			var head=new TrieNode();
+			for(var i=0,len=s.length;i<len;i++){
+				index=s.charCodeAt(i)-charCodeA;
+				while (!self.childNodes[index]&&head!=self) {
+					head=head.failNode;
+				}
+
+				head=head.childNodes[index];
+				if(!head){
+					head=self;
+				}
+
+				var temp=head;
+				while (temp!=self&&temp.freq!=-1) {
+					freq+=temp.freq;
+					temp.hashSet.forEach( function(item, index) {
+						hashSet.push(item);
+					});
+					temp.freq=-1;
+					temp=temp.failNode;
+				}
+			}
+			return hashSet;
+		}
+	};
+	var trie=new TrieNode()
+	trie.insert('and',1);
+	trie.insert('athelate',2);
+	trie.insert('action',3);
+	trie.buildFailNode();
+	console.log(trie.search('and'));
+</script>
+</body>
+</html>
