@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<title>模仿iscroll功能</title>
-	<style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>模仿iscroll功能</title>
+<style>
 	html,body{
 		height: 100%;width: 100%;margin: 0;padding: 0;
 		overflow: hidden;
@@ -65,7 +65,7 @@
 		border-radius:5px;
 		background-color: rgba(0, 0, 0, 0.4);
 	}
-	</style>
+</style>
 </head>
 <body>
 	<header>header</header>
@@ -265,7 +265,7 @@
 				this.startX=this.x;
 				this.startY=this.y;
 			}
-			//移动之后清除隐藏定时器
+			//移动之后清除隐藏定时器,同时显示滚动条
 			clearTimeout(this.scrollHideTimer);
 			this.scrollBar.parentNode.style.opacity=1;
 		},

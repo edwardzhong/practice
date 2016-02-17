@@ -189,6 +189,16 @@ https://chrome.google.com/webstore/detail/%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95/n
 9.模拟app环境
 appdlDebug=1
 
+//页面从微信直接跳转到手Q打开  
+
+    function lauchMqq (url){
+        var QQUrl = 'mqqapi://forward/url?url_prefix=base64Url&version=1&src_type=web';//跳转到手Q的iframe中隐藏的url
+        var base64Url = QQUrl.replace('base64Url',window.btoa(url));
+        var iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+        iframe.src = base64Url;
+    };
 -----------------------------------------
 手Q功能菜单设置方法
 http://zeratul.sinaapp.com/?articleid=101
