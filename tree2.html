@@ -5,6 +5,7 @@
 	<title>tree</title>
 </head>
 <body>
+<canvas id="canvas" width="1200" height="750"></canvas>
 <script>
 	function BTree(list,parent){
 		this.key=list[0].key;
@@ -12,6 +13,7 @@
 		this.parent=parent||null;
 		this.left=null;
 		this.right=null;
+		this.level=parent?parent.level+1:0;//树的深度
 		for(var i=1,len=list.length;i<len;i++){
 			this.add(list[i]);
 		}
@@ -65,48 +67,164 @@
 			}
 		},
 		remove:function(key,value){
-			if(this.key==key){
-				if(this.values.length>1){
-					this.values.splice(this.values.indexOf(value),1);
-				} else if(this.left&&this.right){
-					var node=this.right;
-					while (node.left) {//找到最左的节点
-						node=node.left;
-					}
+			deleteFn.call(this,key,value);
+			return this;
 
-					var dNode=this.remove(node.key,value);
-					if(this.key==node.parent.key){//没有左节点的情况，直接将右子树上移
+			function deleteFn(key,value){
+				if(this.key==key){
+					if(this.values.length>1){
+						this.values.splice(this.values.indexOf(value),1);
+					} else if(this.left&&this.right){
+						var node=this.right;//找右子树的最左节点，如果右子树不存在左节点，则返回自身
+						while (node.left) {
+							node=node.left;
+						}
 						this.key=node.key;
-						this.right=node.right;
-					} else {//有左节点的情况
-						this.key=node.key;
-						if(node.right){//如果还存在右节点，将右节点上移
-							node.right.parent=node.parent;
-							node=node.right;
-						} else {//直接将该节点清除
-							node.parent.left=null;
+						this.values=node.values;
+						deleteFn.call(this.right,this.key,this.values[0]);
+					} else {
+						var prop=this.parent.key>this.key?'left':'right';
+						if(this.left) {//只有左子树
+							this.left.parent=this.parent;
+							this.parent[prop]=this.left;
+						} else if(this.right){//只有右子树
+							this.right.parent=this.parent;
+							this.parent[prop]=this.right;
+						} else {//叶子节点
+							this.parent[prop]=null;
 						}
 					}
+					return this;
+				} else if(this.key>key){
+					return this.left&&deleteFn.call(this.left,key,value);
 				} else {
-					var prop=this.parent.key>this.key?'left':'right';
-					if(this.left) {//只有左子树
-						this.left.parent=this.parent;
-						this.parent[prop]=this.left;
-					} else if(this.right){//只有右子树
-						this.right.parent=this.parent;
-						this.parent[prop]=this.right;
-					} else {//叶子节点
-						this.parent[prop]=null;
-					}
+					return this.right&&deleteFn.call(this.right,key,value);
 				}
-				return this;
-			}  else if(this.key>key){
-				return this.left?this.left.remove(key,value):null;
-			} else {
-				return this.right?this.right.remove(key,value):null;
 			}
-		}
+		},
+		fTravelTree:function(callback){//先序遍历
+			callback(this);
+			this.left&&this.left.fTravelTree(callback);
+			this.right&&this.right.fTravelTree(callback);
+		},
+		mTravelTree:function(callback){//中序遍历
+			this.left&&this.left.mTravelTree(callback);
+			callback(this);
+			this.right&&this.right.mTravelTree(callback);
+		},
+		lTravelTree:function(callback){//后序遍历
+			this.left&&this.left.lTravelTree(callback);
+			this.right&&this.right.lTravelTree(callback);
+			callback(this);
+		},
 	};
+	//使用canvas画出二叉树
+	function drawTree(tree,isHuffMan){
+		var list={},keyName=isHuffMan?'weight':'key',
+			draw=canvasDraw(),
+			top=0,left=0,
+			parentNode=null,
+			parentLeft=0,
+			parentTop=0,
+			isLeft=true,
+			gap=100,
+			r=25,
+			isLR=0;//0根，1左，2右，3中间
+		//先序遍历
+		tree.fTravelTree(function(node){
+			console.log(node);
+			top=node.level*100+50;
+			if(!node.level){
+				isLR=0;
+				left=canvas.width/2;
+			} else {
+				parentNode=list[''+node.parent[keyName]];
+				parentLeft=parentNode.left;
+				parentTop=parentNode.top;
+				isLeft=node.parent.left&&(node.parent[keyName]>node[keyName]?true:false);
+				if(isHuffMan){//哈夫曼树
+					isLeft=node.parent.left[keyName]==node[keyName]?true:false;
+				}
+				if(!parentNode.isLR){
+					isLR=isLeft?1:2;
+				} else if(parentNode.isLR==1){
+					isLR=isLeft?1:3;
+				} else if(parentNode.isLR==2){
+					isLR=!isLeft?2:3;
+				} else {
+					isLR=3;
+				}
+				gap=isLR==3?(10-node.level)*6:150;
+				left=isLeft?parentLeft-gap:parentLeft+gap;
+				var a=Math.abs(left-parentLeft),
+					b=Math.abs(top-parentTop),
+					c=Math.sqrt(a*a+b*b),
+					cy=b/c*r,cx=a/c*r,
+					x1=isLeft?parentLeft-cx:parentLeft+cx,
+					y1=parentTop+cy,
+					x2=isLeft?left+cx:left-cx,
+					y2=top-cy;
+
+				draw.line(x1,y1,x2,y2);
+				if(isHuffMan&&node.parent){
+					draw.text(isLeft?parentLeft-a/2:parentLeft+a/2,parentTop+b/2,node.weight==node.parent.left.weight?0:1);
+				}
+			}
+			var txt=isHuffMan?node.key?node.key+':'+node[keyName]:node[keyName]:node[keyName]
+			draw.round(left,top,r,txt);
+			list[''+node[keyName]]={
+				node:node,
+				top:top,
+				left:left,
+				isLR:isLR
+			};
+		});
+	}
+
+	function canvasDraw(){
+		var	canvas=document.getElementById('canvas'),
+			ctx=canvas.getContext('2d');
+
+		ctx.font='28px Palatino';
+		ctx.fillStyle='#2e6da4';
+		ctx.textAlign="center";
+		ctx.textBaseline='middle';
+
+		//画线
+		function line(x1,y1,x2,y2){
+			ctx.strokeStyle='#d43f3a';
+			ctx.lineWidth=1;
+			ctx.beginPath();
+			ctx.moveTo(x1,y1);
+			ctx.lineTo(x2,y2);
+			ctx.stroke();
+		}
+
+		//画圆
+		function round(x,y,r,txt){
+			ctx.fillStyle='#2e6da4';
+			ctx.strokeStyle='#337ab7';
+			ctx.lineWidth=2;
+			ctx.beginPath();
+			ctx.arc(x,y,r,0,Math.PI*2,false);
+			ctx.fillText(txt,x,y);
+			ctx.stroke();
+		}
+
+		//字符
+		function text(x,y,txt){
+			ctx.fillStyle='#088CF7';
+			ctx.lineWidth=1;
+			ctx.beginPath();
+			ctx.fillText(txt,x,y);
+		}
+
+		return {
+			line:line,
+			round:round,
+			text:text
+		};
+	}
 
 	var tree=new BTree([
 			{key:5,value:'a'},
@@ -115,10 +233,16 @@
 			{key:7,value:'e'},
 			{key:3,value:'f'},
 			{key:8,value:'g'},
-			{key:5,value:'d'}
+			{key:7.8,value:'g'},
+			{key:5.5,value:'h'},
+			{key:5.4,value:'h'},
+			{key:4.5,value:'h'},
+			{key:3.5,value:'h'},
+			{key:2,value:'h'},
+			{key:6.5,value:'h'}
 		]).contain(5);
-	console.log(tree.remove(5,'d'));
-	console.log(tree);
+	console.log(tree.remove(4,'a'));
+	drawTree(tree);
 	// console.log(tree.searchRange(4,7));
 </script>
 </body>
