@@ -7,174 +7,211 @@
 <body>
 <canvas id="canvas" width="1200" height="750"></canvas>
 <script>
-	function BTree(list,parent){
-		this.key=list[0].key;
-		this.values=[list[0].value];
+	function BTreeNode(item,parent){
+		this.key=item.key;
+		this.values=[item.value];
 		this.parent=parent||null;
 		this.left=null;
 		this.right=null;
 		this.level=parent?parent.level+1:0;//树的深度
+		this.height=0;
+	}
+	function BTree(list){
+		this.tree=new BTreeNode(list[0]);
 		for(var i=1,len=list.length;i<len;i++){
-			this.add(list[i]);
+			this.tree=this.add(list[i]);
 		}
 	}
 	BTree.prototype={
-		add:function(item){
-			if(this.key==item.key){
-				this.values.push(item.value);
-				return this;
-			} else if(this.key>item.key){
-				if(!this.left){
-					this.left=new BTree([item],this);
-					if(this.parent){
-						var rNode=this.parent.right||this.parent;
-						if(this.left.level-rNode.level>=2){
-							if(this.key<this.parent.key){
-								this.rotateLL();
-							} else {
-								this.rotateLR();
-							}
+		add:function(item,node){
+			node=node||this.tree;
+			if(node.key==item.key){
+				node.values.push(item.value);
+				return node;
+			} else if(node.key>item.key){
+				if(!node.left){
+					node.left=new BTreeNode(item,node);
+					node.height=Math.max(1,node.height);
+
+					//回到顶部,重设高度
+					while(node.parent){
+						node.parent.height=Math.max(node.parent.height,node.height+1);
+						node=node.parent;
+					}
+					return node;
+				} else {
+					if(this.height(node.left)-this.height(node.right)==2){//左旋
+						if(item.key<node.left.key){
+							this.rotateLL(node);
+						} else {
+							this.rotateLR(node);
 						}
 					}
-					return this.left;
-				} else {
-					return this.left.add(item);
+					return this.add(item,node.left);
 				}
 			} else {
-				if(!this.right){
-					this.right=new BTree([item],this);
-					if(this.parent){
-						var rNode=this.parent.left||this.parent;
-						if(this.right.level-rNode.level>=2){
-							if(this.key>this.parent.key){
-								this.rotateRR();
-							} else {
-								this.rotateRL();
-							}
+				if(!node.right){
+					node.right=new BTreeNode(item,node);
+					node.height=Math.max(1,node.height);
+					while(node.parent){
+						node.parent.height=Math.max(node.parent.height,node.height+1);
+						node=node.parent;
+					}
+					return node;
+				} else {
+					if(this.height(node.right)-this.height(node.left)==2){//右旋
+						if(item.key>node.right.key){
+							this.rotateRR(node);
+						} else {
+							this.rotateRL(node);
 						}
 					}
-					return this.right;
-				} else {
-					return this.right.add(item);
+					return this.add(item,node.right);
 				}
 			}
 		},
-		rotateLL:function(){
-			var parent=this.parent;
-			this.parent=parent.parent;
-			if(this.parent){
-				var prop=this.parent.key>this.key?'left':'right';
-				this.parent[prop]=this;
-			}
+		rotateLL:function(node){
+             // var top = node.left;
+             // node.left = top.right;
+             // top.right = node;
 
-			this.right=parent;
-			this.right.parent=this;
-			this.right.left=null;
-			this.right.level++;
-			this.level--;
-			this.left.level--;
+             // top.parent=node.parent;
+             // node.parent=top;
+ 
+             // //计算当前两个节点的高度
+             // node.height = Math.max(this.height(node.left), this.height(node.right)) + 1;
+             // top.height = Math.max(this.height(top.left), this.height(top.right)) + 1;
+ 
+             // return top;
+             var right=node.left.right;
+             node.left.parent=node.parent;
+             if(node.parent){
+             	node.parent.right=node.left;
+             }
+             node.left.right=node;
+             node.left=right;
+             node.parent=node;
 		},
-		rotateRR:function(){
-			var parent=this.parent;
-			this.parent=parent.parent;
-			if(this.parent){
-				var prop=this.parent.key>this.key?'left':'right';
-				this.parent[prop]=this;
-			}
+		rotateRR:function(node){
+             // var top = node.right;
+             // node.right = top.left;
+             // top.left = node;
+             
+             // top.parent=node.parent;
+             // node.parent=top;
 
-			this.left=parent;
-			this.left.parent=this;
-			this.left.right=null;
-			this.left.level++; 
-			this.level--;
-			this.right.level--;
+             // //计算当前两个节点的高度
+             // node.height = Math.max(this.height(node.left), this.height(node.right)) + 1;
+             // top.height = Math.max(this.height(top.left), this.height(top.right)) + 1;
+ 
+             // return top;
+             var left=node.right.left;
+             node.right.parent=node.parent;
+             if(node.parent){
+             	node.parent.left=node.right;
+             }
+             node.right.left=node;
+             node.right=left;
+             node.parent=node;
 		},
-		rotateLR:function(){
-			this.rotateRR();
-			this.rotateLL();
+		rotateLR:function(node){
+             // //先进行RR旋转
+             // node.left = this.rotateRR(node.left);
+ 
+             // //再进行LL旋转
+             // return this.rotateLL(node);
 		},
-		rotateRL:function(){
-			this.rotateLL();
-			this.rotateRR();
+		rotateRL:function(node){
+             // //执行左左旋转
+             // node.right = this.rotateLL(node.right);
+ 
+             // //再执行右右旋转
+             // return this.rotateRR(node);
+		},
+		height:function(node){
+			return !node?-1:node.height;
 		},
 		//查找是否包含key的节点
-		contain:function(key){
-			if(this.key==key){
-				return this;
-			} else if(this.key>key){
-				return this.left?this.left.contain(key):null;
+		contain:function(key,node){
+			node=node||this.tree;
+			if(node.key==key){
+				return node;
+			} else if(node.key>key){
+				return node.left?this.contain(key,node.left):null;
 			} else {
-				return this.right?this.right.contain(key):null;
+				return node.right?this.contain(key,node.right):null;
 			}
 		},
 		//范围查找
 		searchRange:function(min,max){
 			var list=[];
-			search.call(this,min,max);
+			search(min,max,this.tree);
 			return list;
 
-			function search(min,max){
-				if(this.key>min){//遍历左子树
-					this.left&&search.call(this.left,min,max);
+			function search(min,max,node){
+				if(node.key>min){//遍历左子树
+					node.left&&search(min,max,node.left);
 				}
-				if(this.key>=min&&this.key<=max){
-					list.push(this);
+				if(node.key>=min&&node.key<=max){
+					list.push(node);
 				}
-				if(this.key<max){//遍历右子树
-					this.right&&search.call(this.right,min,max);
+				if(node.key<max){//遍历右子树
+					node.right&&search(min,max,node.right);
 				}
 			}
 		},
 		remove:function(key,value){
-			deleteFn.call(this,key,value);
-			return this;
+			deleteFn(this.tree,key,value);
+			return this.tree;
 
-			function deleteFn(key,value){
-				if(this.key==key){
-					if(this.values.length>1){
-						this.values.splice(this.values.indexOf(value),1);
-					} else if(this.left&&this.right){
-						var node=this.right;//找右子树的最左节点，如果右子树不存在左节点，则返回右子树
+			function deleteFn(root,key,value){
+				if(root.key==key){
+					if(root.values.length>1){
+						root.values.splice(root.values.indexOf(value),1);
+					} else if(root.left&&root.right){
+						var node=root.right;//找右子树的最左节点，如果右子树不存在左节点，则返回右子树
 						while (node.left) {
 							node=node.left;
 						}
-						this.key=node.key;
-						this.values=node.values;
-						deleteFn.call(this.right,this.key,this.values[0]);
+						root.key=node.key;
+						root.values=node.values;
+						deleteFn(root.right,root.key,root.values[0]);
 					} else {
-						var prop=this.parent.key>this.key?'left':'right';
-						if(this.left) {//只有左子树
-							this.left.parent=this.parent;
-							this.parent[prop]=this.left;
-						} else if(this.right){//只有右子树
-							this.right.parent=this.parent;
-							this.parent[prop]=this.right;
+						var prop=root.parent.key>root.key?'left':'right';
+						if(root.left) {//只有左子树
+							root.left.parent=root.parent;
+							root.parent[prop]=root.left;
+						} else if(root.right){//只有右子树
+							root.right.parent=root.parent;
+							root.parent[prop]=root.right;
 						} else {//叶子节点
-							this.parent[prop]=null;
+							root.parent[prop]=null;
 						}
 					}
-					return this;
-				} else if(this.key>key){
-					return this.left&&deleteFn.call(this.left,key,value);
+					return root;
+				} else if(root.key>key){
+					return root.left&&deleteFn(root.left,key,value);
 				} else {
-					return this.right&&deleteFn.call(this.right,key,value);
+					return root.right&&deleteFn(root.right,key,value);
 				}
 			}
 		},
-		fTravelTree:function(callback){//先序遍历
-			callback(this);
-			this.left&&this.left.fTravelTree(callback);
-			this.right&&this.right.fTravelTree(callback);
+		fTravelTree:function(callback,node){//先序遍历
+			node=node||this.tree;
+			callback(node);
+			node.left&&this.fTravelTree(callback,node.left);
+			node.right&&this.fTravelTree(callback,node.right);
 		},
-		mTravelTree:function(callback){//中序遍历
-			this.left&&this.left.mTravelTree(callback);
-			callback(this);
-			this.right&&this.right.mTravelTree(callback);
+		mTravelTree:function(callback,node){//中序遍历
+			node=node||this.tree;
+			node.left&&this.fTravelTree(callback,node.left);
+			callback(node);
+			node.right&&this.fTravelTree(callback,node.right);
 		},
-		lTravelTree:function(callback){//后序遍历
-			this.left&&this.left.lTravelTree(callback);
-			this.right&&this.right.lTravelTree(callback);
-			callback(this);
+		lTravelTree:function(callback,node){//后序遍历
+			node.left&&this.fTravelTree(callback,node.left);
+			node.right&&this.fTravelTree(callback,node.right);
+			callback(node);
 		},
 	};
 	//使用canvas画出二叉树
@@ -290,13 +327,13 @@
 			// {key:4,value:'b'},
 			{key:6,value:'c'},
 			{key:7,value:'e'},
-			{key:3,value:'f'},
 			{key:8,value:'g'},
+			{key:3,value:'f'},
 			{key:2,value:'g'},
 			{key:1,value:'h'}
 		]);
-
-	// console.log(tree.remove(4,'a'));
+	console.log(tree.contain(3));
+	console.log(tree.remove(4,'a'));
 	drawTree(tree);
 	// console.log(tree.searchRange(4,7));
 </script>
