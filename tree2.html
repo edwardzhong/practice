@@ -71,62 +71,46 @@
 			}
 		},
 		rotateLL:function(node){
-             // var top = node.left;
-             // node.left = top.right;
-             // top.right = node;
+             var top = node.left;
+             node.left = top.right;
+             top.right = node;
 
-             // top.parent=node.parent;
-             // node.parent=top;
+             top.parent=node.parent;
+             node.parent=top;
  
-             // //计算当前两个节点的高度
-             // node.height = Math.max(this.height(node.left), this.height(node.right)) + 1;
-             // top.height = Math.max(this.height(top.left), this.height(top.right)) + 1;
+             //计算当前两个节点的高度
+             node.height = Math.max(this.height(node.left), this.height(node.right)) + 1;
+             top.height = Math.max(this.height(top.left), this.height(top.right)) + 1;
  
-             // return top;
-             var right=node.left.right;
-             node.left.parent=node.parent;
-             if(node.parent){
-             	node.parent.right=node.left;
-             }
-             node.left.right=node;
-             node.left=right;
-             node.parent=node;
+             return top;
 		},
 		rotateRR:function(node){
-             // var top = node.right;
-             // node.right = top.left;
-             // top.left = node;
+             var top = node.right;
+             node.right = top.left;
+             top.left = node;
              
-             // top.parent=node.parent;
-             // node.parent=top;
+             top.parent=node.parent;
+             node.parent=top;
 
-             // //计算当前两个节点的高度
-             // node.height = Math.max(this.height(node.left), this.height(node.right)) + 1;
-             // top.height = Math.max(this.height(top.left), this.height(top.right)) + 1;
+             //计算当前两个节点的高度
+             node.height = Math.max(this.height(node.left), this.height(node.right)) + 1;
+             top.height = Math.max(this.height(top.left), this.height(top.right)) + 1;
  
-             // return top;
-             var left=node.right.left;
-             node.right.parent=node.parent;
-             if(node.parent){
-             	node.parent.left=node.right;
-             }
-             node.right.left=node;
-             node.right=left;
-             node.parent=node;
+             return top;
 		},
 		rotateLR:function(node){
-             // //先进行RR旋转
-             // node.left = this.rotateRR(node.left);
+             //先进行RR旋转
+             node.left = this.rotateRR(node.left);
  
-             // //再进行LL旋转
-             // return this.rotateLL(node);
+             //再进行LL旋转
+             return this.rotateLL(node);
 		},
 		rotateRL:function(node){
-             // //执行左左旋转
-             // node.right = this.rotateLL(node.right);
+             //执行左左旋转
+             node.right = this.rotateLL(node.right);
  
-             // //再执行右右旋转
-             // return this.rotateRR(node);
+             //再执行右右旋转
+             return this.rotateRR(node);
 		},
 		height:function(node){
 			return !node?-1:node.height;
