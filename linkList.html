@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>blockLinkList</title>
+
+</head>
+<body>
+<script>
+function linkListNode(){
+	this.prev=null;
+	this.next=null;
+	this.list=[];
+}
+
+linkListNode.prototype={
+	insert:function(num){
+		var blockLen=0;
+		if(!this.list.length){
+			this.list.push(num);
+			return this;
+		}
+		blockLen=Math.ceil(Math.sqrt(this.getCount()))*2;
+		//可以插入
+		if(this.list.slice(-1)[0]>num||!this.next){
+			this.list.push(num);
+			this.list.sort(function(a,b){return a-b;});
+			//数组个数大于blockLen需要分裂
+			if(this.list.length>blockLen){
+				var mid=Math.floor(this.list.length/2);
+				var nextList=new linkListNode();
+
+				nextList.list=this.list.slice(mid);
+				this.list=this.list.slice(0,mid);
+				
+				nextList.prev=this;
+				nextList.next=this.next;
+				this.next=nextList; 
+			}
+			var prev=this.prev;
+			while (prev&&prev.prev) {
+				prev=prev.prev;
+			}
+			return prev||this;
+		}
+		return this.next.insert(num);
+
+	},
+	delete:function(num){
+
+	},
+	getCount:function(){
+		var node=null,
+			counts=this.list.length;
+
+		node=this.prev;
+		while (node) {
+			counts+=node.list.length;
+			node=node.prev;
+		}
+		node=this.next;
+		while (node) {
+			counts+=node.list.length;
+			node=node.next;
+		}
+		return counts;
+	}
+};
+var node=new linkListNode()
+node.insert(2)
+node.insert(3)
+node.insert(7)
+node.insert(5)
+node.insert(1)
+node.insert(10)
+node.insert(4); 
+node.insert(12); 
+node.insert(11); 
+node.insert(13); 
+node.insert(16); 
+console.log(node);
+</script>
+</body>
+</html>
