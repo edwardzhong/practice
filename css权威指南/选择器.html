@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>选择器</title>
+	<style>
+		h2{border:1px solid #f00;padding: 5px 0;}
+		p{border:1px solid #00f;padding: 5px 0;}
+		h2+p{margin-top: 0;}/*兄弟选择器，只有p会应用样式*/
+		a[title]{background-color: #0f0;}/*简单属性选择器*/
+		*[title]{color:#00f;}/*包含title的所有元素*/
+		a[href="http://www.google.hk/"]{color:#0aa;}/*具体选择器*/
+		input[type="text"]{background-color: #ff0;}/*属性选择器*/
+		input[class^="txt"]{border:1px solid #f00;}/*class以txt开头的元素*/
+		
+		/*顺序LVHA  所有伪元素必须放在该元素最后面*/
+		a:link{color: #00f;}/*未访问过*/
+		a:visited{color:#666;}/*已经访问过*/
+		a:hover{color:#f00;}/*鼠标停留在元素上*/
+		a:active{color:#ff0;}/*按下鼠标激活时*/
+		a:visited:hover{color:#0ff;}/*组合伪类*/
+
+		p:first-letter{font-size: 20px;}/*第一个字符*/
+		p:first-line{color:#00f;}/*第一行*/
+	</style>
+</head>
+<body>
+	<h2>hhhhhhhhhhh</h2>
+	<p>pppppppppp <br />ppppppppppppp	
+	</p>
+	<p>pppppppppp</p>
+	<h2 class="blue" title="标题">hhhhh</h2>
+	<a href="http://www.google.hk/">google</a><br />
+	<a href="#" title="链接">链接</a><br />
+	<input type="text" class="txtInput" /><br />
+	<input type="button" value="按钮" /><br />
+	<input type="text" class="txt" /><br />
+
+</body>
+</html>

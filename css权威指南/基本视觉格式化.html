@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>基本视觉格式化</title>
+	<style>
+	body{
+		font:14px Helvetica,Arial,"Microsoft Yahei",sans-serif;
+	}
+	div{
+		width:400px;background-color:#ccc;
+	}
+	p{
+		background-color:#f60;width:100px;
+	}
+	</style>
+</head>
+<body>
+	<h2>块级元素</h2>
+	<h3>水平格式化</h3>
+	<h4>只有一个auto</h4>
+	<div>
+		<p style="margin-left:auto;margin-right:100px;">
+			margin-left使用auto,左外边距将自动填补差距
+		</p>
+		<p style="margin-left:100px;margin-right:100px;">
+			margin-left:100px,margin-right:100px;将覆盖margin-right设置，右外边距将自动填补差距
+		</p>
+		<p style="margin-left:100px;margin-right:100px;width:auto;">
+			width:auto;width将设置为所需的某个值，从而达到总宽度
+		</p>
+	</div>
+	<h4>不止一个auto</h4>
+	<div>
+		<p style="margin-left:auto;margin-right:100px;width:auto;">
+		margin-left:auto;width:auto;设置为auto的外边距会减为0
+		</p>
+		<p style="margin-left:auto;margin-right:auto;width:auto;">
+		3个值都为auto，外边距默认为0；width默认auto；
+		</p>
+	</div>
+	<h4>负外边距</h4>
+	<div>
+		<p style="width:auto;margin-right:-100px;">指定负外边距margin-right:-100px;,将得到更宽的子元素</p>
+		<p style="width:auto;margin-left:-100px;">指定负外边距margin-left:-100px;,将得到更宽的子元素，超出浏览器窗口</p>
+	</div>
+	<h3>垂直格式化</h3>
+	<h4>元素内容height和上下外边距可以设置auto，上下内边距和边框必须设置为特定值，或默认0</h4>
+	<div>
+		<p style="margin-top:auto;margin-bottom:auto;">正常流中，块元素margin-top和margin-bottom设置为auto，它会自动计算为0,如果没有显示声明包含块的height，百分数高度会重置为auto</p>
+	</div>
+	<h4>合并垂直外边距</h4>
+	<div  style="padding:10px 0;">
+		<p style="margin:10px;">如果包含块没有设置内边距和边框，子元素的外边距会超出包含块</p>
+	</div>
+	<div style="border:1px solid #f00;">
+		<p style="margin:10px;">解决方案：设置包含块的边框和内边距或设置包含块overflow:hidden;</p>
+	</div>
+	<h4>负外边距<h4>
+	<div style="height:200px;">
+		<p style="margin-top:-10px;marign-bottom:-20px;">如果垂直外边距都为负值，浏览器会取两个外边距绝对值的最大值<br />
+		如果一个正一个负，会从正减去负的绝对值</p>
+		<p style="margin-top:-10px;">上下边距为负时，会有拉近效果</p>
+	</div>
+</body>
+</html>
