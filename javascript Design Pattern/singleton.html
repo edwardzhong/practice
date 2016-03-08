@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>singleton</title>
+</head>
+<body>
+	<button id="btn">登 录</button>
+	<input type="button" value="关 闭" id="close">
+	<script>
+		var createLogin=function(){
+			var div=document.createElement('div');
+			div.innerHTML = '登录窗口';
+			div.style.display='none';
+			document.body.appendChild(div);
+			return div;
+		};
+
+		//惰性单例
+		var getSingle=function(fn){
+			var result;
+			return function(){
+				return result||(result=fn.apply(this,arguments));
+			}
+		}
+
+		var createSingleLogin=getSingle(createLogin);
+		document.getElementById('btn').onclick=function(){
+			var loginLayer=createSingleLogin();
+			loginLayer.style.display='block';
+		};
+
+		//使用单例等效jq的one事件，只绑定一次 
+		var bindEvent=getSingle(function(){
+			document.getElementById('close').onclick=function(){
+				console.log('close');
+			}
+			return true;
+		});
+		var render=function(){
+			bindEvent();
+		}
+		render();
+		render();
+	</script>
+</body>
+</html>
