@@ -3,15 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<title>如何数据和界面相分离</title>
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<script src="JS/jquery.min.js"></script>
-	<script src="JS/bootstrap.min.js"></script>
-    <script src="JS/jsdeferred.js"></script>
+	<script src="js/jquery.min.js"></script>
 	<script>
 	$(document).ready(function(){
-        var Countries = function () { };
+        var Countries = function () { 
+            this._items=[];
+            this.on_loaded=$.Callbacks();
+        };
         Countries.prototype = {
-            _items: [],
             _getData: function () {
                 var items = [
                    { id: 0, name: '中国' },
@@ -22,8 +21,6 @@
                 ];
                 $.extend(this._items, items);
             },
-            //Events
-            on_loaded: $.Callbacks(),
             //Methods
             load: function () {
                 var self = this;

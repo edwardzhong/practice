@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>proxy</title>
+	<title>代理</title>
 </head>
 <body>
 <script>
@@ -63,6 +63,31 @@
 		proxyPlus=createProxyFactory(plus);
 	console.log(proxyMult(1,2,3,4))
 	console.log(proxyPlus(1,2,3,4))
+
+	// miniConsole未加载之前可以使用api，按下F2呼唤出控制台，才开始加载miniConsole.js,同时依次执行缓存队列
+	var miniConsole=(function(){
+		var cache=[];
+		var handle=function(e){
+			if(e.keyCode==113){
+				var script=document.createElement('script');
+				script.onload=function(){
+
+				};
+				script.src='miniConsole.js';
+				document.getElementsByTagName('head')[0].appendChild(script);
+				document.body.removeEventListener('keydown',handle,false);
+			}
+		};
+		document.body.addEventListener('keydown',handle,false);
+		return {
+			log:function(){
+				var args=arguments;
+				cache.push(function(){
+					return miniConsole.log.apply(miniConsole,args);
+				});
+			}
+		}
+	})();
 </script>
 </body>
 </html>
