@@ -78,6 +78,26 @@
 	});
 	func();
 
+	// function cost(){
+	// 	var args=[];
+	// 	return function(){
+	// 		if(arguments.length==0){
+	// 			var money=0;
+	// 			for(var i=0,len=args.length;i<len;i++){
+	// 				money+=args[i];
+	// 			}
+	// 			return money;
+	// 		} else {
+	// 			[].push.apply(args,arguments);
+	// 			return arguments.callee;
+	// 		}
+	// 	}
+	// }
+
+	// var curryCost=cost();
+	// curryCost(100)(200)(300);
+	// curryCost();
+
 	//currying
 	var currying=function(fn){
 		var args=[];
@@ -90,6 +110,7 @@
 			}
 		};
 	};
+
 	var cost=(function(){
 		var money=0;
 		return function(){
@@ -99,10 +120,9 @@
 			return money;
 		}
 	})();
+
 	var cost=currying(cost);//转换为currying函数
-	cost(100);
-	cost(200);
-	cost(300);
+	cost(100)(200)(300);
 	console.log(cost());
 
 	// uncurrying
@@ -120,13 +140,13 @@
 	// 函数节流, 函数频繁调用场景
 	var throttle=function(fn,interval){
 		var self=fn,
-			timer,
+			timer=null,
 			firstTime=true;//是否第一次调用
 
 		return function(){
 			var args=arguments,
 				me=this;
-
+				
 			if(firstTime){//第一次不需要延迟
 				self.apply(me,args);
 				return firstTime=false;
@@ -145,6 +165,13 @@
 	window.onresize=throttle(function(){
 		console.log('resize');
 	},500);
+
+	function delayFn(fn,interval){
+		var timer=null,
+			isLock=false;
+
+
+	}
 
 	//分时函数，数据量大，影响页面性能场景
 	var timeChunk=function(ary,fn,count){
