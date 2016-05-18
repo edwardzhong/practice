@@ -45,6 +45,24 @@
 6. [margin-bottom和padding-bottom分栏高度自动相等实例页面](https://github.com/edwardzhong/practice/blob/master/layout/margin-bottom和padding-bottom分栏高度自动相等实例页面.html)
 7. [table-cell等高布局](https://github.com/edwardzhong/practice/blob/master/layout/table-cell等高布局.html)
 
+###css权威指南
+1. [基本视觉格式化](https://github.com/edwardzhong/practice/blob/master/css权威指南/基本视觉格式化.html)
+2. [基本视觉格式化二](https://github.com/edwardzhong/practice/blob/master/css权威指南/基本视觉格式化二.html)
+3. [字体](https://github.com/edwardzhong/practice/blob/master/css权威指南/字体.html)
+4. [特殊颜色](https://github.com/edwardzhong/practice/blob/master/css权威指南/特殊颜色.html)
+5. [选择器](https://github.com/edwardzhong/practice/blob/master/css权威指南/选择器.html)
+
+###JavaScript高级程序设计
+1. [事件](https://github.com/edwardzhong/practice/blob/master/JavaScript高级程序设计/事件.html)
+1. [函数表达式](https://github.com/edwardzhong/practice/blob/master/JavaScript高级程序设计/函数表达式.html)
+1. [面向对象](https://github.com/edwardzhong/practice/blob/master/JavaScript高级程序设计/面向对象.html)
+1. [面向对象继承](https://github.com/edwardzhong/practice/blob/master/JavaScript高级程序设计/面向对象继承.html)
+1. [面向对象实践](https://github.com/edwardzhong/practice/blob/master/JavaScript高级程序设计/面向对象实践.html)
+1. [BOM](https://github.com/edwardzhong/practice/blob/master/JavaScript高级程序设计/BOM.html)
+1. [DOM](https://github.com/edwardzhong/practice/blob/master/JavaScript高级程序设计/DOM.html)
+1. [Json](https://github.com/edwardzhong/practice/blob/master/JavaScript高级程序设计/Json.html)
+1. [高级技巧](https://github.com/edwardzhong/practice/blob/master/JavaScript高级程序设计/高级技巧.html)
+
 ###数据结构和算法
 1. [链表linkList](https://github.com/edwardzhong/practice/blob/master/algorithm/linkList.html)
 2. [图map](https://github.com/edwardzhong/practice/blob/master/algorithm/map.html)
