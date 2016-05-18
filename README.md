@@ -36,14 +36,23 @@
 35. [jquery研究](https://github.com/edwardzhong/practice/blob/master/jquery.html)
 36. [css 3D和透视](https://github.com/edwardzhong/practice/blob/master/perspective.html)
 
+###布局
+1. [基本自适应布局](https://github.com/edwardzhong/practice/blob/master/layout/基本自适应布局.html)
+2. [布局实例](https://github.com/edwardzhong/practice/blob/master/layout/布局实例.html)
+3. [负边距三角等](https://github.com/edwardzhong/practice/blob/master/layout/负边距三角等.html)
+4. [各种居中](https://github.com/edwardzhong/practice/blob/master/layout/center.html)
+5. [justify两端对齐](https://github.com/edwardzhong/practice/blob/master/layout/justify.html)
+6. [margin-bottom和padding-bottom分栏高度自动相等实例页面](https://github.com/edwardzhong/practice/blob/master/layout/margin-bottom和padding-bottom分栏高度自动相等实例页面.html)
+7. [table-cell等高布局](https://github.com/edwardzhong/practice/blob/master/layout/table-cell等高布局.html)
+
 ###数据结构和算法
-1. [链表linkList](https://github.com/edwardzhong/practice/blob/master/linkList.html)
-2. [图map](https://github.com/edwardzhong/practice/blob/master/map.html)
-3. [排序算法sort](https://github.com/edwardzhong/practice/blob/master/sort.html)
-4. [二叉树1 tree](https://github.com/edwardzhong/practice/blob/master/tree.html)
-5. [二叉树2 tree2](https://github.com/edwardzhong/practice/blob/master/tree2.html)
-6. [ac自动机](https://github.com/edwardzhong/practice/blob/master/trie.html)
-7. [动画公式 Tween](https://github.com/edwardzhong/practice/blob/master/Tween.html)
+1. [链表linkList](https://github.com/edwardzhong/practice/blob/master/algorithm/linkList.html)
+2. [图map](https://github.com/edwardzhong/practice/blob/master/algorithm/map.html)
+3. [排序算法sort](https://github.com/edwardzhong/practice/blob/master/algorithm/sort.html)
+4. [二叉树1 tree](https://github.com/edwardzhong/practice/blob/master/algorithm/tree.html)
+5. [二叉树2 tree2](https://github.com/edwardzhong/practice/blob/master/algorithm/tree2.html)
+6. [ac自动机](https://github.com/edwardzhong/practice/blob/master/algorithm/trie.html)
+7. [动画公式 Tween](https://github.com/edwardzhong/practice/blob/master/algorithm/Tween.html)
 
 ###javascript设计模式
 1. [面向对象基础](https://github.com/edwardzhong/practice/blob/master/javascript Design Pattern/base.html)
