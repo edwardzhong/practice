@@ -50,9 +50,9 @@ qq环境要首先引用这个
     <a class="btn btn_gz btn_gz_jd wx_show" href="http://mp.weixin.qq.com/s?__biz=MjYzMjU0MjU0MA==&mid=244790036&idx=1&sn=0b5e7df5e2a41884ba3346c5c0f278cf&key=94484500774026df06178aea31845435549a211019907fdd67f809c86209a8786f699f6cabcaae324c4ed48fd6b8d401&ascene=1&uin=NDQyNzQyODU%3D&pass_ticket=Nr16fdZd2lGeBmhNhWu6ByNntS49EZiU2tXb6Kn6Tns%3D&ptag=7059.1.4" ptag="7059.1.4">点击关注</a>
 
 9.快速发布地址
-/static/res/sinclude/jsi/wg.market.618wallet.enter.shtml
-/static/event/juhuodong/618wallet/images/pc_bg.jpg
-/static/event/juhuodong/618wallet/pc.html
+/static/res/sinclude/jsi/wg.market.618wallet.enter.shtml  
+/static/event/juhuodong/618wallet/images/pc_bg.jpg  
+/static/event/juhuodong/618wallet/pc.html  
 /resource/js/version/201505/wg.market.618wallet.201505281651.js
 
 
@@ -61,17 +61,17 @@ http://wqadmin.jd.com/queryuserid/v1/ShowSearchList
 
 11.公共抽奖函数
 1)文档：
-http://legos.wq.jd.com/ci.php/api/#id=20107
+http://legos.wq.jd.com/ci.php/api/#id=20107  
 地址：
-http://wq.jd.com/active/active_draw
+http://wq.jd.com/active/active_draw  
 调用示例：	
 http://party.wanggou.com/tws64/activemkt/active/active_draw?active=test&level=1&deal_id=12344433&ext=hj:w
 
-bingo/bingolevel : 中奖等级
-bingo/bingomsg : 中奖错误信息
-bingo/bingoret : 中奖错误码
-award/awardmsg : 发奖信息
-award/awardret: 发奖错误码
+bingo/bingolevel : 中奖等级  
+bingo/bingomsg : 中奖错误信息  
+bingo/bingoret : 中奖错误码  
+award/awardmsg : 发奖信息  
+award/awardret: 发奖错误码  
 
 返回码ret：
 0 成功  result.bingo.bingolevel == 0 为中奖
@@ -150,9 +150,9 @@ ppms里面img类型的数据加了尺寸校验，用"size"限定大小，单位K
 http://m.360buyimg.com/mobilecms/s300x300_
 
 6.获取CPC数据
-http://legos.wq.jd.com/ci.php/api/#id=20348
+http://legos.wq.jd.com/ci.php/api/#id=20348  
 接口调用
-http://wq.jd.com/mcoss/focusbi/show?gids=2008&pc=2&callback=processFocusData&pcs=5776:16,5777:10,5778:16,5779:14,5780:13,5781:13
+http://wq.jd.com/mcoss/focusbi/show?gids=2008&pc=2&callback=processFocusData&pcs=5776:16,5777:10,5778:16,5779:14,5780:13,5781:13  
 
 7.微信api相关功能
 微信公众平台开发文档
