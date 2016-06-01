@@ -280,12 +280,29 @@ js后期操作节点产生的css3动画会有系统资源不够导致渲染一�
 5.移动web的position:fixed导致之前绑定的事件无法触发的bug修复：
 先设置为static，延时后再重新设置为fixed
 
+----------------------------------------
+weinre使用
+1.运行
+weinre --httpPort 8081 --boundHost -all-
 
-http://mtd.jd.com/mobile/wx/base.html 公共样式
-http://pcm.jd.com/ 京东svn配置平台
-http://wei.jd.com/weidian/portal.shtml 京东微店管理系统
-http://wqs.jd.com/weidian/mp/attention.shtml 京东微店关注公众号
-http://m.isd.com/app/endusermonitor2/config/pointView.php#date=2015-01-03&curTab=speed&countryId=1&flag1=7807&flag2=9&flag3=1 监控平台
-http://ppms.paipaioa.com/ppms
-http://legos.wq.jd.com/ 京东legos
-http://legos.cm.com/legos4.php/project/ 腾讯legos
+主要参数解析：
+httpPort    调试服务器运行的端口，默认8080  
+boundHost   调试服务器绑定的IP地址或域名，默认localhost  
+
+2.打开debug面板：http://localhost:8081/client/#anonymous  
+
+3.获取本机的IP地址，例如：192.168.1.101，添加如下js文件到需要调试的目标文件的头部：  
+<script src="http://192.168.1.101:8081/target/target-script-min.js#anonymous"></script>  
+
+在debug面板中可以监听到移动设备对目标页面的访问：
+
+----------------------------------------
+http://mtd.jd.com/mobile/wx/base.html 公共样式  
+http://pcm.jd.com/ 京东svn配置平台  
+http://wei.jd.com/weidian/portal.shtml 京东微店管理系统  
+http://wqs.jd.com/weidian/mp/attention.shtml 京东微店关注公众号  
+http://ump.jd.com/login/admin.action 监控平台  
+http://ppms.jd.com/ 
+http://legos.wq.jd.com/ 京东legos  
+http://legos.cm.com/legos4.php/project/ 腾讯legos  
+
