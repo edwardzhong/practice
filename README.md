@@ -35,6 +35,7 @@
 33. [history&hashchange的使用](https://github.com/edwardzhong/practice/blob/master/history&hashchange.html)
 34. [jquery研究](https://github.com/edwardzhong/practice/blob/master/jquery.html)
 35. [css 3D和透视](https://github.com/edwardzhong/practice/blob/master/perspective.html)
+36. [实现requireJs的功能](https://github.com/edwardzhong/practice/blob/master/require.html)
 
 ###布局
 1. [基本自适应布局](https://github.com/edwardzhong/practice/blob/master/layout/基本自适应布局.html)

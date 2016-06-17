@@ -82,7 +82,7 @@ $(function(){
 			curr:1,//当前第几页
 			show:5,//中间展示几页
 			side:2,//两侧展示几页
-			callback:null
+			callback:function(){}
 		};
 		options=$.extend(options,option);
 		var total=Math.ceil(options.len/options.page);
@@ -238,6 +238,124 @@ $(function(){
 			}
 		}
 	});
+
+    /**
+     * 分页组件
+     */
+    function pages(options){
+        var opts={
+            domId:'',//dom的id
+            pageSize:10,//每页记录数
+            pageNum:0,//总页数
+            total:0,//总记录数
+            curr:1,//当前第几页
+            show:5,//中间展示几页
+            side:2,//两侧展示几页
+            callback:function(curr,pageSize,pageNum,total){}//当前页，页大小，总页数，总记录数
+        },container=null;
+
+        $.extend(true,opts,options);
+        if(!opts.domId){throw new Error('domId in null or empty'); }
+        container=$('#'+opts.domId);
+        if(!container.length){throw new Error('dom is not exist'); }
+
+        function bindEvent(){
+            container.off().on('click', 'li', function() {
+                var className=$(this).attr('class')||'';
+                if(/disabled|active/i.test(className)){
+                    return false;
+                }
+                if(/prev/i.test(className)){
+                    opts.curr--;
+                } else if(/next/i.test(className)){
+                    opts.curr++;
+                } else {
+                    opts.curr=parseInt($(this).children('a').text());
+                }
+                render();
+            });
+        }
+
+        function render(){
+            opts.pageNum=Math.ceil(opts.total/opts.pageSize);
+            if(opts.pageNum<opts.show){
+                opts.show=opts.pageNum;
+            }
+            if(opts.curr<=0){
+                opts.curr=1;
+            }
+            if(opts.curr>opts.pageNum){
+                opts.curr=opts.pageNum;
+            }
+
+            var start=Math.min(opts.side,Math.ceil(opts.pageNum/2)),
+                end=Math.min(opts.side,Math.floor(opts.pageNum/2)),
+                before=Math.ceil((opts.show-1)/2),
+                after=Math.floor((opts.show-1)/2),
+                index=start,len=opts.pageNum-end,
+                i,left,right,html='';
+
+            left=opts.curr-start-before-1;
+            if(left>0){
+                index+=left;
+            } else {
+                after-=left;
+            }
+            
+            right=len-after-opts.curr;
+            if(right>0){
+                len-=right;
+            }else{
+                index+=right;
+            }
+
+            if(index<=0){index=start;}
+
+            if(index-start===1){
+                index--;
+            }
+            if(right===1){
+                len++;
+            }
+
+            html+='<li class="prev"><a href="javascript:;" aria-label="Previous"><span aria-hidden="true">«</span></a></li>';
+            for(i=0;i<start;i++){
+                html+='<li><a href="javascript:;">'+(i+1)+'</a></li>';
+            }
+            if(index>start){
+                html+='<li class="disabled"><a href="javascript:;">...</a></li>';
+            }
+            for(;index<len;index++){
+                html+='<li><a href="javascript:;">'+(index+1)+'</a></li>';
+            }
+            if(right>1){
+                html+='<li class="disabled"><a href="javascript:;">...</a></li>';
+            }
+            for(i=opts.pageNum-end;i<opts.pageNum;i++){
+                html+='<li><a href="javascript:;">'+(i+1)+'</a></li>';
+            }
+
+            html+='<li class="next"><a href="javascript:;" aria-label="Next"><span aria-hidden="true">»</span></a></li>';
+            container.html(html);
+
+            container.children('li').filter(function(index,item) {
+                return $(item).children('a').text()===''+opts.curr;
+            }).addClass('active');
+
+            if(opts.curr<=1){
+                container.find('.prev').addClass('disabled');
+            }
+            if(opts.curr===opts.pageNum){
+                container.find('.next').addClass('disabled');
+            }
+            if(opts.callback){
+                opts.callback(opts.curr,opts.pageSize,opts.pageNum,opts.total);
+            }
+        }
+
+        render();
+        bindEvent();
+    }
 });
 </script>
 </head>

@@ -7,8 +7,15 @@
 <body>
 <script>
 	(function(){
+		var config={
+			alias:{
+				'a':'a.js',
+				'b':'b.js'
+			}
+		};
 		var factorys=[];
 		var modules={};
+		var loadings=[];
 
 		window.define=function(id,deps,factory){
 			var args=[].slice.call(arguments);
@@ -20,19 +27,62 @@
 			}
 			_deps=typeof args[0]=='function'?[]:args.shift();
 			_factory=args.shift();
-			if(!_id){_id=getCurrentScript(); }
-			modules[_id]={
-				id:_id,
-				factory:_factory,
-				state:1
+			_id=modules[_id]&&modules[_id].state>=1?_id:getCurrentScript();
+			_factory.id=_id;
+			_factory.delay=function(){
+
 			};
-			
+			factorys.push(_factory);
 		};
 
-		window.require=function(){
-
+		window.require=function(list,factory){
+			var deps={},
+				args=[],
+				id='callback'+setTimeout('1'),
+				dn=0,
+				cn=0,
+				url='';
+			String(list).replace(/[^\,\s]+/g, function(el) {
+				url=config.alias[el]||el;//js路径
+				if(!/\w+\.js/.test(url)){//没有后缀
+					url+=url.slice(-1)=='.'?'js':'.js';
+				}
+				if(!modules[url]){
+					modules[url]={
+						id:url
+					};
+					loadJS(url);
+				}
+				dn++;
+				if(modules[url]&&modules[url].state==2){
+					cn++;
+				}
+				if(!deps[url]){
+					args.push(url);
+					deps[url]='jeff';
+				}
+			});
+			modules[id] = {//创建一个对象,记录模块的加载情况与其他信息
+	            id: id,
+	            factory: factory,
+	            deps: deps,
+	            args: args,
+	            state: 1
+	        };
+	        if(dn==cn){
+	        	fireFactory(id,deps,factory);
+	        } else {
+	        	loadings.unshift(id);
+	        }
 		};
 
+		function fireFactory(id, deps, factory) {
+
+		}
+
+		/**
+		 * 获取当前文件的路径
+		 */
 	    function getCurrentScript(base) {
 	        // 参考 https://github.com/samyk/jiagra/blob/master/jiagra.js
 	        var stack;
@@ -67,6 +117,33 @@
 	                return node.className = node.src;
 	            }
 	        }
+	    }
+
+	    /**
+	     * 加载js
+	     * @param    {[type]}                 url      [description]
+	     * @param    {Function}               callback [description]
+	     */
+	    function loadJS(url,callback){
+	    	var fn=function(){
+	    		var factory = factorys.pop();
+                factory && factory.delay(node.src);
+                callback && callback();
+	    	},
+	    	script=document.createElement('script');
+	    	script.type="text/javascript";
+	    	if(script.readyState){
+	    		script.onreadystatechange=function(){
+	    			if(/loaded|complete/i.test(script.readyState)){
+	    				fn();
+	    			}
+	    		}
+	    	} else {
+	    		script.onload=fn;
+	    	}
+
+	    	script.src=url;
+	    	document.getElementsByTagName("head")[0].appendChild(script);
 	    }
 	}());
 </script>
