@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>仿豆瓣分页</title>
+<meta charset="UTF-8">
+<title>仿豆瓣分页</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
 <style>
 	body{
 		font:14px Helvetica,Arial,"Microsoft Yahei",sans-serif;
@@ -47,217 +48,26 @@
 		display: inline-block;
 		margin: 20px auto;
 	}
-	#page li{
-		margin: 0 1px;
-	}
-	#page li a{
-		text-decoration: none;
-		padding: 2px 6px;
-		color: #37a;
-	}
-	#page li a:hover{
-		background-color: #37a;
-		color: #fff;
-	}
-	#page li.curr a{
-		background-color: #649fc8;
-		color: #fff;
-	}
-	#page li.dis a{
-		color:#aaa;
-	}
-	#page li.dis a:hover{
-		background-color: inherit;
-		color:#aaa;
-	}
 </style>
 <script src="js/jquery.min.js"></script>
 <script>
 $(function(){
-	$.fn.doubanPage=function(option){
-		var self=this,
-		options={
-			page:10,//每页记录数
-			len:10,//总记录数
-			curr:1,//当前第几页
-			show:5,//中间展示几页
-			side:2,//两侧展示几页
-			callback:function(){}
-		};
-		options=$.extend(options,option);
-		var total=Math.ceil(options.len/options.page);
-		function init(){
-			if(total<options.show){
-				options.show=total;
-			}
-			if(options.curr<=0){
-				options.curr=1;
-			}
-			if(options.curr>total){
-				options.curr=total;
-			}
-			drawPage();
-		}
-		function drawPage(){
-			var temp='',li='',
-				start=Math.min(options.side,Math.ceil(total/2)),
-				end=Math.min(options.side,Math.floor(total/2)),
-				before=Math.ceil((options.show-1)/2),
-				after=Math.floor((options.show-1)/2),
-				index=start,len=total-end,i;
-
-			var left=options.curr-start-before-1;
-			if(left>0){
-				index+=left;
-			}else{
-				after-=left;
-			}
-			
-			var right=len-after-options.curr;
-			if(right>0){
-				len-=right;
-			}else{
-				index+=right;
-			}
-
-			if(index<=0){index=start;}
-
-			if(index-start===1){
-				index--;
-			}
-			if(right===1){
-				len++;
-			}
-
-			temp+='<li class="prev"><a href="javascript:void(0);">&lt;前页</a></li>';
-			for(i=0;i<start;i++){
-				temp+='<li><a href="javascript:void(0);">'+(i+1)+'</a></li>';
-			}
-			if(index>start){
-				temp+='<li class="separator">...</li>';
-			}
-			for(;index<len;index++){
-				temp+='<li><a href="javascript:void(0);">'+(index+1)+'</a></li>';
-			}
-			if(right>1){
-				temp+='<li class="separator">...</li>';
-			}
-			for(i=total-end;i<total;i++){
-				temp+='<li><a href="javascript:void(0);">'+(i+1)+'</a></li>';
-			}
-			temp+='<li class="next"><a href="javascript:void(0);">后页&gt;</a></li>';
-			$(self).empty().append(temp);
-
-			$(self).children('li').filter(function(index) {
-				return $(this).children('a').text()===''+options.curr;
-			}).addClass('curr');
-
-			if(options.curr<=1){
-				$(self).find('.prev').addClass('dis');
-			}
-			if(options.curr===total){
-				$(self).find('.next').addClass('dis');
-			}
-			if(options.callback){
-				options.callback(options.curr,options.page,options.len);
-			}
-		}
-		function bindEvents(){
-			$(self).on('click', 'li', function() {
-				var className=$(this).attr('class')||'';
-				if(className==='curr'||className==='separator'||className.indexOf('dis')>-1){
-					return;
-				}
-				else if(className.indexOf('prev')>-1){
-					options.curr--;
-				}else if(className.indexOf('next')>-1){
-					options.curr++;
-				}else{
-					options.curr=parseInt($(this).children('a').text());
-				}
-				init();
-			});
-		}
-		init();
-		bindEvents();
-	};
-	var arr=[],i;
-	for(i=0;i<116;i++){
-		arr.push({'title':'title'+(i+1)});
-	}
-	var page=10,total=Math.ceil(arr.length/page);
-	$('#page').doubanPage({
-		page:page,
-		len:arr.length,
-		curr:1,
-		show:5,
-		side:2,
-		callback:function(curr,page,len){
-			var list=$('.list'), temp='',lis=list.children('li'),
-				l=lis.length,k=0,
-				w=list.outerWidth(),h=list.outerHeight();
-			if(l>0){		
-				var timerHide=setInterval(function(){
-					$(lis[k]).animate({top: h+'px', left: w/2+'px',width:'0',height:'0'}, 100,
-						function(){
-						$(this).remove();
-					});
-					k++;
-					if(k===l){
-						clearInterval(timerHide);
-						setTimeout(showList,200);
-					}
-				},100);
-			}else{
-				showList();
-			}
-			function showList(){
-				var	i=(curr-1)*page,
-					padding=10,per=130,
-					c=0,r=0,j=0,posArr=[],pos;
-				l=page*curr>len?len:page*curr;
-				for(;i<l;i++){
-					c=i%5;
-					r=Math.floor(j/5);
-					j++;
-					posArr.push({top:(10+r*130),left:(10+c*130)});
-					temp+='<li style="width:0;height:0;top:'+h+'px; left:'+w/2+'px;display:none;">'+arr[i].title+'</li>';
-				}
-				list.append(temp);
-				lis=list.children('li');
-				var timerShow=setInterval(function(){
-					j--;
-					pos=posArr.pop();
-					$(lis[j]).show().animate({'top': pos.top+'px', 'left': pos.left+'px',
-						width:'100px',height:'100px'}, 100);
-
-					if(j<=0){
-						clearInterval(timerShow);
-					}
-				},100);
-			}
-		}
-	});
-
     /**
      * 分页组件
      */
-    function pages(options){
+    $.fn.doubanPage=function(options){
         var opts={
-            domId:'',//dom的id
             pageSize:10,//每页记录数
-            pageNum:0,//总页数
+            pageNum:0,//总页数，由计算得出
             total:0,//总记录数
             curr:1,//当前第几页
             show:5,//中间展示几页
             side:2,//两侧展示几页
             callback:function(curr,pageSize,pageNum,total){}//当前页，页大小，总页数，总记录数
-        },container=null;
+        },container=$(this);
 
         $.extend(true,opts,options);
-        if(!opts.domId){throw new Error('domId in null or empty'); }
-        container=$('#'+opts.domId);
-        if(!container.length){throw new Error('dom is not exist'); }
+        if(!opts.total){return false;}
 
         function bindEvent(){
             container.off().on('click', 'li', function() {
@@ -288,57 +98,64 @@ $(function(){
                 opts.curr=opts.pageNum;
             }
 
-            var start=Math.min(opts.side,Math.ceil(opts.pageNum/2)),
-                end=Math.min(opts.side,Math.floor(opts.pageNum/2)),
-                before=Math.ceil((opts.show-1)/2),
-                after=Math.floor((opts.show-1)/2),
-                index=start,len=opts.pageNum-end,
-                i,left,right,html='';
+            var startLen=Math.min(opts.side,Math.ceil(opts.pageNum/2)),//左侧开头展示的页数
+                end=Math.min(opts.side,Math.floor(opts.pageNum/2)),//右侧结尾展示的页数
+                showLeftNums=Math.ceil((opts.show-1)/2),//中间展示页数的前半部分数
+                showRightNums=Math.floor((opts.show-1)/2),//中间展示页数的后半部分数
+                showIndex=startLen,//中间显示页数的开始下标
+                showLen=opts.pageNum-end,//中间显示页数的结束下标
+                leftNum,rightNum,i,html='';
 
-            left=opts.curr-start-before-1;
-            if(left>0){
-                index+=left;
+            //在左半区对showIndex和showRightNums进行调整
+            leftNum=opts.curr-startLen-showLeftNums-1;//左侧被"..."代替的页数
+            if(leftNum>0){
+                showIndex+=leftNum;
             } else {
-                after-=left;
+                showRightNums-=leftNum;
             }
             
-            right=len-after-opts.curr;
-            if(right>0){
-                len-=right;
-            }else{
-                index+=right;
+            //在右半区对showIndex和showLen进行调整
+            rightNum=showLen-showRightNums-opts.curr;//右侧被"..."代替的页数
+            if(rightNum>0){
+                showLen-=rightNum;
+            } else {
+                showIndex+=rightNum;
             }
 
-            if(index<=0){index=start;}
-
-            if(index-start==1){
-                index--;
+            if(showIndex<=0){
+            	showIndex=startLen;
             }
-            if(right==1){
-                len++;
+
+            if(showIndex-startLen==1){//左侧如果间距是1则不需要"..."
+                showIndex--;
+            }
+
+            if(rightNum==1){//右侧如果间距是1也不需要"..."
+                showLen++;
             }
 
             html+='<li class="prev"><a href="javascript:;" aria-label="Previous"><span aria-hidden="true">«</span></a></li>';
-            for(i=0;i<start;i++){
+
+            for(i=0;i<startLen;i++){//左侧开头
                 html+='<li><a href="javascript:;">'+(i+1)+'</a></li>';
             }
-            if(index>start){
+            if(showIndex>startLen){//左边大于1的情况添加"..."
                 html+='<li class="disabled"><a href="javascript:;">...</a></li>';
             }
-            for(;index<len;index++){
-                html+='<li><a href="javascript:;">'+(index+1)+'</a></li>';
+            for(;showIndex<showLen;showIndex++){//中间部分
+                html+='<li><a href="javascript:;">'+(showIndex+1)+'</a></li>';
             }
-            if(right>1){
+            if(rightNum>1){//右边大于1的情况添加"..."
                 html+='<li class="disabled"><a href="javascript:;">...</a></li>';
             }
-            for(i=opts.pageNum-end;i<opts.pageNum;i++){
+            for(i=opts.pageNum-end;i<opts.pageNum;i++){//右侧结尾
                 html+='<li><a href="javascript:;">'+(i+1)+'</a></li>';
             }
 
             html+='<li class="next"><a href="javascript:;" aria-label="Next"><span aria-hidden="true">»</span></a></li>';
             container.html(html);
 
-            container.children('li').filter(function(index,item) {
+            container.children('li').filter(function(showIndex,item) {
                 return $(item).children('a').text()==''+opts.curr;
             }).addClass('active');
 
@@ -348,7 +165,8 @@ $(function(){
             if(opts.curr==opts.pageNum){
                 container.find('.next').addClass('disabled');
             }
-            if(opts.callback){
+
+            if(opts.callback){//绘制完，先运行一次callback
                 opts.callback(opts.curr,opts.pageSize,opts.pageNum,opts.total);
             }
         }
@@ -356,14 +174,70 @@ $(function(){
         render();
         bindEvent();
     }
+
+    var arr=[];
+	for(var i=0;i<116;i++){
+		arr.push({'title':'title'+(i+1)});
+	}
+	$('#page').doubanPage({
+        pageSize:10,
+        total:arr.length,
+        curr:1,
+        show:5,
+        side:2,
+		callback:function(curr,size,pages,total){
+			var list=$('.list'), temp='',lis=list.children('li'),
+				l=lis.length,k=0,
+				w=list.outerWidth(),h=list.outerHeight();
+			if(l>0){		
+				var timerHide=setInterval(function(){
+					$(lis[k]).animate({top: h+'px', left: w/2+'px',width:'0',height:'0'}, 100,
+						function(){
+						$(this).remove();
+					});
+					k++;
+					if(k===l){
+						clearInterval(timerHide);
+						setTimeout(showList,200);
+					}
+				},100);
+			}else{
+				showList();
+			}
+			function showList(){
+				var	i=(curr-1)*size,
+					padding=10,per=130,
+					c=0,r=0,j=0,posArr=[],pos;
+				l=size*curr>total?total:size*curr;
+				for(;i<l;i++){
+					c=i%5;
+					r=Math.floor(j/5);
+					j++;
+					posArr.push({top:(10+r*130),left:(10+c*130)});
+					temp+='<li style="width:0;height:0;top:'+h+'px; left:'+w/2+'px;display:none;">'+arr[i].title+'</li>';
+				}
+				list.append(temp);
+				lis=list.children('li');
+				var timerShow=setInterval(function(){
+					j--;
+					pos=posArr.pop();
+					$(lis[j]).show().animate({'top': pos.top+'px', 'left': pos.left+'px',
+						width:'100px',height:'100px'}, 100);
+
+					if(j<=0){
+						clearInterval(timerShow);
+					}
+				},100);
+			}
+		}
+	});
 });
 </script>
 </head>
 <body>
 <div class="wrap">
 	<ul class="list clearfix"></ul>
-	<ul id="page" class="clearfix"></ul>
+	<ul id="page" class="pagination"></ul>
 </div>
-
 </body>
 </html>
