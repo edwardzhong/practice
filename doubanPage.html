@@ -311,10 +311,10 @@ $(function(){
 
             if(index<=0){index=start;}
 
-            if(index-start===1){
+            if(index-start==1){
                 index--;
             }
-            if(right===1){
+            if(right==1){
                 len++;
             }
 
@@ -339,13 +339,13 @@ $(function(){
             container.html(html);
 
             container.children('li').filter(function(index,item) {
-                return $(item).children('a').text()===''+opts.curr;
+                return $(item).children('a').text()==''+opts.curr;
             }).addClass('active');
 
             if(opts.curr<=1){
                 container.find('.prev').addClass('disabled');
             }
-            if(opts.curr===opts.pageNum){
+            if(opts.curr==opts.pageNum){
                 container.find('.next').addClass('disabled');
             }
             if(opts.callback){
