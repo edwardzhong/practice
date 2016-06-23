@@ -53,15 +53,8 @@
 	      // }
 	    }
 	  }
-	}(),
-    animationend=function(){//获取animationend名称
-        switch(webkit){
-            case '-webkit-':return 'webkitAnimationEnd';
-            case '-ms-':return 'MSAnimationEnd';
-            case '-o-':return 'oAnimationEnd';
-            default:return 'animationend';
-        }
-    }();
+	}();
+
 	// addCssRule('.restore{-webkit-transition:-webkit-transform .3s linear;}');
 
 	/**
@@ -83,7 +76,36 @@
 	    }
 	}();
 
-	
+    /**
+     * 获取animationend名称
+     */
+	var animationend=function(){
+        switch(webkit){
+            case '-webkit-':return 'webkitAnimationEnd';
+            case '-ms-':return 'MSAnimationEnd';
+            case '-o-':return 'oAnimationEnd';
+            default:return 'animationend';
+        }
+    }();
+
+    var transition=function(){
+        var transitionEnd=(function(){
+            var el=document.createElement('bootstrap'),
+                transEndEventName={
+                    'WebkitTransition' : 'webkitTransitionEnd',
+                    'MozTransition'    : 'transitionend',
+                    'OTransition'      : 'oTransitionEnd otransitionend',
+                    'transition'       : 'transitionend'
+                };
+                for(var name in transEndEventName){
+                    if(el.style[name]!==undefined){
+                        return transEndEventName[name];
+                    }
+                }
+        })();
+        return transitionEnd&&{end:transitionEnd}
+    }();
+
 	 /**
      * 获取url参数
      * @param    {String}                 search url/search
@@ -526,63 +548,61 @@
             }
         },
         //密码必须包含数字,字母,符号
-        checkPassword:function (t, n) {
-            var rega = /^[^a-zA-Z_]+$/;
-            var regb = /^\D+$/;
-            var regc = /^^\w+$/;
-            if (!rega.test(t.val()) && !regb.test(t.val()) && !regc.test(t.val())) {
+        checkPassword:function (val) {
+            var rega = /[a-zA-Z]+/;
+            var regb = /\d+/;
+            var regc = /[\W\_]+/;
+            if (rega.test(val) && regb.test(val) && regc.test(val)) {
                 return true;
             }
             return false;
         },
         //Object转换为json
         objToJson:function (o){
-        function getVal(obj){
-            var val='';
-            var type=typeof obj;
-            switch (type){
-                case 'string':val='"'+obj+'"';break;
-                case 'number':val=obj;break;
-                case 'boolean':val=obj;break;
-                case 'object':val=toJson(obj);break;
-                default :break;
-            }
-            return val;
-        }
-        function f(n) {
-            // Format integers to have at least two digits.
-            return n < 10 ? '0' + n : n;
-        }
-        function toJson(obj){
-            var json='';
-            if(typeof obj!='object'){return json;}
-            var i,len,v,arr=[];
-            if(obj instanceof Array){
-                for(i=0,len=obj.length;i<len;i++){
-                    arr.push(getVal(obj[i]));
+            function getVal(obj){
+                var val='';
+                var type=typeof obj;
+                switch (type){
+                    case 'string':val='"'+obj+'"';break;
+                    case 'number':val=obj;break;
+                    case 'boolean':val=obj;break;
+                    case 'object':val=toJson(obj);break;
+                    default :break;
                 }
-                arr.join(',');
-                json='['+arr.join(',')+']';
+                return val;
             }
-            else if(obj instanceof Date){
-                json= isFinite(obj.valueOf())
-                    ? obj.getUTCFullYear()     + '-' +
-                    f(obj.getUTCMonth() + 1) + '-' +
-                    f(obj.getUTCDate())      + 'T' +
-                    f(obj.getUTCHours())    + ':' +
-                    f(obj.getUTCMinutes())   + ':' +
-                    f(obj.getUTCSeconds())   +'.'+
-                    obj.getUTCMilliseconds()+ 'Z'
-                    : null;
+            function f(n) {
+                // Format integers to have at least two digits.
+                return n < 10 ? '0' + n : n;
             }
-            else{
-                for(var v in obj){
-                    arr.push('"'+v+'":'+getVal(obj[v]));
+            function toJson(obj){
+                var json='';
+                if(typeof obj!='object'){return json;}
+                var i,len,v,arr=[];
+                if(obj instanceof Array){
+                    for(i=0,len=obj.length;i<len;i++){
+                        arr.push(getVal(obj[i]));
+                    }
+                    arr.join(',');
+                    json='['+arr.join(',')+']';
+                } else if(obj instanceof Date){
+                    json= isFinite(obj.valueOf())
+                        ? obj.getUTCFullYear()     + '-' +
+                        f(obj.getUTCMonth() + 1) + '-' +
+                        f(obj.getUTCDate())      + 'T' +
+                        f(obj.getUTCHours())    + ':' +
+                        f(obj.getUTCMinutes())   + ':' +
+                        f(obj.getUTCSeconds())   +'.'+
+                        obj.getUTCMilliseconds()+ 'Z'
+                        : null;
+                } else{
+                    for(var v in obj){
+                        arr.push('"'+v+'":'+getVal(obj[v]));
+                    }
+                    json= '{'+arr.join(',')+'}';
                 }
-                json= '{'+arr.join(',')+'}';
+                return json;
             }
-            return json;
-        }
         return toJson(o);
     },
     //原生ajax
