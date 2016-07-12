@@ -222,11 +222,9 @@
             e.stopPropagation(); 
             e.preventDefault();
             if(offset>0){
-                if(prev<0){prev=len-1;}//第一项继续向左滑，则最后一项前置到第一项
-                act=prev;
+                act=prev<0?len-1:prev;
             } else if(offset<0){
-                if(next>=len){next=0;}//最后一项继续向右滑，则第一项填充到最后一项
-                act=next;
+                act=next>=len?0:next;
             }
             lis[act].style.cssText='display:block;left:'+(offset<0?'':'-')+'100%;';
             lis[curr].style[webkit+'transform']=lis[act].style[webkit+'transform']='translate3d('+offset+'px,0,0)';
