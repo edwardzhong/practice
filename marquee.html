@@ -36,6 +36,51 @@
         }, 500);
     }
 
+     /**
+     * 跑马灯，默认左移
+     * @param    {Boolean}                isRight 是否右移
+     */
+    function marquee(list,isRight){
+        var ul=$('.news_list'),
+            ulWidth=0,
+            speed=1,
+            marginLen=0,
+            left=0,
+            lis,html='';
+
+        list.forEach(function(item,i){
+            html+='<li>'+item.nick+'获得'+_Awards[item.level-1].txt+'</li>';
+        });
+        ul.html(html);
+        lis=ul.find('li');
+
+        if(lis.length<=1&&$('#newBox').width()>=lis.first().length){return;}
+        lis.each(function(i,item){
+            ulWidth+=$(item).width(); 
+        });
+        ul.css('width',ulWidth+'px');
+        if(isRight){
+            marginLen=left=lis.last().width()-ulWidth;
+            lis.first().css({'marginLeft':left+'px'});
+        }
+        ~function(){
+            var first=ul.find('li').first(),
+                last=ul.find('li').last();
+            if(isRight&&left-marginLen>=last.width()){
+                left=marginLen;
+                ul.prepend(last);
+                first.css('marginLeft','0');
+            } else if(!isRight&&left>=first.width()){
+                ul.append(first.css('marginLeft','0'));
+                left=0;
+            } else {
+                left+=speed;
+            }
+            ul.find('li').first().css({'marginLeft':(isRight?'':'-')+ left+'px'});
+            mqTimer=requestAnimationFrame(arguments.callee);
+        }();
+    }
+
     /**
      * 轮播图
      * @param    {$Dom}                 wrap  所在节点
@@ -195,7 +240,7 @@
     }();
 
     /**
-     * 可左右循环滑动(猜你喜欢)
+     * 左右循环滑动(本店热销模块)
      * @Author   jeffzhong(p_jdjfzhong)
      * @DateTime 2016-07-12T13:59:53+0800
      */
