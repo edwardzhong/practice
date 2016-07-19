@@ -265,7 +265,6 @@
             container.on('touchend',_touchRelease);
             container.on('touchcancel',_touchRelease);
             e.stopPropagation(); 
-            e.preventDefault();
             if(offset>0){
                 act=prev<0?len-1:prev;
             } else if(offset<0){
