@@ -10,43 +10,34 @@
 		var config={
 			alias:{
 				'a':'a.js',
-				'b':'b.js'
+				'b':'b.js',
+				'c':'c.js'
 			}
 		};
+		var head = document.head || document.getElementsByTagName("head")[0]; //HEAD元素
+		var moduleClass = "require" + (new Date - 0);
+		var rmakeid = /(#.+|\W)/g; //用于处理掉href中的hash与所有特殊符号，生成长命名空间
+	    (function() {
+	        var cur = getCurrentScript(true);
+	        if (!cur) {//处理window safari的Error没有stack的问题
+	            cur = $.slice(document.scripts).pop().src;
+	        }
+	        var url = cur.replace(/[?#].*/, "");
+	        config.basepath=url.slice(0, url.lastIndexOf("/") + 1);
+	    })();
 		var factorys=[];
 		var modules={};
 		var loadings=[];
 
-		window.define=function(id,deps,factory){
-			var args=[].slice.call(arguments);
-			var _id='',
-				_deps=[],
-				_factory;
-			if(typeof id==='string'){
-				_id=args.shift();
-			}
-			_deps=typeof args[0]=='function'?[]:args.shift();
-			_factory=args.shift();
-			_id=modules[_id]&&modules[_id].state>=1?_id:getCurrentScript();
-			_factory.id=_id;
-			_factory.delay=function(){
-
-			};
-			factorys.push(_factory);
-		};
-
-		window.require=function(list,factory){
+		window.require=function(list,factory,parent){
 			var deps={},
 				args=[],
-				id='callback'+setTimeout('1'),
 				dn=0,
 				cn=0,
-				url='';
+				url='',
+				id = parent || "callback" + setTimeout("1");
 			String(list).replace(/[^\,\s]+/g, function(el) {
-				url=config.alias[el]||el;//js路径
-				if(!/\w+\.js/.test(url)){//没有后缀
-					url+=url.slice(-1)=='.'?'js':'.js';
-				}
+				url=config.alias[el]||config.basepath+el;//js路径
 				if(!modules[url]){
 					modules[url]={
 						id:url
@@ -69,15 +60,87 @@
 	            args: args,
 	            state: 1
 	        };
-	        if(dn==cn){
-	        	fireFactory(id,deps,factory);
+	        if(dn==cn){//当没有依赖模块的时候，则dn=cn=0，也会执行
+	        	fireFactory(id,args,factory);
 	        } else {
 	        	loadings.unshift(id);
 	        }
+	        checkDeps();
 		};
 
-		function fireFactory(id, deps, factory) {
+		//js加载完成后则执行define
+		window.define=function(id,deps,factory){
+			var args=[].slice.call(arguments), _id='';
+			if(typeof id==='string'){
+				_id=args.shift();
+			}
+			if(typeof args[0]==='function'){
+				args.unshift([]);
+			}
+			id = modules[id] && modules[id].state >= 1 ? _id : getCurrentScript();
+			factory=args[1];
+			factory.id=_id;
+			factory.delay=function(id){
+				args.push(id);
+	            var isCycle = true;
+	            try {
+	               isCycle = checkCycle(modules[id].deps, id);
+	            } catch (e) {}
 
+	            if (isCycle) {
+	                throw new Error(id + "模块与之前的某些模块存在循环依赖");
+	            }
+
+	            delete factory.delay; //释放内存
+	            require.apply(null, args); //如果deps为空，则进入require触发fireFactory，否则在require进行loadJS加载依赖模块
+			};
+
+			if (id) {
+				factory.delay(id, args);
+	        } else {
+	        	factorys.push(factory);
+	        }
+		};
+
+		function checkDeps(){
+			loop: for (var i = loadings.length, id; id = loadings[--i]; ) {
+	            var obj = modules[id], deps = obj.deps;
+	            for (var key in deps) {
+	                if (Object.prototype.hasOwnProperty.call(deps, key) && modules[key].state !== 2) {
+	                    continue loop;
+	                }
+	            }
+	            //如果obj的deps是空对象或者其依赖的模块的状态都是2,同时该module还没安装，则使用fireFactory进行安装
+	            if (obj.state !== 2) {
+	                loadings.splice(i, 1); //必须先移除再安装，防止在IE下DOM树建完后手动刷新页面，会多次执行它
+	                fireFactory(obj.id, obj.args, obj.factory);
+	                checkDeps();//如果成功,则再执行一次,以防有些模块就差本模块没有安装好
+	            }
+	        }
+		}
+
+		//检测是否存在循环依赖
+	    function checkCycle(deps, nick) {
+	        for (var id in deps) {
+	            if (deps[id] === "jeff" && modules[id].state !== 2 && (id === nick || checkCycle(modules[id].deps, nick))) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    }
+
+		function fireFactory(id, deps, factory) {
+			for(var i=0,arr=[],d;d = deps[i++];){
+				arr.push(modules[d].exports);
+			}
+
+	        var module = Object(modules[id]),
+	            ret = factory.apply(null,arr);
+	        module.state = 2;
+	        if (ret !== void 0) {//有返回结果，则赋值到exports
+	            modules[id].exports = ret;
+	        }
+	        return ret;
 		}
 
 		/**
@@ -96,17 +159,6 @@
 	            }
 	        }
 	        if (stack) {
-	            /**e.stack最后一行在所有支持的浏览器大致如下:
-	             *chrome23:
-	             * at http://113.93.50.63/data.js:4:1
-	             *firefox17:
-	             *@http://113.93.50.63/query.js:4
-	             *opera12:http://www.oldapps.com/opera.php?system=Windows_XP
-	             *@http://113.93.50.63/data.js:4
-	             *IE10:
-	             *  at Global code (http://113.93.50.63/data.js:4:1)
-	             *  //firefox4+ 可以用document.currentScript
-	             */
 	            stack = stack.split(/[@ ]/g).pop(); //取得最后一行,最后一个空格或@之后的部分
 	            stack = stack[0] === "(" ? stack.slice(1, -1) : stack.replace(/\s/, ""); //去掉换行符
 	            return stack.replace(/(:\d+)?:\d+$/i, ""); //去掉行号与或许存在的出错字符起始位置
@@ -129,23 +181,58 @@
 	    		var factory = factorys.pop();
                 factory && factory.delay(node.src);
                 callback && callback();
+                console.log('load success '+url);
 	    	},
 	    	script=document.createElement('script');
 	    	script.type="text/javascript";
+	    	script.className = moduleClass; //让getCurrentScript只处理类名为moduleClass的script节点
 	    	if(script.readyState){
 	    		script.onreadystatechange=function(){
 	    			if(/loaded|complete/i.test(script.readyState)){
 	    				fn();
+	    				script.onreadystatechange=null;
 	    			}
 	    		}
 	    	} else {
-	    		script.onload=fn;
+	    		script.onload=function(){
+	    			fn();
+	    			script.onload = null;
+	    		}
 	    	}
-
 	    	script.src=url;
 	    	document.getElementsByTagName("head")[0].appendChild(script);
+	    	console.log('ready to load '+url);
 	    }
+
+	    function loadCSS(url) {
+	        //通过link节点加载模块需要的CSS文件
+	        var id = url.replace(rmakeid, "");
+	        if (!document.getElementById(id)) {
+	            var node = document.createElement("link");
+	            node.rel = "stylesheet";
+	            node.href = url;
+	            node.id = id;
+	            head.insertBefore(node, head.firstChild);
+	        }
+	    }
+
+  		//分析module的依赖关系
+  		function parseDependencies(code) {
+  			var commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg;
+  			var cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g;
+  			var ret = [];
+  			code.replace(commentRegExp, "").replace(cjsRequireRegExp, function(match, dep) {
+  				dep && ret.push(parseVars(dep));
+  			})
+  			return ret;
+  		}
 	}());
+</script>
+<script>
+	require('a.js,c.js',function(a,c){
+		a();
+		c();
+	});
 </script>
 </body>
 </html>
