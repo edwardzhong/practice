@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ES6 Promise</title>
+	<script>
+	function promise1(){
+		return new Promise(function(resolve,reject){
+			setTimeout(function() {
+				resolve(true);
+			}, 200);
+		});
+	}
+
+	function promise2(){
+		return new Promise(function(resolve,reject){
+			dfdf
+			resolve(true);
+		});
+	}
+
+	// 把value转换成Promise。一般用来把一个对象方便转换成Promise实例对象。
+	let pm3=Promise.resolve(99);
+
+	// 下一个then接受前一个then中的返回值
+	promise1().then(function(ret){
+		console.log(ret);
+		console.log(234);
+		return 345;//返回给下一个then使用
+	}).then(function(ret2){
+		console.log(ret2);
+	});
+
+	// catch 捕获错误,promise.catch (rejection) 方法是 promise.then (null, rejection)的别名 catch用于指定发生错误时的回调函数。
+	promise2().then(function(ret){
+		console.log(ret);
+	},function(err){
+		console.log(err)
+	}).catch(function(err){//如果前面的reject已经捕获过，则catch不再执行捕获
+		console.log(err);
+	});
+	// // 等价于promise.catch (rejection)
+	// promise2().then(null,function(err){
+	// 	console.log(err);
+	// });
+
+	pm3.then(function(ret){console.log(ret);});
+
+	// Promise.all并行执行 promise2里面有错误，所以整个表达式都不成功
+	Promise.all([promise1(),promise2(),pm3]).then(function(ret){
+		console.log(ret);
+	}).catch(function(err){
+		console.log(err);
+	});
+	// Promise.race状态由参数中的第一个改变状态的Promise实例对象的状态决定(正如它的名字一样，race-比赛，胜者为王！) pm3为第一个改变状态的promise对象，所以该表达式为fulfilled状态
+	Promise.race([promise1(),pm3,promise2()]).then(function(ret){
+		console.log(ret);
+	}).catch(function(err){
+		console.log(err);
+	});
+	</script>
+</head>
+<body>
+	
+</body>
+</html>
