@@ -40,6 +40,23 @@
 		    });
 		    return defer.promise();
 		}
+		// 4.这是第二种自定义promise对象写法，效果和上面一样
+		function loadData(){
+			return $.Deferred(function(deferred){
+				if(Content){
+					deferred.resolve(Content);
+					return;
+				}
+				$.get('content.json', function(data) {
+					if(data){
+						Content=data;
+						deferred.resolve(data);
+					} else{
+						deferred.reject(null);
+					}
+				});
+			});
+		}
 
 		// getData('/getDetail')
 		// .done(function(data){
