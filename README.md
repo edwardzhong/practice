@@ -46,6 +46,7 @@
 5. [justify两端对齐](https://github.com/edwardzhong/practice/blob/master/layout/justify.html)
 6. [margin-bottom和padding-bottom分栏高度自动相等实例页面](https://github.com/edwardzhong/practice/blob/master/layout/margin-bottom和padding-bottom分栏高度自动相等实例页面.html)
 7. [table-cell等高布局](https://github.com/edwardzhong/practice/blob/master/layout/table-cell等高布局.html)
+7. [flex布局](https://github.com/edwardzhong/practice/blob/master/layout/flex.html)
 
 ###css权威指南
 1. [基本视觉格式化](https://github.com/edwardzhong/practice/blob/master/css权威指南/基本视觉格式化.html)
