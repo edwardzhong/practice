@@ -46,7 +46,7 @@
 		justify-content: space-around;/* 每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔大一倍 */
 	}
 
-	.align-content{/* 纵轴上的对齐 */
+	.align-content{/* 纵轴上的对齐 ，align-content是针对flex容器里面多轴(多行)的情况,align-items是针对一行的情况进行排列。下面写个小demo。*/
 		flex-flow: row wrap;
 		justify-content: flex-start;
 		align-content: flex-start;
