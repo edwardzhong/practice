@@ -19,14 +19,14 @@
 		background-color: #f00;
 	}
 	</style>
-	<script src="../JS/jquery.min.js"></script>
+	<script src="./js/jquery.min.js"></script>
 	<script>
 	$(function(){
 		var map=$('.map'),h=map.height();
 		//正弦函数曲线图
 		function drawSin(){
 			for(var x=0;x<360;x++){
-				var y=(h/2-5)*Math.sin(Math.PI/180*x)+h/2;
+				var y=h/2*Math.sin(Math.PI/180*x)+h/2;
 				map.append($('<div class="point"></div>').css({'top':y+'px','left':x+'px'}));
 			}
 		}
@@ -50,7 +50,7 @@
 			}
 		}
 		drawSin();
-		//drawCircle(300,100,90,5);
+		drawCircle(300,100,90,5);
 		for(var i=0;i<90;i++){
 			drawCircle2(300,100,i,5);
 		}

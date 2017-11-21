@@ -3,38 +3,104 @@
 <head>
 	<meta charset="UTF-8">
 	<title>跑马灯/轮播图</title>
-
+<style>
+    /* 跑马灯样式 */
+    .container{
+        width: 400px;
+        height: 20px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .news{
+        list-style: none;
+        margin: 0;
+    }
+    .news li{
+        float: left;
+    }
+    /*焦点图样式*/
+    .container{
+        position: relative;
+        width: 360px;
+        height: 240px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    ul{
+        list-style: none;
+        margin: 0;
+    }
+    .pages{
+        width: 100%;
+        height: 100%;
+    }
+    .pages li{
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .pages img{
+        width: 100%;
+        height: 100%;
+    }
+    .ctrl{
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 10px;
+    }
+    .ctrl li{
+        float: left;
+        width: 20px;
+        height: 20px;
+        margin: 5px;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, .7);
+    }
+    .ctrl li.active{
+        background-color: #00acee;
+    }
+    .restore{-webkit-transition:-webkit-transform .2s linear;}
+    .moving{-webkit-transition:-webkit-transform .2s linear;}
+</style>
 </head>
 <body>
+<h2>跑马灯</h2>
+<div class="container">
+    <ul class="news clearfix"></ul>
+</div>
+
+<h2>手机版触控焦点图</h2>
+<div class="container">
+    <ul class="pages clearfix">
+        <li><img src="http://oncse3u6r.bkt.clouddn.com/tibetbudalagongrc1.jpg" /></li>
+        <li><img src="http://oncse3u6r.bkt.clouddn.com/tibetzhongjiaolukang3.jpg" /></li>
+        <li><img src="http://oncse3u6r.bkt.clouddn.com/tibetbudalagongyejing2.jpg" /></li>
+        <li><img src="http://oncse3u6r.bkt.clouddn.com/tibetnamucuorl1.jpg" /></li>
+        <li><img src="http://oncse3u6r.bkt.clouddn.com/tibetnamucuorc16.jpg" /></li>
+        <li><img src="http://oncse3u6r.bkt.clouddn.com/tibetnamucuorl13.jpg" /></li>
+    </ul>
+    <ul class="ctrl">
+        <li class="active"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
 <script src="js/Zepto.js"></script>
 <script>
-	/**
-     * 跑马灯效果
-     * @param    {String}                 txt   内容
-     * @param    {Number}                 speed 速度 默认是 50，表示50px/s
-     */
-    function makeMarquee(txt,speed){
-        speed=speed||50;
-        var container=$("[tag=marquee]"),
-            style=$('#marqueeStyle'),
-            marquee=$('<span class="marquee_move" style="display:inline-block; white-space:nowrap; position:relative; left:100%;">' + txt + '</span>'),
-            duration=0;
-        if(!container.length)return;
-        container.html(marquee);
-        setTimeout(function() {
-            var width=marquee.width();
-            var coh=container.width();
-            var diff=width-coh;
-            if(coh<=0)return ;//不需要滚动
-            duration=(diff+coh)/speed;
-            marquee[0].innerHTML=marquee[0].innerHTML+'<span style="display:inline-block; width:'+coh+'px;"></span>';
-            if(!duration)return;
-            setTimeout(function(){
-                style.html('@'+webkit+'keyframes marquee{0%{'+webkit+'transform:translate3d(0,0,0);}100%{'+webkit+'transform:translate3d(-100%,0,0);}}'
-                +'.marquee_move{'+webkit+'animation:marquee '+duration+'s linear infinite;}');
-            },500);
-        }, 500);
-    }
+    var Msgs=[
+        'aaa获得了大疆无人机 !',
+        'bbb获得了苹果MacBook Pro !',
+        'ccc获得了XBOX 360 !',
+        'ddd获得了苹果IPhone7 Plus !',
+        'eee获得了小米电视 !'
+    ];
 
      /**
      * 跑马灯，默认左移
@@ -80,146 +146,7 @@
             mqTimer=requestAnimationFrame(arguments.callee);
         }();
     }
-
-    /**
-     * 轮播图
-     * @param    {$Dom}                 wrap  所在节点
-     * @param    {Array}                imgs  图片
-     * @param    {String}               motion 方向 X Y
-     */
-    function imgPlayer(wrap,imgs,motion,isppms){
-        var container=$('<div style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px;"></div>');
-        var navWrap=$('<div style="position:absolute; width:auto; height: .20rem; text-align:center; left:0; bottom: .10rem; left:50%;'+webkit+'transform:translate(-50%,0);"></div>');
-        var images=[],navs=[],len=imgs.length,img=null,timer=null,duration=4000;
-        if(!len){wrap.html(''); return;}
-        while((img=imgs.shift())){
-            var imgSrc=isppms?img:(imgPre+img);
-            images.push('<a href="javascript:;" style="position:absolute; width:100%; height:100%; overflow:hidden; left:0; top:0;'+(imgs.length==len-1?'display:block;':' display:none;')+'"> <img src="' + imgSrc + '"></a>');
-            navs.push('<i style="position:relative; display:inline-block; width:.10rem; height:.10rem; overflow:hidden; border-radius:50%; vertical-align:top;margin-right:8px;background-color: '+(imgs.length==len-1?'#ff1d3e;':'#AFAEAE;')+'"></i>');
-        }
-        images=$(images.join(''));
-        navs=$(navs.join(''));
-        container.append(images);
-        navWrap.append(navs);
-        wrap.html(container);
-        wrap.append(navWrap);
-        if(len<=1){return;}
-        var getIndex=function(num){
-            return (num<0?len+num:num)%len;
-        },
-        isLock=false,startX=0,stratY=0,offset=0,
-        cur=0,previous=getIndex(-1),next=getIndex(1),act=previous,curMotion='none',
-        keepClass=motion=='X'?'PAGE_DRAG_H_KEEP':'PAGE_DRAG_KEEP',restoreClass='PAGE_DRAG_RESTORE',
-        _touchStart=function(e){
-            clearTimeout(timer);
-            if(isLock){return;}
-            var touchers=e.changedTouches||e.targetTouches;
-            startX=touchers[0].pageX,startY=touchers[0].pageY;
-            container.on('touchmove',_touchMove);
-        },
-        _touchMove=function(e){
-            if(isLock){return;}
-            var touchers=e.changedTouches||e.targetTouches,
-                _x=touchers[0].pageX, _y=touchers[0].pageY,
-                offsetX=_x-startX, offsetY=_y-startY;
-            if(Math.abs(offsetX)==Math.abs(offsetY)){
-                e.preventDefault(); e.stopPropagation();
-                return ;//分不出方向，等待分清方向
-            } else if(Math.abs(offsetX)>Math.abs(offsetY)){
-                curMotion='X';
-            } else {
-                curMotion="Y";
-            }
-            if(motion!=curMotion){//方向不一致
-                autoplay();
-                container.off('touchmove',_touchMove);
-                return;
-            }
-            container.on('touchend',_release);
-            container.on('touchcancel',_release);
-            e.stopPropagation(); e.preventDefault();//阻止冒泡 
-
-            offset=motion=='X'?offsetX:offsetY;
-            act=offset>0?previous:next;
-            //预先定位图片的位置(向左/向上):(向右/向下)
-            images[act].style.display='block';
-            curMotion=='X'?(images[act].style.left=offset>0?'-100%':'100%'):(images[act].style.top=offset>0?'-100%':'100%');
-            offset>0?(images[next].style.display='none'):(images[previous].style.display='none');
-
-            if(motion=='X'){//同时移动当前和下一张的图片
-                images[cur].style[webkit+'transform']=images[act].style[webkit+'transform']='translate3d('+offset+'px,0,0)';
-            } else {
-                images[cur].style[webkit+'transform']=images[act].style[webkit+'transform']='translate3d(0,'+offset+'px,0)';
-            }
-        },
-        _release=function(){
-            var absOffset=Math.abs(offset),
-                restore=absOffset<=30;
-            autoplay();
-            if(isLock){return;}
-            isLock=true;
-            //小于指定距离，重置图片位置
-            if(restore){
-                $(images[cur]).addClass(restoreClass);
-                $(images[act]).addClass(restoreClass);
-                images[act].style[webkit+'transform']=images[cur].style[webkit+'transform']='translate3d(0,0,0)';
-                setTimeout(function() {
-                    $(images[cur]).removeClass(restoreClass);
-                    $(images[act]).removeClass(restoreClass);
-                    images[act].style.display='none';
-                    offset=0,curMotion='none',isLock=false;//重置参数
-                }, 200);
-            } else {
-                move();
-            }
-            container.off('touchmove',_touchMove);
-            container.off('touchend',_release);
-            container.off('touchcancel',_release);
-        },
-        setIcon=function(cur,act){
-            navs[cur].style.backgroundColor='#787878';
-            navs[act].style.backgroundColor='#ff1d3e';
-        },
-        move=function(){
-            var p=offset>0?'':'-';
-            $(images[cur]).addClass(keepClass);
-            $(images[act]).addClass(keepClass);
-            if(motion=='X'){
-                images[act].style[webkit+'transform']=images[cur].style[webkit+'transform']='translate3d('+p+images[cur].offsetWidth+'px,0,0)';
-            } else {
-                images[act].style[webkit+'transform']=images[cur].style[webkit+'transform']='translate3d(0,'+p+images[cur].offsetHeight+'px,0)';
-            }
-            setTimeout(function() {
-                $(images[cur]).removeClass(keepClass);
-                $(images[act]).removeClass(keepClass);
-                images[cur].style.display='none';
-                offset=0,curMotion='none',isLock=false;//重置参数
-                //小icon切换
-                setIcon(cur,act);
-                //页码更改
-                cur=act,previous=getIndex(cur-1),next=getIndex(cur+1);
-                //保持当前页面永远为left/top 0 translate3d(0,0,0)
-                images[cur].style.cssText='position:absolute; width:100%; height:100%; overflow:hidden; left:0; top:0;';
-            }, 300);
-        },
-        autoplay=function(){//向右/向下自动播放
-            timer=setTimeout(function(){
-                var n=getIndex(cur+1);
-                images[n].style.cssText='position:absolute; width:100%; height:100%; overflow:hidden; '+(motion=="X"?'left:100%; top:0;':'left:0; top:100%;');//预定位
-                setTimeout(function(){
-                    if(isLock){return;}
-                    isLock=true;//把touchstart,touchmove,touchend锁定住
-                    act=n;
-                    move();//开始移动
-                },60);
-                autoplay();
-            }, duration);
-        };
-        container.off();
-        container.on('touchstart',_touchStart);
-        autoplay();
-    }
-
+    marquee(Msgs);
     /**
      * 返回浏览器特有css前缀
      */

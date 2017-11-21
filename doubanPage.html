@@ -5,49 +5,25 @@
 <title>仿豆瓣分页</title>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <style>
-	body{
-		font:14px Helvetica,Arial,"Microsoft Yahei",sans-serif;
-	}
-	.clearfix:after{
-		content: '.';
-		display: block;
-		height: 0;
-		clear: both;
-		visibility: hidden;
-	}
-	.clearfix{zoom:1;}
-	ul{
-		list-style-type: none;
-		padding: 0;
-		margin: 0;
-	}
-	ul li{
-		float: left;
-	}
-	.wrap{
-		width: 640px;
-		overflow: hidden;
-		margin: 20px auto;
-		text-align: center;
-	}
-	.list{
-		position: relative;
-		width: 670px;height: 280px;
-		padding: 10px;
-		margin-right: -30px;
-		margin-bottom: -30px;
-	}
-	.list li{
-		position: absolute;
-		top: 10px;left: 10px;
-		margin:0 30px 30px 0;
-		width: 100px;height: 100px;
-		background-color: #f00;
-	}
-	#page{
-		display: inline-block;
-		margin: 20px auto;
-	}
+    .list{
+        position: relative;
+        width: 640px;
+        height: 250px;
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        background-color: #fff;
+    }
+    .list li{
+        position: absolute;
+        top: 10px;left: 10px;
+        margin:0 30px 30px 0;
+        width: 100px;height: 100px;
+        text-align: center;
+        line-height: 100px;
+        color: #fff;
+        background-color: #88aca1;
+        transition: left 0.3s ease-in-out,top 0.3s ease-in-out,width 0.3s ease-in-out,height 0.3s ease-in-out;
+    }
 </style>
 <script src="js/jquery.min.js"></script>
 <script>
@@ -123,7 +99,7 @@ $(function(){
             }
 
             if(showIndex<=0){
-            	showIndex=startLen;
+                showIndex=startLen;
             }
 
             if(showIndex-startLen==1){//左侧如果间距是1则不需要"..."
@@ -134,7 +110,7 @@ $(function(){
                 showLen++;
             }
 
-            html+='<li class="prev"><a href="javascript:;" aria-label="Previous"><span aria-hidden="true">«</span></a></li>';
+            html+='<li class="prev"><a href="javascript:;"><span>«</span></a></li>';
 
             for(i=0;i<startLen;i++){//左侧开头
                 html+='<li><a href="javascript:;">'+(i+1)+'</a></li>';
@@ -152,7 +128,7 @@ $(function(){
                 html+='<li><a href="javascript:;">'+(i+1)+'</a></li>';
             }
 
-            html+='<li class="next"><a href="javascript:;" aria-label="Next"><span aria-hidden="true">»</span></a></li>';
+            html+='<li class="next"><a href="javascript:;"><span>»</span></a></li>';
             container.html(html);
 
             container.children('li').filter(function(showIndex,item) {
@@ -175,62 +151,111 @@ $(function(){
         bindEvent();
     }
 
-    var arr=[];
-	for(var i=0;i<116;i++){
-		arr.push({'title':'title'+(i+1)});
-	}
-	$('#page').doubanPage({
+    /* 使用分页组件 */
+    var Datas=[];
+    for(var i=0;i<116;i++){
+        Datas.push({'content':i+1});
+    }
+    $('#page').doubanPage({
         pageSize:10,
-        total:arr.length,
+        total:Datas.length,
         curr:1,
         show:5,
         side:2,
-		callback:function(curr,size,pages,total){
-			var list=$('.list'), temp='',lis=list.children('li'),
-				l=lis.length,k=0,
-				w=list.outerWidth(),h=list.outerHeight();
-			if(l>0){		
-				var timerHide=setInterval(function(){
-					$(lis[k]).animate({top: h+'px', left: w/2+'px',width:'0',height:'0'}, 100,
-						function(){
-						$(this).remove();
-					});
-					k++;
-					if(k===l){
-						clearInterval(timerHide);
-						setTimeout(showList,200);
-					}
-				},100);
-			}else{
-				showList();
-			}
-			function showList(){
-				var	i=(curr-1)*size,
-					padding=10,per=130,
-					c=0,r=0,j=0,posArr=[],pos;
-				l=size*curr>total?total:size*curr;
-				for(;i<l;i++){
-					c=i%5;
-					r=Math.floor(j/5);
-					j++;
-					posArr.push({top:(10+r*130),left:(10+c*130)});
-					temp+='<li style="width:0;height:0;top:'+h+'px; left:'+w/2+'px;display:none;">'+arr[i].title+'</li>';
-				}
-				list.append(temp);
-				lis=list.children('li');
-				var timerShow=setInterval(function(){
-					j--;
-					pos=posArr.pop();
-					$(lis[j]).show().animate({'top': pos.top+'px', 'left': pos.left+'px',
-						width:'100px',height:'100px'}, 100);
+        callback:function(curr,size,pages,total){
+            var list=$('.list'), 
+                temp='',
+                lis=list.children('li'),
+                w=list.outerWidth(),
+                h=list.outerHeight(),
+                posArr=calcPositions(size,5),
+                initState={w:0,h:0, t:h,l:w/2 },
+                pageData=Datas.slice((curr-1)*size,curr*size);
 
-					if(j<=0){
-						clearInterval(timerShow);
-					}
-				},100);
-			}
-		}
-	});
+            if(lis.length>0){
+                hideList();
+                setTimeout(showList, 50*pageData.length+400);
+            } else {
+                showList();
+            }
+
+            /**
+             * 计算位置
+             * @param  {Number} size 总条数
+             * @param  {Number} cols 每行列数
+             */
+            function calcPositions(size,cols){
+                var pad=10,//与边框的Padding
+                    interPad=30,//元素之间的padding
+                    row=0,//行
+                    col=0,//列
+                    w=100,
+                    h=100,
+                    ret=[];
+                for(var i=0;i<size;i++){
+                    col=i%cols;
+                    row=Math.floor(i/cols);
+                    ret.push({
+                        left:col*(w+interPad)+pad,
+                        top:row*(h+interPad)+pad
+                    });
+                }
+                return ret;
+            }
+
+            function hideList(){
+                var i=0;
+                // lis.each(function(i,item){
+                //  setTimeout(function() {
+                //      $(item).css({
+                //          top: initState.t+'px', 
+                //          left: initState.l+'px',
+                //          width:initState.w+'px',
+                //          height:initState.h+'px',
+                //      });
+                //      setTimeout(function() {
+                //          $(item).remove();
+                //      }, 300);
+                //  }, 50*i);
+                // });
+                ~function(){
+                    if(i>=lis.length) return;
+                    lis.eq(i).css({
+                        top: initState.t+'px', 
+                        left: initState.l+'px',
+                        width:initState.w+'px',
+                        height:initState.h+'px',
+                    });
+                    i++;
+                    setTimeout(function() {
+                        lis.eq(i).remove();
+                    }, 300);
+                    setTimeout(arguments.callee, 50);
+                }();
+            }
+
+            function showList(){
+                var index=0;
+                pageData.forEach(function(item,i){
+                    console.log(item);
+                    temp+='<li style="width:'+initState.w+';height:'+initState.h+';top:'+initState.t+'px; left:'+initState.l+'px;display:none;">'+item.content+'</li>';
+                });
+                list.html(temp);
+
+                ~function(){
+                    if(index>=pageData.length) return;
+                    list.children('li').eq(index).show().css({
+                        top: posArr[index].top+'px', 
+                        left: posArr[index].left+'px',
+                        width:'100px',
+                        height:'100px',
+                    });
+                    index++;
+                    setTimeout(arguments.callee,50);
+                }();
+            }
+        }
+    });
 });
 </script>
 </head>
