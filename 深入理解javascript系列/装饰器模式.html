@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>单页面view切换</title>
+	<style>
+
+	</style>
+	<script>
+		window.onload=function(){
+			var page={
+				wrap:document.getElementById('wrap'),
+				init:function(pageId,callback){
+					this.wrap.innerHTML='';
+					page[pageId].prototype=this;
+					var view= new page[pageId]();
+					view.render();
+					view.bindEvent();
+					callback&&callback();
+
+				}
+			};
+			page.self=function(){
+				this.render=function(){
+					this.wrap.innerHTML='<p>1111</p>'
+					+'<p>2222</p>'
+					+'<button>self</button>';
+				};
+				this.bindEvent=function(){
+					this.wrap.getElementsByTagName('button')[0].onclick=function(){
+						alert('self');
+					}
+				};
+			}
+
+			page.other=function(){
+				this.render=function(){
+					this.wrap.innerHTML='<p>3333</p>'
+					+'<p>4444</p>'
+					+'<button>other</button>';
+				};
+				this.bindEvent=function(){
+					this.wrap.getElementsByTagName('button')[0].onclick=function(){
+						alert('other');
+					}
+				};		
+			}
+			function hashChange(callback){
+				window.onhashchange=function(){
+					var hash=window.location.hash.replace('#','');
+					callback&&callback(hash);
+				}
+			}
+			page.init('other');
+			hashChange(function(hash){
+				if(hash=='self'||hash=='other'){
+					page.init(hash);
+				}
+			});
+		};
+	</script>
+</head>
+<body>
+	<div id="wrap">
+	</div>
+</body>
+</html>

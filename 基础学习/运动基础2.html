@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>运动基础2</title>
+	<style>
+	body{margin:0;padding: 0;height: 2000px;}
+	.div{position:absolute; width: 100px;height: 100px;background-color: #f00;}
+	#div2{position: absolute;width: 100px;height: 100px;right: 10px;bottom:10px;background-color:#f00;}
+	</style>
+	<script>
+	window.onload=function(){
+		
+		var div=document.getElementById('div1'),
+			timer=null;
+		document.getElementById('btn1').onclick=function(){
+			startMove2(100);
+		}
+		document.getElementById('btn2').onclick=function(){
+			startMove2(300);
+		}
+		function startMove(iLeft){
+			clearInterval(timer);
+			timer=setInterval(function(){
+				var speed=(iLeft-div.offsetLeft)/10;
+				
+				speed=speed>0?Math.ceil(speed):Math.floor(speed);//缓存运动别忘记取整
+				if(speed==0){
+					clearInterval(timer);
+				}else{
+					div.style.left=div.offsetLeft+speed+'px';
+					document.title=div.offsetLeft+speed;
+				}
+			},30);
+		}
+		function startMove2(iLeft){//匀速运动停止条件
+			clearInterval(timer);
+			timer=setInterval(function(){
+				var speed=0;
+				if(iLeft>div.offsetLeft){
+					speed=7;
+				}else{
+					speed=-7;
+				}
+				if(Math.abs(iLeft-div.offsetLeft)<7){//当小于速度时,停止
+					clearInterval(timer);
+					div.style.left=iLeft+'px';
+				}else{
+					div.style.left=div.offsetLeft+speed+'px';
+				}
+				
+			},30);
+		}
+	};
+	window.onscroll=function(){//浮动的div
+		var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+		var div2=document.getElementById('div2');
+		//div2.style.top=(document.documentElement.clientHeight-div2.offsetHeight+scrollTop)+'px';
+		//console.log('scrollTop:'+scrollTop+' clientHeight:'+document.documentElement.clientHeight);
+		startScroll(parseInt((document.documentElement.clientHeight-div2.offsetHeight)/2+scrollTop));//如果不是整数会造成抖动
+	};
+	var timer=null;
+	function startScroll(iTop){
+		clearInterval(timer);
+		var div2=document.getElementById('div2');
+		timer=setInterval(function(){
+			var speed=(iTop-div2.offsetTop)/4;
+			speed=speed>0?Math.ceil(speed):Math.floor(speed);
+			if(div2.offsetTop==iTop){
+				clearInterval(timer);
+			}else{
+				div2.style.top=div2.offsetTop+speed+'px';
+			}
+		},30);
+	}
+	</script>
+</head>
+<body>
+	<div id="div1" class="div"></div>
+	<div style="width:100px;height:200px;border-right:1px solid #000;"></div>
+	<div style="width:300px;height:200px;border-right:1px solid #000;position:absolute;top:0;"></div>
+	<div id="div2"></div>
+	<button id="btn1">100</button><button id="btn2">300</button>
+</body>
+</html>

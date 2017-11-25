@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>运动框架2</title>
+	<style>
+/*	div{width: 100px;height: 100px;background-color: #f00;border: 10px solid #000;margin:10px;}
+	#div2{filter:alpha(opacity:30);opacity: 0.3;}
+	#div3{font-size: 12px;}*/
+	#img_div{position: relative; width: 400px;height:378px;margin: 100px auto;overflow: hidden;}
+	ul{margin: 0;padding: 0;}
+	ul li{list-style: none;float: left;}
+	.btn{position: absolute;z-index: 30001;top:129px;opacity: 0;filter:alpha(opacity:0); display: block;width: 41px;height: 42px;background: url(../Images/znsComBg.png) 0 0 no-repeat;}
+	.prev{background-position: -273px 0;left: 1px}
+	.next{background-position: -314px 0;right: 1px;}
+	.mark{position: absolute;width: 200px;height: 300px;z-index: 30000;}
+	.mark_left{}
+	.mark_right{left: 200px;}
+	.big_pic{width: 3200px;}
+	.big_pic li{position: absolute;height: 300px;overflow: hidden;}
+	.small_pic{position:absolute;left: 0;bottom: 0;width: 800px;height: 78px;}
+	.small_pic li{background-color: #fff;filter:alpha(opacity:50);opacity: 0.5;}
+	</style>
+	<script>
+	function getElementsByClassName(name){
+		var objs=document.getElementsByTagName('*'),
+			len=objs.length,
+			i,
+			arr=[];
+		var regex=new RegExp("(?:^|\\s)"+name+"(?:\\s|$)");
+		for(i=0;i<len;i++){
+			if(regex.test(objs[i].className)){
+				arr.push(objs[i]);
+			}
+		}
+		return arr;
+	}
+	function getStyle(obj,styleName){
+		if(obj.currentStyle){
+			return obj.currentStyle[styleName];
+		}else{
+			return getComputedStyle(obj,false)[styleName];
+		}
+	}
+	function startMove(obj,attr,iTarget,fnEnd){
+		clearInterval(obj.timer);
+		obj.timer=setInterval(function(){
+			var cur=0;
+			if(attr=='opacity'){
+				cur=Math.round(parseFloat(getStyle(obj,attr))*100);
+			}else{
+				cur=parseInt(getStyle(obj,attr),10);
+			}
+
+			var speed=(iTarget-cur)/3;
+			speed=speed>0?Math.ceil(speed):Math.floor(speed);
+
+			if(cur==iTarget){
+				clearInterval(obj.timer);
+				if(fnEnd){fnEnd();}
+			}else{
+				if(attr=='opacity'){
+					obj.style['filter']='alpha(opacity:'+(cur+speed)+')';
+					obj.style['opacity']=(cur+speed)/100;
+				}else{
+					obj.style[attr]=cur+speed+'px';
+				}
+			}
+		},30);		
+	}
+	window.onload=function(){
+		var nowIndex=2,now=0,
+			i;
+		var imgDiv=document.getElementById('img_div'),
+			mark_left=getElementsByClassName('mark_left')[0],
+			mark_right=getElementsByClassName('mark_right')[0],
+			prev=getElementsByClassName('prev')[0],
+			next=getElementsByClassName('next')[0],
+			bigUl=getElementsByClassName('big_pic')[0],
+			bigLis=bigUl.getElementsByTagName('li'),
+			smallUl=getElementsByClassName('small_pic')[0],
+			smallLis=smallUl.getElementsByTagName('li'),
+			len=smallLis.length;
+
+		mark_left.onmouseover=prev.onmouseover=function(){
+			startMove(prev,'opacity',100);
+		};
+		mark_left.onmouseout=prev.onmouseout=function(){
+			startMove(prev,'opacity',0);
+		};
+		mark_right.onmouseover=next.onmouseover=function(){
+			startMove(next,'opacity',100);
+		};
+		mark_right.onmouseout=next.onmouseout=function(){
+			startMove(next,'opacity',0);
+		};
+		prev.onclick=function(){
+			now--;
+			if(now<0){now=len-1;}
+			tab();
+		};
+		next.onclick=function(){
+			now++;
+			if(now>=len){now=0;}
+			tab();
+		};
+		for(i=0;i<len;i++){
+			smallLis[i].index=i;
+			smallLis[i].onclick=function(){
+				if(this.index==now){return;}
+				now=this.index;
+				tab(now);
+				// bigLis[this.index].style.zIndex=nowIndex++;
+				// bigLis[this.index].style.height=0;
+				// startMove(bigLis[this.index],'height',300);
+
+				// for(var j=0;j<len;j++){
+				// 	startMove(smallLis[j],'opacity',50);
+				// }
+				// startMove(this,'opacity',100);
+			}
+
+			smallLis[i].onmouseover=function(){
+				startMove(this,'opacity',100);
+			}
+			smallLis[i].onmouseout=function(){
+				if(this.index!=now){
+					startMove(this,'opacity',50);
+				}
+			}
+		}
+		function tab(){
+			bigLis[now].style.zIndex=nowIndex++;
+			bigLis[now].style.height=0;
+			startMove(bigLis[now],'height',300);
+
+			for(var j=0;j<len;j++){
+				startMove(smallLis[j],'opacity',50);
+			}
+			startMove(smallLis[now],'opacity',100);
+			if(now<=1){
+				startMove(smallUl,'left',0);
+			}else if(now>=len-2){
+				startMove(smallUl,'left',-(len-4)*smallLis[0].offsetWidth);
+			}else{
+				startMove(smallUl,'left',-(now-1)*smallLis[0].offsetWidth);
+			}
+		}
+		var timer=setInterval(next.onclick,1000);
+		imgDiv.onmouseover=function(){
+			clearInterval(timer);
+		}
+		imgDiv.onmouseout=function(){
+			timer=setInterval(next.onclick,1000);
+		}
+		// var div1=document.getElementById('div1'),
+		// 	div2=document.getElementById('div2'),
+		// 	div3=document.getElementById('div3');
+		// div1.onmouseover=function(){
+		// 	startMove(this,'width',200);
+		// };
+		// div1.onmouseout=function(){
+		// 	startMove(this,'width',100);
+		// };
+		// div2.onmouseover=function(){
+		// 	startMove(this,'opacity',100);
+		// };
+		// div2.onmouseout=function(){
+		// 	startMove(this,'opacity',30);
+		// };
+		// div3.onmouseover=function(){
+		// 	startMove(this,'fontSize',30);
+		// };
+		// div3.onmouseout=function(){
+		// 	startMove(this,'fontSize',12);
+		// };
+		var ldiv=document.getElementById('ldiv');
+		startMove(ldiv,'width',300,function(){startMove(ldiv,'height',300);})
+	}
+	</script>
+</head>
+<body>
+<!-- 	<div id="div1"></div>
+	<div id="div2"></div>
+	<div id="div3">hahaha</div> -->
+	<div id="ldiv" style="width:100px;height:100px;background-color:#00f;"></div>
+	<div id="img_div">
+		<a class="btn prev" href="javascript:"></a>
+		<a class="btn next" href="javascript:"></a>
+		<div class="mark mark_left"></div>
+		<div class="mark mark_right"></div>
+		<ul class="big_pic">
+			<li style="z-index:1;"><img src="../Images/Chrysanthemum.jpg" width="400" alt=""></li>
+			<li><img src="../Images/Desert.jpg" width="400" alt=""></li>
+			<li><img src="../Images/Hydrangeas.jpg" width="400" alt=""></li>
+			<li><img src="../Images/Jellyfish.jpg" width="400" alt=""></li>
+			<li><img src="../Images/Koala.jpg" width="400" alt=""></li>
+			<li><img src="../Images/Lighthouse.jpg" width="400" alt=""></li>
+			<li><img src="../Images/Penguins.jpg" width="400" alt=""></li>
+			<li><img src="../Images/Tulips.jpg" width="400" alt=""></li>
+		</ul>
+		<ul class="small_pic">
+			<li style="filter:alpha(opacity:100);opacity:1;"><img style="" src="../Images/Chrysanthemum.jpg" width="100" alt=""></li>
+			<li><img src="../Images/Desert.jpg" width="100" alt=""></li>
+			<li><img src="../Images/Hydrangeas.jpg" width="100" alt=""></li>
+			<li><img src="../Images/Jellyfish.jpg" width="100" alt=""></li>
+			<li><img src="../Images/Koala.jpg" width="100" alt=""></li>
+			<li><img src="../Images/Lighthouse.jpg" width="100" alt=""></li>
+			<li><img src="../Images/Penguins.jpg" width="100" alt=""></li>
+			<li><img src="../Images/Tulips.jpg" width="100" alt=""></li>
+		</ul>
+	</div>
+</body>
+</html>

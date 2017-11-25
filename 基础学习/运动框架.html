@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>运动框架</title>
+	<style>
+	div{width: 100px;height: 50px;background-color: #f00;margin: 10px;}
+	div[name=opacity]{float: left;width: 100px;height: 100px;filter:alpha(opacity:30);opacity: 0.3;}
+	</style>
+	<script>
+	window.onload=function(){
+		var expends=document.getElementsByName('expend'),
+			opacities=document.getElementsByName('opacity'),
+			len=expends.length,
+			olen=opacities.length, i;
+
+		for(i=0;i<len;i++){
+			expends[i].timer=null;
+			expends[i].onmouseover=function(){
+				setExpend(this,300);
+			};
+			expends[i].onmouseout=function(){
+				setExpend(this,100);
+			};
+		}
+
+		for(i=0;i<olen;i++){
+			opacities[i].alpha=30;//将变量加到此处
+			opacities[i].onmouseover=function(){
+				setFade(this,100);
+			};
+			opacities[i].onmouseout=function(){
+				setFade(this,30);
+			};
+		}
+		function setExpend(obj,iWidth){
+			clearInterval(obj.timer);
+			obj.timer=setInterval(function(){
+				var speed=(iWidth-obj.offsetWidth)/6;
+				speed=speed>0?Math.ceil(speed):Math.floor(speed);
+				if(obj.offsetWidth==iWidth){
+					clearInterval(obj.timer);
+				}else{
+					obj.style.width=obj.offsetWidth+speed+'px';
+				}
+			},30);
+		}
+		function setFade(obj,iOpacity){
+			clearInterval(obj.timer);
+			obj.timer=setInterval(function(){
+				var speed=(iOpacity-obj.alpha)/6;
+				speed=speed>0?Math.ceil(speed):Math.floor(speed);
+				console.log(speed);
+				if(obj.alpha==iOpacity){
+					clearInterval(obj.timer);
+				}else{
+					obj.alpha+=speed;
+					obj.style.filter='alpha(opacity:'+obj.alpha+')';
+					obj.style.opacity=obj.alpha/100;
+				}
+			},30);
+		}
+	}
+	</script>
+</head>
+<body>
+<div name="expend"></div>
+<div name="expend"></div>
+<div name="expend"></div>
+<div name="opacity"></div>
+<div name="opacity"></div>
+<div name="opacity"></div>
+</body>
+</html>

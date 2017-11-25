@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>完美运动框架</title>
+	<style>
+	div{width: 100px;height: 100px;background-color: #f00;}
+	.nav{position: absolute;right: 0;bottom: 10px;height: 130px;background-color: #fff;overflow: hidden;}
+	.click{position: absolute;bottom:0;right:0; height: 30px;width: 30px;background-color: #0f0;z-index: 2;}
+	.left{position: absolute;right: -100px;bottom: 0;width: 100px;height: 30px;z-index: 1;}
+	.top{position: absolute;top: 100px;right: 0;background-color: #00f;}
+
+	.slide{position: relative;width: 400px;height: 300px;margin: 0 auto;overflow: hidden;}
+	ul{margin:0;padding: 0;}
+	ul li{list-style: none;padding: 0;margin: 0;height: 300px;}
+	ul li a{display: inline-block;text-decoration: none;margin:0 5px;padding:5px 10px;border: 1px solid #333;color:#eee;background-color: #f0f;}
+	.pic{position: absolute;top:0;}
+	.num{position:absolute;right: 0;top: 260px; }
+	.num li{float: left;}
+
+	.weibo{ height: 500px;width: 300px;border: 1px solid #000;}
+	.weibo li{ padding: 5px;border-bottom: 1px dotted #666;width: 300px;word-wrap :break-word; }
+	</style>
+	<script src="Animate.js"></script>
+	<script>
+	window.onload=function () {
+		var div=document.getElementsByTagName('div')[0],
+			clickDiv=getElementsByClassName('click')[0],
+			leftDiv=getElementsByClassName('left')[0],
+			topDiv=getElementsByClassName('top')[0];
+		div.onmouseover=function(){
+			move(this,{width:300,height:200},function(){
+				move(div,{opacity:30});
+			});
+		};
+		div.onmouseout=function(){
+			move(this,{opacity:100},function(){
+				move(div,{width:100,height:100});
+			});
+		};
+
+		//
+		clickDiv.onclick=function(){
+			if(getStyle(leftDiv,'right')=='-100px'){
+				move(leftDiv,{'right':0},function(){
+					move(topDiv,{'top':0});
+				});
+			}else{
+				move(topDiv,{'top':100},function(){
+					move(leftDiv,{'right':-100});
+				});
+			}
+		};
+		//焦点图
+		var pic=getElementsByClassName('pic')[0],
+			as=getElementsByClassName('num')[0].getElementsByTagName('a'),
+			len=as.length;
+
+		var now=0,i;
+		for(i=0;i<len;i++){
+			as[i].index=i;
+			as[i].onclick=function(){
+				if(this.index==now){return;}
+				now=this.index;
+				tab();
+			};
+		}
+
+		function tab(){
+			move(pic,{top:-now*300});
+			for(i=0;i<len;i++){
+				as[i].style.backgroundColor='#f0f';
+			}
+			as[now].style.backgroundColor='#0f0';
+		}
+		function next(){
+			now++;
+			if(now==len){now=0;}
+			tab();
+		}
+		var tt=setInterval(next,1000);
+		pic.onmouseover=function(){
+			clearInterval(tt);
+		}
+		pic.onmouseout=function(){
+			tt=setInterval(next,1000);
+		}
+
+		var msg=document.getElementById('msg'),
+			send=document.getElementById('send'),
+			ul=getElementsByClassName('weibo')[0];
+		send.onclick=function(){
+			if(!msg.value){return;}
+			var li=document.createElement('li');
+			li.appendChild(document.createTextNode(msg.value));
+			if(ul.children.length>0){
+				ul.insertBefore(li,ul.firstElementChild);
+			}else{
+				ul.appendChild(li);
+			}
+			var offsetHieght=li.offsetHeight;
+			li.style.height='0';
+			li.style.opacity='0';
+			move(li,{height:offsetHieght},function(){
+				move(li,{opacity:100});
+			});
+		};
+	};
+	</script>
+</head>
+<body>
+	<div></div>
+	<div class="nav">
+		<div class="top"></div>
+		<div class="left"></div>
+		<div style="position:absolute;width:100px;height:30px;bottom:0;right:0;background-color:#fff;"><div class="click"></div></div>		
+	</div>
+<div class="slide">
+	<ul class="pic">
+		<li><img src="../Images/Chrysanthemum.jpg" width="400" alt=""></li>
+		<li><img src="../Images/Desert.jpg" width="400" alt=""></li>
+		<li><img src="../Images/Hydrangeas.jpg" width="400" alt=""></li>
+		<li><img src="../Images/Jellyfish.jpg" width="400" alt=""></li>
+		<li><img src="../Images/Koala.jpg" width="400" alt=""></li>
+		<li><img src="../Images/Lighthouse.jpg" width="400" alt=""></li>
+		<li><img src="../Images/Penguins.jpg" width="400" alt=""></li>
+		<li><img src="../Images/Tulips.jpg" width="400" alt=""></li>
+	</ul>
+	<ul class="num">
+		<li><a href="javascript:">1</a></li>
+		<li><a href="javascript:">2</a></li>
+		<li><a href="javascript:">3</a></li>
+		<li><a href="javascript:">4</a></li>
+		<li><a href="javascript:">5</a></li>
+		<li><a href="javascript:">6</a></li>
+		<li><a href="javascript:">7</a></li>
+	</ul>
+</div>
+<textarea id="msg" cols="30" rows="4" class="input_msg"></textarea><button id="send">发送</button>
+<ul class="weibo">
+</ul>
+</body>
+</html>

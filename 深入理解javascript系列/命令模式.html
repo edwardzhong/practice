@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>命令模式</title>
+	<script>
+	var CarManager = {
+
+        // 请求信息
+        requestInfo: function (model, id) {
+        	return 'The information for ' + model +
+        	' with ID ' + id + ' is foobar';
+        },
+
+        // 购买汽车
+        buyVehicle: function (model, id) {
+        	return 'You have successfully purchased Item '
+        	+ id + ', a ' + model;
+        },
+
+        // 组织view
+        arrangeViewing: function (model, id) {
+        	return 'You have successfully booked a viewing of '
+        	+ model + ' ( ' + id + ' ) ';
+        }
+    };
+    CarManager.execute = function (command) {
+    	return CarManager[command.request](command.model, command.carID);
+    };
+
+    console.log(CarManager.execute({request:'requestInfo',model:'bmw',carID:'111'}));
+    console.log(CarManager.execute({request:'buyVehicle',model:'bmw',carID:'111'}));
+</script>
+</head>
+<body>
+	
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>运动基础</title>
+	<style>
+	#div1{position: absolute;width: 150px;height: 300px;background-color: #f00;left: -150px;}
+	#div1 span{position: absolute;top:20px;left: 150px;background-color: #0f0;width: 20px;}
+	#div2{position: relative;width: 100px;height: 100px;background: #f00;top:300px;filter:alpha(opacity: 30);opacity: 0.3;}
+	</style>
+	<script>
+	window.onload=function(){
+		var span=document.getElementsByTagName('span')[0],
+		    div=document.getElementById('div1');
+		var timer=null;
+		div.onmouseover=function(){
+			startMove(0);
+		};
+		div.onmouseout=function(){
+			startMove(-150);
+		};
+		function startMove(targetPos){
+			var speed=0;
+			if(div.offsetLeft>targetPos){
+				speed=-10;
+			}else{
+				speed=10;
+			}
+			clearInterval(timer);
+			timer=setInterval(function(){
+				if(div.offsetLeft==targetPos){
+					clearInterval(timer);
+				}else{
+					div.style.left=div.offsetLeft+speed+'px';
+				}
+			},30);
+		}
+		//淡入淡出
+		var div2=document.getElementById('div2'),
+			timer2=null,alpha=30;
+		function startFade(fadePos){
+			var speed=0;
+			clearInterval(timer2);
+			timer2=setInterval(function(){
+				if(fadePos>alpha){
+					speed=10;
+				}else{
+					speed=-10;
+				}
+
+				if(alpha==fadePos){
+					clearInterval(timer2);
+				}else{
+					alpha+=speed;
+					console.log(alpha);
+					div2.style.filter='alpha(opacity:'+alpha+')';
+					div2.style.opacity=alpha/100;
+				}
+			},10);
+		}
+		div2.onmouseover=function(){
+			startFade(100);
+		}
+		div2.onmouseout=function(){
+			startFade(30);
+		}
+	}
+	</script>
+</head>
+<body>
+	<div id="div1"><span>分享到</span></div>
+	<div id="div2"></div>
+</body>
+</html>

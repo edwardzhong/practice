@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>绑定</title>
+	<style>
+	#div1{width: 100px;height: 100px;background-color: #ff0;position: absolute;}
+	.box{border: 1px dotted Gray;position: absolute;}
+	</style>
+	<script src="../jquery-1.7.2.js"></script>
+	<script>
+	function addEvent(obj,type,fn){
+		if(obj.attachEvent){
+			obj.attachEvent(obj,'on'+type,fn);
+		}else if(obj.addEventListener){
+			obj.addEventListener(obj,type,fn,false);
+		}else{
+			obj['on'+type]=fn;
+		}
+	}
+	window.onload=function(){
+		// var btn=document.getElementById('btn');
+		// btn.onclick=function(){
+		// 	alert('a');
+		// }
+		//btn.setCapture();
+		//带框的拖拽
+		var div=document.getElementById('div1');
+		div.onmousedown=function(evt){
+			var evt=evt||event;
+			var disX=evt.clientX-div.offsetLeft;
+			var disY=evt.clientY-div.offsetTop;
+
+			var box=document.createElement('div');
+			box.className='box';
+			box.style.width=div.offsetWidth+'px';
+			box.style.height=div.offsetHeight+'px';
+			box.style.left=div.offsetLeft+'px';
+			box.style.top=div.offsetTop+'px';
+			document.body.appendChild(box);
+
+			document.onmousemove=function(ev){
+				var ev=ev||event;
+				var l=ev.clientX-disX,
+					t=ev.clientY-disY;
+
+				box.style.left=l+'px';
+				box.style.top=t+'px';
+			};
+			document.onmouseup=function(){
+				document.onmousemove=null;
+				document.onmouseup=null;
+				div.style.left=box.offsetLeft+'px';
+				div.style.top=box.offsetTop+'px';
+				document.body.removeChild(box);
+			};
+			return false;
+		}
+	}
+	</script>
+</head>
+<body>
+	<!-- <button id="btn">点击</button> -->
+	<div id="div1"></div>
+</body>
+</html>

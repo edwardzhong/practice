@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>验证模块</title>
+	<script>
+		var validator={
+			types:{},
+			validate:function(data){
+				if(!data){return;}
+				var prop,name,val,typeName,type,msg,ret=[];
+				for(prop in data){
+					if(!data.hasOwnProperty(prop)){continue;} 
+
+					name=data[prop].name||''; 
+					val=data[prop].val;
+					typeName=data[prop].type;
+					type=this.types[typeName];
+					msg=data[prop].msg||'';
+
+					if(!typeName){continue;}
+					if(!type||!type.validate||typeof type.validate!='function'){
+						throw new Error("No handler to validate type " + typeName);
+					}
+
+					if(!type.validate(val)){
+						ret.push(msg?msg:((name||prop)+type.msg));
+					}
+				}
+				return ret.join(',');
+			}
+		};
+		validator.types.isNotEmpty={
+			validate:function(v){
+				if(!v){
+					return false;
+				}
+				return true;
+			},
+			msg:'不能为空'
+		};
+
+		var msg=validator.validate({
+			userName:{
+				name:'用户名',
+				val:'',
+				type:'isNotEmpty',
+				msg:'用户名不能为空！'
+			},
+			password:{
+				type:'isNotEmpty',
+				val:'',
+				msg:'pass不能为空'
+			}
+		});
+		console.log(msg);
+	</script>
+</head>
+<body>
+	
+</body>
+</html>

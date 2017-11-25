@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>close</title>
+	<style>
+	body{height: 2000px;}
+	#div1{width: 100px;height: 100px;background-color: #f00;position: absolute;right: 0;bottom: 0;}
+	</style>
+	<script>
+	document.onclick=function(){
+		//滚动条高度
+		// var scrollTop= document.documentElement.scrollTop;//ie,ff下
+		// scrollTop=document.body.scrollTop;//chrome下
+		var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+		var clientWidth=document.documentElement.clientWidth;//可视区的宽度
+		console.log('scrollTop:'+scrollTop+' clientWidth:'+clientWidth);
+	};
+	//浮动窗口始终在右下角,不使用fixed,是因为ie6不支持
+window.onscroll=window.onresize=function(){
+	var div=document.getElementById('div1'),
+		scrollTop=document.documentElement.scrollTop||document.body.scrollTop,
+		clientHeight=document.documentElement.clientHeight;
+	div.style.top=clientHeight-div.offsetHeight+scrollTop+'px';
+}
+	</script>
+</head>
+<body>
+	<div id="div1"></div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>事件2</title>
+	<style>
+	#div1{width: 100px;height: 100px;background-color: #ccc;position: absolute;}
+	</style>
+	<script>
+	document.onkeydown=function (evt) {
+		var evt=evt||event,
+			div=document.getElementById('div1');
+		if(evt.keyCode==65){
+			div.style.left=div.offsetLeft-10+'px';
+		}
+		if(evt.keyCode==68){
+			div.style.left=div.offsetLeft+10+'px';
+		}
+		if(evt.keyCode==87){
+			div.style.top=div.offsetTop-10+'px';
+		}
+		if(evt.keyCode==83){
+			div.style.top=div.offsetTop+10+'px';
+		}
+
+	};
+	window.onload=function(){		
+		var txt=document.getElementById('txt'),
+			msg=document.getElementById('msg');
+
+		txt.onkeydown=function(evt){
+			var evt=evt||event;
+			if(evt.keyCode==13&&evt.ctrlKey){
+				msg.value+=txt.value+'\n';
+			}
+		};
+	};
+	</script>
+</head>
+<body>
+	<div id="div1"></div>
+	<input type="text" name="" id="txt">
+	<textarea name="" id="msg" cols="30" rows="10"></textarea>
+</body>
+</html>
