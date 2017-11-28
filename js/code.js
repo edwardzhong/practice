@@ -4,6 +4,43 @@
  * Date: 14-12-27
  * Time: 下午8:38
  */
+        // 观察者模式，发布订阅
+        function Observer(){
+            this.events={};
+        }
+
+        Observer.prototype={
+            bind:function(name,fn){
+                var events=this.events;
+                events[name]=events[name]||[];
+                events[name].push(fn);
+            },
+            unbind:function(name,fn){
+                var events=this.events,
+                    index=-1;
+                if(events[name]&&(index=events[name].indexOf(fn))>-1){
+                    events[name].splice(index,1);
+                }
+            },
+            one:function(name,fn){
+                var self=this;
+                self.add(name,function(){
+                    fn.apply(this,[].slice.call(arguments));
+                    self.unbind(name,arguments.callee);
+                });
+            },
+            fire:function(){
+                var events=this.events,
+                    args=Array.prototype.slice.call(arguments),
+                    name=args[0];
+                if(events[name]){
+                    events[name].forEach(function(fn,i){
+                        fn.apply(this,args.slice(1));
+                    });
+                }
+            }
+        };
+
     /**
      * [ieRGBA description]
      * @param    {Number}                 rr 
@@ -539,6 +576,36 @@
 
             throw new Error("Unable to copy obj! Its type isn't supported.");
         },
+        // // 深度克隆对象
+        // extend:function(){
+        //     var args=arguments,
+        //         len=args.length,
+        //         target=args[0],
+        //         isArr=false,
+        //         options,copy,name;
+
+        //     if(len<=1){ return target;}
+
+        //     for(var i=0;i<len;i++){
+        //         if((options=args[i])!=null){
+        //             for(name in options){
+        //                 copy=options[name];
+        //                 if((isArr=isArray(copy))||isObject(copy)){
+        //                     if(isArr){
+        //                         target[name]=target[name]||[];
+        //                     } else {
+        //                         target[name]=target[name]||{};
+        //                     }
+        //                     target[name]=extend(target[name],copy);
+        //                 } else {
+        //                     target[name]=copy;
+        //                 }
+        //             }
+        //         }   
+        //     }
+        //     return target;
+        // },
+
         //检测是否为Array
         isArray:function (value){
             if(typeof Array.isArray==='function'){
