@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mouse scroll</title>
+</head>
+<body>
+<p>
+    <label for="wheelDelta"> 滚动值:</label>(IE/Opera)
+    <input type="text" id="wheelDelta" />
+</p>
+<p>
+    <label for="detail"> 滚动值:(Firefox)</label>
+    <input type="text" id="detail" />
+</p>
+<script type="text/javascript">
+var oTxt = document.getElementById("txt");
+/***********************
+ * 函数：判断滚轮滚动方向
+ * 作者：walkingp
+ * 参数：event
+ * 返回：滚轮方向 1：向上 -1：向下
+ *************************/
+var scrollFunc = function(e) {
+        var direct = 0;
+        e = e || window.event;
+
+        var t1 = document.getElementById("wheelDelta");
+        var t2 = document.getElementById("detail");
+        if (e.wheelDelta) { //IE/Opera/Chrome
+            t1.value = e.wheelDelta;
+        } else if (e.detail) { //Firefox
+            t2.value = e.detail;
+        }
+        ScrollText(direct);
+    }
+    /*注册事件*/
+if (document.addEventListener) {
+    document.addEventListener('DOMMouseScroll', scrollFunc, false);
+} //W3C
+window.onmousewheel = document.onmousewheel = scrollFunc; //IE/Opera/Chrome/Safari
+</script>
+    
+</body>
+</html>
