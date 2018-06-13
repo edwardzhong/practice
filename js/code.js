@@ -139,17 +139,18 @@ function isArray(value) {
 }
 
 //是否对象
-function isObject(value){
-    return Object.prototype.toString.call(value)==="[object Object]";
+function isObject(value) {
+    return Object.prototype.toString.call(value) === "[object Object]";
 }
 
 /**
  * 判断类型
  */
-function type(obj){
-    if(obj==null){return String(obj);}
-    return typeof obj=='object'||typeof obj=='function'?
-        Object.prototype.toString.call(obj).slice(8,-1).toLowerCase()||'object':typeof obj;
+function type(obj) {
+    if (obj == null) {
+        return String(obj); }
+    return typeof obj == 'object' || typeof obj == 'function' ?
+        Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() || 'object' : typeof obj;
 }
 
 //密码必须包含数字,字母,符号
@@ -380,12 +381,12 @@ function stringFormat() {
  * @param  {dom elem}   node    
  * @param  {Function}   callback 
  */
-function walkDOM(node,callback){
+function walkDOM(node, callback) {
     var root = node || window.document,
-        elems=root.getElementsByTagName('*');
-    callback.call(root,0);
-    for(var i=0,l=elems.length;i<l;i++){
-        callback.call(elems[i],i+1);
+        elems = root.getElementsByTagName('*');
+    callback.call(root, 0);
+    for (var i = 0, l = elems.length; i < l; i++) {
+        callback.call(elems[i], i + 1);
     }
 }
 
@@ -395,11 +396,11 @@ function walkDOM(node,callback){
  * @param  {Function}   callback 
  * @param  {Number}     depth    元素深度
  */
-function walkDOMRecursive(node,callback,depth) {
+function walkDOMRecursive(node, callback, depth) {
     var root = node || window.document,
-        depth = depth||0,
+        depth = depth || 0,
         elem;
-    
+
     callback.call(root, depth++);
     elem = root.firstElementChild;
     while (elem) {
@@ -414,14 +415,14 @@ function walkDOMRecursive(node,callback,depth) {
  * @param  {[type]} str [description]
  * @return {[type]}     [description]
  */
-function htmlEncode(str){  
-    if(!str) return '';
-    return str.replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/ /g,'&nbsp;')
-        .replace(/\'/g,'&#39;')
-        .replace(/\"/g,'&quot;');
+function htmlEncode(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/ /g, '&nbsp;')
+        .replace(/\'/g, '&#39;')
+        .replace(/\"/g, '&quot;');
 }
 
 /**
@@ -430,14 +431,14 @@ function htmlEncode(str){
  * @param  {[type]} str [description]
  * @return {[type]}     [description]
  */
-function htmlDecode (str){  
-    if(!str) return '';
-    return str.replace(/&amp;/g,"&")
-        .replace(/&lt;/g,'<')
-        .replace(/&gt;/g,'>')
-        .replace(/&nbsp;/g,' ')
-        .replace(/&#39;/g,'\'')
-        .replace(/&quot;/g,'\"');
+function htmlDecode(str) {
+    if (!str) return '';
+    return str.replace(/&amp;/g, "&")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&#39;/g, '\'')
+        .replace(/&quot;/g, '\"');
 }
 
 //给String附加trim方法
@@ -447,30 +448,32 @@ if (!String.trim) {
     }
 }
 
-function getContentSummary(str,n){
-    let replaceHtmlTags=str=>str.replace(/<\s*\/?\s*\w+[\S\s]*?>/g,''),//过滤掉html标签
-    pattern=/^[a-zA-Z0-9_\u0392-\u03c9\u0410-\u04F9]+/,
-    ret='',count=0,m;
-    str=replaceHtmlTags(htmlDecode(str));
+function getContentSummary(str, n) {
+    let replaceHtmlTags = str => str.replace(/<\s*\/?\s*\w+[\S\s]*?>/g, ''), //过滤掉html标签
+        pattern = /^[a-zA-Z0-9_\u0392-\u03c9\u0410-\u04F9]+/,
+        ret = '',
+        count = 0,
+        m;
+    str = replaceHtmlTags(htmlDecode(str));
 
-    while(str.length){
-        if((m=str.match(pattern))){//拉丁文字
+    while (str.length) {
+        if ((m = str.match(pattern))) { //拉丁文字
             count++;
-            ret+=m[0];
-            str=str.substr(m[0].length);
+            ret += m[0];
+            str = str.substr(m[0].length);
         } else {
-            if(str.charCodeAt(0)>=0x4E00){//中日韩文字
+            if (str.charCodeAt(0) >= 0x4E00) { //中日韩文字
                 count++;
             }
-            ret+=str.charAt(0);
-            str=str.substr(1);
+            ret += str.charAt(0);
+            str = str.substr(1);
         }
-        if(count>n){
-            ret+='...';
+        if (count > n) {
+            ret += '...';
             break;
         }
     }
-    return ret; 
+    return ret;
 }
 
 /**
@@ -483,9 +486,9 @@ function wordCount(data) {
     var pattern = /[a-zA-Z0-9_\u0392-\u03c9\u0410-\u04F9]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g;
     var m = data.match(pattern);
     var count = 0;
-    if(m === null) return count;
-    for(var i = 0; i < m.length; i++) {
-        if(m[i].charCodeAt(0) >= 0x4E00) {
+    if (m === null) return count;
+    for (var i = 0; i < m.length; i++) {
+        if (m[i].charCodeAt(0) >= 0x4E00) {
             count += m[i].length;
         } else {
             count += 1;
@@ -495,10 +498,10 @@ function wordCount(data) {
 }
 
 //实现bind的功能
-Function.prototype.myBind=function(obj){
-    var self=this;
-    return function(){
-        return self.apply(obj,[].slice.call(arguments));
+Function.prototype.myBind = function(obj) {
+    var self = this;
+    return function() {
+        return self.apply(obj, [].slice.call(arguments));
     }
 }
 
@@ -573,6 +576,69 @@ if (!Date.ToString) {
             format = time.Year + "-" + time.Month + "-" + time.Day + " " + time.Hour + ":" + time.Minute + ":" + time.Second;
         }
         return format;
+    }
+}
+// 判断环境
+function getEnv() {
+    var ua = navigator.userAgent.toLowerCase();
+    if (/micromessenger(\/[\d\.]+)*/.test(ua)) {
+        return 'weixin';
+    } else if (/qq\/(\/[\d\.]+)*/.test(ua) || /qzone\//.test(ua)) {
+        return 'qq';
+    } else if (u.indexOf('chrome') > -1) {
+        return 'Chrome';
+    }else if (u.indexOf('msie') > 0) {
+        return 'MSIE'; //IE浏览器  
+    } else if (u.indexOf('firefox') > 0) {
+        return 'Firefox'; //Firefox浏览器  
+    } else if (u.indexOf('safari') > 0) {
+        return 'Safari'; //Safan浏览器  
+    } else if (u.indexOf('camino') > 0) {
+        return 'Camino'; //Camino浏览器  
+    } else if (u.indexOf('gecko/') > 0) {
+        return 'Gecko'; //Gecko浏览器  
+    } else {
+        return 'h5';
+    }
+}
+
+
+var browser = {
+    versions: function() {
+        var u = navigator.userAgent;
+        return {
+            trident: u.indexOf('Trident') > -1, //IE内核
+            presto: u.indexOf('Presto') > -1, //opera内核
+            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+            isIE: u.indexOf('MSIE') > 0,
+            isChrome: u.indexOf('Chrome') > -1,
+            isSafari: u.indexOf('Safari') > 0 && (/webkit|khtml/i).test(u),
+            isFirefox: u.indexOf('Firefox') > -1,
+            mobile: !!u.match(/AppleWebKit.*Mobile.*/),
+            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
+            iPhone: u.indexOf('iPhone') > -1,
+            iPad: u.indexOf('iPad') > -1,
+            winPhone: u.indexOf('Windows Phone') > -1
+        };
+    }()
+}
+
+function getBrowser() {
+    var u = navigator.userAgent;
+    if (u.indexOf('Chrome') > -1) {
+        return 'Chrome';
+    } else if (u.indexOf('MSIE') > -1) {
+        return 'MSIE'; //IE浏览器  
+    } else if (u.indexOf('Firefox') > -1) {
+        return 'Firefox'; //Firefox浏览器  
+    } else if (u.indexOf('Safari') > -1) {
+        return 'Safari'; //Safan浏览器  
+    } else if (u.indexOf('Camino') > -1) {
+        return 'Camino'; //Camino浏览器  
+    } else if (u.indexOf('Gecko/') > -1) {
+        return "Gecko"; //Gecko浏览器  
     }
 }
 

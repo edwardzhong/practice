@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>纯CSS导航栏下划线跟随效果</title>
+<style>
+ul{
+	list-style: none;
+}
+ul::after{
+	content:'';
+	display: table;
+	clear: both;
+}
+li{
+	position: relative;
+	float: left;
+	padding: 5px;
+	cursor: pointer;
+}
+li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 100%;/* 前一选项默认最右边 */
+    width: 0;
+    height: 100%;
+    border-bottom: 2px solid #000;
+    transition: 0.1s all linear;
+}
+
+li:hover::before {/* 当前选项 */
+    width: 100%;
+    left: 0;/* 重置为最左边 */
+}
+
+li:hover ~ li::before {/* 后一个选项重置为最左边 */
+    left: 0;
+}
+</style>
+</head>
+<body>
+	<ul>
+		<li>0001</li>
+		<li>0002</li>
+		<li>0003</li>
+		<li>0004</li>
+	</ul>
+</body>
+</html>

@@ -18,11 +18,12 @@
 * [瀑布流图片加载](https://github.com/edwardzhong/practice/blob/master/imgfall.html)
 * [简单烟花效果](https://github.com/edwardzhong/practice/blob/master/smoke.html)
 * [实现3D标签云](https://github.com/edwardzhong/practice/blob/master/3dtags.html)
+* [纯CSS导航栏下划线跟随效果](https://github.com/edwardzhong/practice/blob/master/underlineEffect.html)
 
 ### 学习
 * [实现defer的功能](https://github.com/edwardzhong/practice/blob/master/defer.html)
 * [实现requireJs的功能](https://github.com/edwardzhong/practice/blob/master/require.html)
-* [history&hashchange的使用](https://github.com/edwardzhong/practice/blob/master/history&hashchange.html)
+* [history实现单页面应用](https://github.com/edwardzhong/practice/blob/master/historyapp.html)
 * [jquery研究](https://github.com/edwardzhong/practice/blob/master/jquery.html)
 * [JavaScript语言精髓与编程实践技巧](https://github.com/edwardzhong/practice/blob/master/JavaScript_study_practice.html)
 * [indexDB的实践](https://github.com/edwardzhong/practice/blob/master/indexDB.html)

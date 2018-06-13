@@ -1,119 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>实现defer的功能</title>
-	<script>
-        //=======================================================================
-        // Deferred.next(function(){
-        //     console.log(1);
-        // }).next(function(){
-        //     console.log(2);
-        // }).wait(3).next(function(){
-        //     console.log(3);
-        // });
+    <meta charset="UTF-8">
+    <title>实现defer的功能</title>
+    <script>
+    //=======================================================================
+    // Deferred.next(function(){
+    //     console.log(1);
+    // }).next(function(){
+    //     console.log(2);
+    // }).wait(3).next(function(){
+    //     console.log(3);
+    // });
 
-        function Defer(){
-            return (this instanceof Defer)?this.init():new this.constructor();
+    function Defer() {
+        return (this instanceof Defer) ? this.init() : new this.constructor();
+    }
+    Defer.prototype = {
+        _id: 'xxx123',
+        init: function() {
+            this._next = null;
+            this.callback = {
+                ok: Defer.ok,
+                ng: Defer.ng
+            }
+            return this;
+        },
+        call: function(val) {
+            return this._fire('ok', val);
+        },
+        fail: function(err) {
+            return this._fire("ng", err);
+        },
+        _fire: function(okng, value) {
+            var next = 'ok';
+            try {
+                value = this.callback[okng].call(this, value);
+            } catch (e) {
+                next = 'ng';
+                value = e;
+            }
+            if (Defer.isDeferred(value)) {
+                value._next = this._next;
+            } else {
+                if (this._next) {
+                    this._next._fire(next, value);
+                }
+            }
+        },
+        next: function(fun) {
+            return this._post('ok', fun);
+        },
+        error: function(fun) {
+            return this._post("ng", fun);
+        },
+        _post: function(okng, fun) {
+            this._next = new Defer();
+            this._next.callback[okng] = fun;
+            return this._next;
         }
-        Defer.prototype={
-            _id:'xxx123',
-            init:function(){
-                this._next=null;
-                this.callback={
-                    ok:Defer.ok,
-                    ng:Defer.ng
-                }
-                return this;
-            },
-            call:function(val){
-                return this._fire('ok',val);
-            },
-            fail  : function (err) { 
-                return this._fire("ng", err);
-            },
-            _fire:function(okng,value){
-                var next='ok';
-                try{
-                    value=this.callback[okng].call(this,value);
-                } catch(e){
-                    next='ng';
-                    value=e;
-                }
-                if(Defer.isDeferred(value)){
-                    value._next=this._next;
-                } else {
-                    if (this._next) {
-                        this._next._fire(next, value);
-                    }
-                }
-            },
-            next:function(fun){
-                return this._post('ok',fun);
-            },
-            error : function (fun) { 
-                return this._post("ng", fun); 
-            },
-            _post:function(okng,fun){
-                this._next=new Defer();
-                this._next.callback[okng]=fun;
-                return this._next;
-            }
+    };
+    Defer.ok = function(x) {
+        return x;
+    };
+    Defer.ng = function(x) {
+        throw x;
+    };
+    Defer.next = function(fun) {
+        var d = new Defer();
+        var id = setTimeout(function() {
+            d.call();
+        }, 0);
+        d.canceller = function() {
+            clearTimeout(id);
         };
-        Defer.ok=function(x){
-            return x;
-        };
-        Defer.ng=function(x){
-            throw x;
-        };
-        Defer.next=function(fun){
-            var d=new Defer();
-            var id=setTimeout(function() {
-                d.call();
-            }, 0);
-            d.canceller=function(){
-                clearTimeout(id);
-            };
-            if(fun){
-                d.callback.ok=fun;
-            }
-            return d;
-        };
-        Defer.isDeferred=function(obj){
-            return !!(obj && obj._id === Defer.prototype._id);
-        };
+        if (fun) {
+            d.callback.ok = fun;
+        }
+        return d;
+    };
+    Defer.isDeferred = function(obj) {
+        return !!(obj && obj._id === Defer.prototype._id);
+    };
 
-        // Defer.next(function(){
-        //     console.log(1);
-        //     return 2
-        // }).next(function(val){
-        //     console.log(val);
-        //     return 3
-        // }).next(function(val){
-        //     console.log(val);
-        // });
-        function time100(val){
-            var d=new Defer();
-            setTimeout(function() {
-                console.log(val);
-                d.fail(100);
-            }, 100);
-            return d;
-        }
-        function time300(val){
-            var d=new Defer();
-            setTimeout(function() {
-                console.log(val||0);
-                d.call(2000);
-            }, 2000);
-            return d;
-        }
-        Defer.next(time300).next(time100).next(function(val){
+    // Defer.next(function(){
+    //     console.log(1);
+    //     return 2
+    // }).next(function(val){
+    //     console.log(val);
+    //     return 3
+    // }).next(function(val){
+    //     console.log(val);
+    // });
+    function time100(val) {
+        var d = new Defer();
+        setTimeout(function() {
             console.log(val);
-        });
-	</script>
+            d.fail(100);
+        }, 100);
+        return d;
+    }
+
+    function time300(val) {
+        var d = new Defer();
+        setTimeout(function() {
+            console.log(val || 0);
+            d.call(2000);
+        }, 2000);
+        return d;
+    }
+    Defer.next(time300).next(time100).next(function(val) {
+        console.log(val);
+    });
+    </script>
 </head>
 <body>
-	
 </body>
 </html>
