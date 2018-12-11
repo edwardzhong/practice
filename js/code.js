@@ -1,9 +1,70 @@
 /**
- * Created with sublime text.
+ * utility
  * User: Jeff Zhong
  * Date: 14-12-27
  * Time: 下午8:38
  */
+
+/**
+ * 滚动事件统一控制器
+ * @param    {String}  fn  返回：false 表示反复执行，true 用于达到某条件后不再执行
+ * @Author   jeffzhong(p_jdjfzhong)
+ * @DateTime 2016-07-14T15:06:16+0800
+ */
+var scrollEventCtr=(function(){
+    var eventArr=[],//事件列表
+        eventIsLoads=[];//是否加载的标志列表
+    $(window).on('scroll', function() {
+        eventArr.forEach(function(fn,i){
+            if(eventIsLoads[i]){return true;}//标志已经加载过，不需要反复执行
+            if(typeof fn =='function'){
+                eventIsLoads[i]=fn(); 
+            }
+        });
+    });
+    return function(fn){
+        eventIsLoads.push(false);
+        eventArr.push(fn);
+        if(typeof fn =='function'){//滚动事件触发前先运行一次
+            eventIsLoads[eventIsLoads.length-1]=fn();
+        }
+    };
+}());
+
+/*视口的大小，部分移动设备浏览器对innerWidth的兼容性不好，需要
+ *document.documentElement.clientWidth或者document.body.clientWidth
+ *来兼容（混杂模式下对document.documentElement.clientWidth不支持）。
+ *使用方法 ： getViewPort().width;
+ */
+function getViewPort () {
+    if(document.compatMode == "BackCompat") {   //浏览器嗅探，混杂模式
+        return {
+            width: document.body.clientWidth,
+            height: document.body.clientHeight
+        };
+    } else {
+        return {
+            width: document.documentElement.clientWidth,
+            height: document.documentElement.clientHeight
+        };
+    }
+}
+
+//获得文档的大小（区别与视口）,与上面获取视口大小的方法如出一辙
+function getDocumentPort () {
+    if(document.compatMode == "BackCompat") {
+        return {
+            width: document.body.scrollWidth,
+            height: document.body.scrollHeight
+        };
+    } else {
+        return {
+            width: Math.max(document.documentElement.scrollWidth,document.documentElement.clientWidth),
+            height: Math.max(document.documentElement.scrollHeight,document.documentElement.clientHeight)
+        }
+    }
+}
+
 // 观察者模式，发布订阅
 function Observer() {
     this.events = {};
@@ -111,23 +172,22 @@ var animationend = function() {
 /**
  * 获取transitionend名称
  */
-var transition = function() {
-    var transitionEnd = (function() {
-        var el = document.createElement('bootstrap'),
-            transEndEventName = {
-                'WebkitTransition': 'webkitTransitionEnd',
-                'MozTransition': 'transitionend',
-                'OTransition': 'oTransitionEnd otransitionend',
-                'transition': 'transitionend'
-            };
-        for (var name in transEndEventName) {
-            if (el.style[name] !== undefined) {
-                return transEndEventName[name];
-            }
+
+var transitionEnd = (function() {
+    var el = document.createElement('bootstrap'),
+        transEndEventName = {
+            'WebkitTransition': 'webkitTransitionEnd',
+            'MozTransition': 'transitionend',
+            'OTransition': 'oTransitionEnd otransitionend',
+            'transition': 'transitionend'
+        };
+    for (var name in transEndEventName) {
+        if (el.style[name] !== undefined) {
+            return transEndEventName[name];
         }
-    })();
-    return transitionEnd && { end: transitionEnd }
-}();
+    }
+})();
+
 
 //检测是否为Array
 function isArray(value) {
@@ -753,21 +813,21 @@ var MyLib = {
         return parent;
     },
     //遍历节点,并执行函数func(非递归)
-    walkElementsLinear: function(func, node) {
+    walkDoms: function(node, fn) {
         var root = node || window.document;
         var nodes = root.getElementsByTagName('*'),
             i, len = nodes.length;
         for (i = 0; i < len; i++) {
-            func.call(nodes[i]);
+            fn && fn.call(nodes[i]);
         }
     },
-    //递归方式,跟踪节点深度
-    walkTheDOMRecursive: function(func, node, depth) {
+    //递归方式遍历节点,跟踪节点深度
+    walkDOMRecursive: function(node, depth, fn) {
         var root = node || window.document;
-        func.call(root, depth++, returnedFromParent);
+        fn && fn.call(root, depth++);
         node = root.firstChild;
         while (node) {
-            walkTheDOMRecursive(func, node, depth);
+            walkTheDOMRecursive(node, depth, fn);
             node = node.nextSibling;
         }
     },

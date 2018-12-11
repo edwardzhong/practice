@@ -2,156 +2,176 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>history and hashchange</title>
+<title>history webapp</title>
 <style>
-	html,body{
-		margin: 0;
-		padding: 0;
-		width: 100%;
-	}
-	.container{
-		position: relative;
-		width: 100%;
-	}
-	.view{
-		position: absolute;
-	}
-	.title{
-		width: 100%;
-		height: 100px;
-		text-align: center;
-		font-size: 20px;
-		line-height: 2;
-		margin: 50px auto;
-	}
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+.view {
+    position: absolute;
+}
+
+.title {
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 2;
+    margin: 50px auto;
+}
 </style>
-<script src="./js/jquery.min.js"></script>
+<script src="./lib/Zepto.js"></script>
 <script>
-$(function(){
-// HTML5新增的API
-// A) history.pushState(data, title [, url])：往历史记录堆栈顶部添加一条记录；data会在onpopstate事件触发时作为参数传递过去；title为页面标题，当前所有浏览器都会忽略此参数；url为页面地址，可选，缺省为当前页地址； 
-// B) history.replaceState(data, title [, url]) ：更改当前的历史记录，参数同上； 
-// C) history.state：用于存储以上方法的data数据，不同浏览器的读写权限不一样； 
-// D) window.onpopstate：响应pushState或replaceState的调用；
+$(function() {
+    // HTML5新增的API
+    // A) history.pushState(data, title [, url])：往历史记录堆栈顶部添加一条记录；data会在onpopstate事件触发时作为参数传递过去；title为页面标题，当前所有浏览器都会忽略此参数；url为页面地址，可选，缺省为当前页地址； 
+    // B) history.replaceState(data, title [, url]) ：更改当前的历史记录，参数同上； 
+    // C) history.state：用于存储以上方法的data数据，不同浏览器的读写权限不一样； 
+    // D) window.onpopstate：响应pushState或replaceState的调用；
 
-	function App(opt){
-		this.con=$('#'+opt.id);
-		this.view={};
-		this.page={};
-		this.curr='';
-		this.last='';
-	}
+    function App(opt) {
+        this.con = $('#' + opt.id);
+        this.view = {};
+        this.page = {};
+        this.curr = '';
+        this.last = '';
+    }
 
-	App.prototype={
-		init:function(){
-			var that=this;
-			$(window).on('popstate',function(event){
-				var state=event.state||history.state;
-				console.log(state,'back');
-				that.load();
-			});
-			return this.load();
-		},
-		load:function(){
-			var search = location.search||'',
-				match=search.match(/hash\=([^=?&]+)/),
-				hash=(match&&match[1])||'';
-			if(this.view[hash]){
-				this.setPage(hash);
-			} else if(this.otherView){
-				this.setPage(this.otherView.hash);
-			}
-			return this;
-		},
-		setPage:function(hash){
-			var currPage=this.page[hash],//准备展示页
-				actPage=this.page[this.curr],//正在展示页
-				currView=this.view[hash];
+    App.prototype = {
+        init: function() {
+            var that = this;
+            $(window).on('popstate', function(event) {
+                var state = event.state || history.state;
+                console.log(state, 'history');
+                that.load(true);
+            });
+            return this.load();
+        },
+        load: function(isHistory) {
+            var path = location.pathname || '';
+            if (this.view[path]) {
+                this.setPage(path,isHistory);
+            } else if (this.otherView) {
+                this.setPage(this.otherView.path,isHistory);
+            }
+            return this;
+        },
+        setPage: function(path,notPush) {
+            var notPush=!!notPush,
+                currPage = this.page[path], //准备展示页
+                actPage = this.page[this.curr], //正在展示页
+                currView = this.view[path];
+            if (this.curr == path) {
+                // history.replaceState({path: path, time: new Date() }, null, path);
+                return;
+            }
 
-			if(!currPage){
-				currPage=new this.pageFn(hash,currView.id);
-				this.page[hash]=currPage;
-				this.curr=hash;
-				this.con.append(currPage.elem);
-				if(actPage){
-					actPage.elem.hide();
-				}
-				currView.callback.call(currView,this,currPage.elem);
-				history.pushState({hash:hash,time:new Date()},null,location.pathname+'?hash='+hash);
-			} else if(this.curr!=hash){
-				this.curr=hash;
-				this.last=actPage.hash;
-				actPage.elem.hide();
-				currPage.elem.show();
-				currView.callback.call(currView,this,currPage.elem);
-				history.pushState({hash:hash,time:new Date()},null,location.pathname+'?hash='+hash);
-			}
-			
-			
-		},
-		pageFn:function(hash,id){
-			this.hash=hash;
-			this.id=id;
-			this.elem=$('<div class="view" data-hash='+hash+'>'+$('#'+id).html()+'</div>');
-		},
-		when:function(url,id,callback){
-			this.setView(url,id,callback);
-			return this;
-		},
-		other:function(url,id,callback){
-			this.otherView=this.setView(url,id,callback);
-			return this;
-		},
-		setView:function(url,id,callback){
-			this.view[url]={
-				hash:url,
-				id:id,
-				callback:callback||function(){}
-			};
-			return this.view[url];
-		}
-	};
+            if (!currPage) {
+                currPage = new this.pageFn(path, currView.id);
+                this.page[path] = currPage;
+                this.curr = path;
+                this.con.append(currPage.elem);
+                if (actPage) {
+                    this.pageEffect(currPage,actPage);
+                }
+                currView.callback.call(currView, this, currPage.elem);
+                if(!notPush){
+                    history.pushState({path: path, time: new Date() }, null, path);
+                }
+            } else if (this.curr != path) {
+                this.curr = path;
+                this.last = actPage.path;
+                this.pageEffect(currPage,actPage);
+                currView.callback.call(currView, this, currPage.elem);
+                if(!notPush){
+                    history.pushState({path: path, time: new Date() }, null, path);
+                }
+            }
+        },
+        pageEffect:function(toShow,toHide,callback){
+            toHide.elem.hide();
+            toShow.elem.show();
+            callback&&callback();
+        },
+        pageFn: function(path, id) {
+            this.path = path;
+            this.id = id;
+            this.elem = $('<div class="view" data-path=' + path + '>' + $('#' + id).html() + '</div>');
+        },
+        when: function(url, id, callback) {
+            this.setView(url, id, callback);
+            return this;
+        },
+        other: function(url, id, callback) {
+            this.otherView = this.setView(url, id, callback);
+            return this;
+        },
+        setView: function(url, id, callback) {
+            this.view[url] = {
+                path: url,
+                id: id,
+                callback: callback || function() {}
+            };
+            return this.view[url];
+        }
+    };
 
-	var app=new App({id:'con'})
-		.when('/aa','tpl1',function(ctx){/*console.log(ctx);*/})
-		.when('/bb','tpl2',function(ctx){/*console.log(ctx);*/})
-		.other('/cc','tpl3',function(ctx){/*console.log(ctx);*/})
-		.init();
-	$('#con').on('click','[data-id]',function(e){
-		var id=$(this).data('id');
-		app.setPage('/'+id);
-	});
-	/**
-	 * 添加onhashchange事件
-	 * @param  {Function} callback [回调函数]
-	 * @return {[type]}            []
-	 */
-	function hashChange(callback){
-		$(window).on('hashchange', callback);
-	}
+    var app = new App({id: 'con'})
+        .when('/aa', 'tpl1', function(ctx) {
+            console.log(ctx);
+        })
+        .when('/bb', 'tpl2', function(ctx) {
+            console.log(ctx);
+        })
+        .other('/cc', 'tpl3', function(ctx) {
+            console.log(ctx);
+        })
+        .init();
+
+    $('#con').on('click', '[data-id]', function(e) {
+        var id = $(this).data('id');
+        app.setPage('/' + id);
+    });
+    /**
+     * 添加onhashchange事件
+     * @param  {Function} callback [回调函数]
+     * @return {[type]}            []
+     */
+    function hashChange(callback) {
+        $(window).on('hashchange', callback);
+    }
 });
 </script>
 </head>
 <body>
-    <div class="container" id="con"></div>
-    <script id="tpl1" type="text/html">
-        <div class="title">template aaa
-        	<a href="javascript:;" data-id="aa">aa</a>
-        	<a href="javascript:;" data-id="bb">bb</a>
-        	<a href="javascript:;" data-id="cc">cc</a>
-        </div>
-    </script>
-    <script id="tpl2" type="text/html">
-        <div class="title">template bbb
-            <a href="javascript:;" data-id="aa">aa</a>
-        	<a href="javascript:;" data-id="bb">bb</a>
-        	<a href="javascript:;" data-id="cc">cc</a></div>
-    </script>
-    <script id="tpl3" type="text/html">
-        <div class="title">template ccc
-            <a href="javascript:;" data-id="aa">aa</a>
-        	<a href="javascript:;" data-id="bb">bb</a>
-        	<a href="javascript:;" data-id="cc">cc</a></div>
-    </script>
+<div class="container" id="con"></div>
+<script id="tpl1" type="text/html">
+    <div class="title">template aaa
+        <a href="javascript:;" data-id="aa">aa</a>
+        <a href="javascript:;" data-id="bb">bb</a>
+        <a href="javascript:;" data-id="cc">cc</a>
+    </div>
+</script>
+<script id="tpl2" type="text/html">
+    <div class="title">template bbb
+        <a href="javascript:;" data-id="aa">aa</a>
+        <a href="javascript:;" data-id="bb">bb</a>
+        <a href="javascript:;" data-id="cc">cc</a></div>
+</script>
+<script id="tpl3" type="text/html">
+    <div class="title">template ccc
+        <a href="javascript:;" data-id="aa">aa</a>
+        <a href="javascript:;" data-id="bb">bb</a>
+        <a href="javascript:;" data-id="cc">cc</a></div>
+</script>
 </body>
 </html>
