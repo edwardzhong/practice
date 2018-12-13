@@ -24,6 +24,7 @@
 * [实现defer的功能](https://github.com/edwardzhong/practice/blob/master/defer.html)
 * [实现requireJs的功能](https://github.com/edwardzhong/practice/blob/master/require.html)
 * [history实现单页面应用](https://github.com/edwardzhong/practice/blob/master/historyapp.html)
+* [hashchange实现无刷新切换](https://github.com/edwardzhong/practice/blob/master/hashchange.html)
 * [jquery研究](https://github.com/edwardzhong/practice/blob/master/jquery.html)
 * [JavaScript语言精髓与编程实践技巧](https://github.com/edwardzhong/practice/blob/master/JavaScript_study_practice.html)
 * [indexDB的实践](https://github.com/edwardzhong/practice/blob/master/indexDB.html)
