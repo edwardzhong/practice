@@ -139,8 +139,7 @@
 
 	// 函数节流, 函数频繁调用场景
 	var throttle=function(fn,interval){
-		var self=fn,
-			timer=null,
+		var timer=null,
 			firstTime=true;//是否第一次调用
 
 		return function(){
@@ -148,7 +147,7 @@
 				me=this;
 				
 			if(firstTime){//第一次不需要延迟
-				self.apply(me,args);
+				fn.apply(me,args);
 				return firstTime=false;
 			}
 
@@ -157,7 +156,7 @@
 			timer=setTimeout(function() {//延迟一段时间执行
 				clearTimeout(timer);
 				timer=null;
-				self.apply(me,args);
+				fn.apply(me,args);
 			}, interval||500);
 		}
 	};

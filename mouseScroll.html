@@ -32,13 +32,10 @@ var scrollFunc = function(e) {
         } else if (e.detail) { //Firefox
             t2.value = e.detail;
         }
-        ScrollText(direct);
     }
     /*注册事件*/
-if (document.addEventListener) {
-    document.addEventListener('DOMMouseScroll', scrollFunc, false);
-} //W3C
-window.onmousewheel = document.onmousewheel = scrollFunc; //IE/Opera/Chrome/Safari
+document.addEventListener('mousewheel', scrollFunc, false);
+// window.onmousewheel = document.onmousewheel = scrollFunc; //IE/Opera/Chrome/Safari
 </script>
     
 </body>

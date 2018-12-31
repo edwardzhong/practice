@@ -1,113 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>indexBD应用</title>
-	<script>
-		//IndexedDB
-		var IndexedDB =function(){
-			var myDB={
-				name:'phoneBook',
-				version:2,
-				db:null,
-				table:null
-			};
-			var indexDB=window.indexedDB||window.msIndexedDB||window.mozIndexedDB||window.webkitIndexedDB;
-			var request=indexDB.open(myDB.name,myDB.version);
-			request.onerror=function(event){
-				console.log(event.target);
-			};
-			request.onsuccess=function (event) {
-				myDB.db=event.target.result;
-			};
-			request.onupgradeneeded=function(){
-				myDB.db=event.target.result;
-				if(!myDB.db.objectStoreNames.contains('books')){
-	                var store=myDB.db.createObjectStore('books',{keyPath: 'name'});
-	                //创建索引
-	                store.createIndex('nameIndex','name',{unique:true}); 
-            	}
-            	console.log('DB version changed to '+myDB.version);
-			};
-			var _showData=function(d){
-				$('#ul').empty();
-				var lis='',i,len=d.length;
-				for(i=0;i<len;i++){
-					lis+='<li>name:'+d[i].name+' phone:'+d[i].phone+'<li>';
-				}
-				$('#ul').append(lis);
-			};
-			return {
-				closeDB:function(){myDB.close()},
-				deleteDB:function(dbName) {
-					indexedDB.deleteDatabase(dbName);
-				},
-				clearTable:function(){
-					var store=myDB.db.transaction('books','readwrite').objectStore('books');
-					store.clear();
-				},
-				deleteTable:function(){
-					if(myDB.db.objectStoreNames.contains('books')){ 
-                    db.deleteObjectStore('books'); 
-					}
-				},
-				// add:function(name,phone){
-    //     			var store=myDB.db.transaction('books','readwrite').objectStore('books'); 
-    //     			store.add({name:name,phone:phone});
-				// },
-				save:function(name,phone) {
-        			var store=myDB.db.transaction('books','readwrite').objectStore('books'); 
-					var request=store.get(name);//根据键值查找
-					request.onsuccess=function (evt) {
-						var book=evt.target.result;//存在则更新,否则新增
-						if(book){
-							book.phone=phone;
-							store.put(book);	
-						}else{
-							store.add({name:name,phone:phone});
-						}
-					}
-				},
-				search:function (name) {
-		            var store=myDB.db.transaction('books').objectStore('books'); 
-		            var request=null,
-		            cursor=null,
-		            arr=[];
-		            if(!name){//使用游标查找全部
-			            store.openCursor().onsuccess = function(event) {
-			            	cursor=event.target.result;
-			            	if(cursor){
-			            		arr.push(cursor.value);
-			            		cursor.continue();
-			            	}else{
-			            		_showData(arr);
-			            		console.log('no more entries!');
-			            	}
-			            }
-		            }else{
-			            var index = store.index("nameIndex");//根据索引查找
-			            index.get(name).onsuccess=function(evt){
-			                var user=evt.target.result;
-			                if(!user){return;}
-			                _showData([user]);
-			            }
-		            }
-		        },
-		        delete:function (name) {
-        			var store=myDB.db.transaction('books','readwrite').objectStore('books'); 
-					var request=store.get(name);
-					request.onsuccess=function (evt) {
-						var book=evt.target.result;//存在则删除
-						if(book){
-							store.delete(name);	
-						}
-					}
-		        }
-		    }
-		}();
-	</script>
+<meta charset="UTF-8">
+<title>单例模式</title>
+<script>
+//单例模式
+var singleton = {
+        name : value,
+        method : function () { //这里是方法的代码
+    } 
+};
+
+//当单例需要初始化和需要维护其私有变量时
+var application = function(){
+    //私有变量和函数
+    var components = new Array();
+    //初始化
+    components.push(new BaseComponent());
+    //公共 
+    return {
+        getComponentCount : function(){
+            return components.length;
+        },
+        registerComponent : function(component){
+            if (typeof component == "object"){
+                components.push(component);
+            }
+        }
+    };
+}();
+</script>
 </head>
 <body>
-	
+	<ul id="ul"></ul>
 </body>
 </html>

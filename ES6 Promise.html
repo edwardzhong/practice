@@ -19,8 +19,15 @@
 		});
 	}
 
-	// 把value转换成Promise。一般用来把一个对象方便转换成Promise实例对象。
-	let pm3=Promise.resolve(99);
+	// 把value转换成Promise,一般用来把一个对象方便转换成Promise实例对象。
+	let p3 = Promise.resolve(99);
+	// 等价于
+	p3 = new Promise(resolve => resolve(99))
+
+	const p4 = Promise.reject('出错了');
+	// 等同于
+	const p4 = new Promise((resolve, reject) => reject('出错了'))
+
 
 	// 下一个then接受前一个then中的返回值
 	promise1().then(function(ret){
@@ -44,14 +51,14 @@
 	// 	console.log(err);
 	// });
 
-	pm3.then(function(ret){console.log(ret);});
 
 	// Promise.all并行执行 promise2里面有错误，所以整个表达式都不成功
-	Promise.all([promise1(),promise2(),pm3]).then(function(ret){
+	Promise.all([promise1(),promise2(),p3,p4]).then(function(ret){
 		console.log(ret);
 	}).catch(function(err){
 		console.log(err);
 	});
+
 	// Promise.race状态由参数中的第一个改变状态的Promise实例对象的状态决定(正如它的名字一样，race-比赛，胜者为王！) pm3为第一个改变状态的promise对象，所以该表达式为fulfilled状态
 	Promise.race([promise1(),pm3,promise2()]).then(function(ret){
 		console.log(ret);
@@ -59,6 +66,16 @@
 		console.log(err);
 	});
 		
+
+	// 加载图片,我们可以将图片的加载写成一个Promise，一旦加载完成，Promise的状态就发生变化。
+	const preloadImage = function (path) {
+		return new Promise(function (resolve, reject) {
+			const image = new Image();
+			image.onload  = resolve;
+			image.onerror = reject;
+			image.src = path;
+		});
+	};
 
 	// 提交表单
 	function submitForm(val){

@@ -84,10 +84,10 @@ Observer.prototype = {
         }
     },
     one: function(name, fn) {
-        var self = this;
-        self.add(name, function() {
+        var that = this;
+        that.bind(name, function() {
             fn.apply(this, [].slice.call(arguments));
-            self.unbind(name, arguments.callee);
+            that.unbind(name, arguments.callee);
         });
     },
     fire: function() {
@@ -110,8 +110,8 @@ var addCssRule = function() {
     // 创建一个 style， 返回其 stylesheet 对象
     // 注意：IE6/7/8中使用 style.stylesheet/addRule，其它浏览器 style.sheet/insertRule
     var sheet = function() {
-        var head = document.head || document.getElementsByTagName('head')[0];
-        var style = document.createElement('style');
+        var head = document.head || document.getElementsByTagName('head')[0],
+            style = document.createElement('style');
         style.type = 'text/css';
         head.appendChild(style);
         return style.sheet;
@@ -224,25 +224,6 @@ function checkPassword(val) {
     return false;
 }
 
-//转换为n位小数
-function roundTo(num, n) {
-    var f = parseFloat(num);
-    if (isNaN(f)) {
-        return '';
-    }
-    var m = Math.pow(10, n);
-    f = Math.round(f * m) / m;
-    var s = f.toString();
-    var rs = s.indexOf('.');
-    if (rs < 0) {
-        rs = s.length;
-        s += '.';
-    }
-    while (s.length <= rs + n) {
-        s += '0';
-    }
-    return s;
-}
 /**
  * 获取 a~b 区间的随机数
  * @param {Number} a 
@@ -301,11 +282,12 @@ function getUrlParamByName(name) {
 }
 
 //通过原型继承 继承父对象
-function inherits(child, parent) {
-    var f = function() {};
+function inherit(parent,child){
+    var f = function(){};
     f.prototype = parent.prototype;
     child.prototype = new f();
-    child.prototype.constructor = child; //注意修正constructor
+    child.prototype.constructor = child;//注意修正constructor
+    return child;
 }
 
 //克隆对象
@@ -559,9 +541,9 @@ function wordCount(data) {
 
 //实现bind的功能
 Function.prototype.myBind = function(obj) {
-    var self = this;
+    var that = this;
     return function() {
-        return self.apply(obj, [].slice.call(arguments));
+        return that.apply(obj, [].slice.call(arguments));
     }
 }
 
