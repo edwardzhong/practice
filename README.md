@@ -3,6 +3,7 @@
 * [pc版轮播图1](https://github.com/edwardzhong/practice/blob/master/slidePic.html)
 * [pc版轮播图2](https://github.com/edwardzhong/practice/blob/master/slidePic2.html)
 * [pc版轮播图3](https://github.com/edwardzhong/practice/blob/master/slidePic3.html)
+* [css3轮播图4](https://github.com/edwardzhong/practice/blob/master/slidePic4.html)
 * [触摸版焦点图/跑马灯](https://github.com/edwardzhong/practice/blob/master/marquee.html)
 * [模仿IScroll效果](https://github.com/edwardzhong/practice/blob/master/iscroll.html)
 * [模仿swipe,tap点击](https://github.com/edwardzhong/practice/blob/master/swipe.html)
@@ -19,6 +20,7 @@
 * [简单烟花效果](https://github.com/edwardzhong/practice/blob/master/smoke.html)
 * [实现3D标签云](https://github.com/edwardzhong/practice/blob/master/3dtags.html)
 * [纯CSS导航栏下划线跟随效果](https://github.com/edwardzhong/practice/blob/master/underlineEffect.html)
+* [box-shadow](https://github.com/edwardzhong/practice/blob/master/boxshadow.html)
 
 ### 学习
 * [实现defer的功能](https://github.com/edwardzhong/practice/blob/master/defer.html)
