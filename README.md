@@ -43,6 +43,8 @@
 * [简单模板引擎](https://github.com/edwardzhong/practice/blob/master/tempjs.html)
 * [简单运动框架](https://github.com/edwardzhong/practice/blob/master/js/Animate.js)
 * [鼠标滚轮](https://github.com/edwardzhong/practice/blob/master/mouseScroll.html)
+* [触摸手势](https://github.com/edwardzhong/practice/blob/master/gestures.html)
+
 
 ### 布局
 1. [基本自适应布局](https://github.com/edwardzhong/practice/blob/master/layout/基本自适应布局.html)
