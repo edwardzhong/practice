@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>hashchange实现无刷新切换</title>
+<meta charset="UTF-8">
+<title>hashchange实现无刷新切换</title>
 </head>
 <body>
 <script>
-    var firstLoad=true,
-    Actions={
-        about:function(){},
-        notice:function(){},
-        private:function(){},
-        account:function(){},
-        black:function(){}
-    };
-        
-    function selectHash(hash){
+    var firstLoad = true,
+        Actions = {
+            about: function () { },
+            notice: function () { },
+            private: function () { },
+            account: function () { },
+            black: function () { }
+        };
+
+    function selectHash(hash) {
         if (location.hash.substr(1) != hash) {
             location.hash = hash;
             return;
         }
-        var args=hash.split('/');
-        var actionName=args[0];
+        var args = hash.split('/');
+        var actionName = args[0];
         if (!actionName || !(actionName in Actions)) {
             selectHash('notice');
         } else {
             activePage(actionName);
-            Actions[actionName].apply(this,args);
-            firstLoad=false;
+            Actions[actionName].apply(this, args);
+            firstLoad = false;
         }
     }
 
-    function activePage(name){
-        var page = $('.pages .'+name);
+    function activePage(name) {
+        var page = $('.pages .' + name);
         page.show().siblings().hide();
-        $('.nav [data-tag='+name+']').addClass('active').siblings('.active').removeClass('active');
+        $('.nav [data-tag=' + name + ']').addClass('active').siblings('.active').removeClass('active');
     }
 
-    $(window).on('hashchange', function(e) {
+    $(window).on('hashchange', function (e) {
         selectHash(location.hash.replace('#', ''));
     });
 
