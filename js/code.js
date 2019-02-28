@@ -172,7 +172,6 @@ var animationend = function() {
 /**
  * 获取transitionend名称
  */
-
 var transitionEnd = (function() {
     var el = document.createElement('bootstrap'),
         transEndEventName = {
@@ -290,6 +289,25 @@ function inherit(parent,child){
     return child;
 }
 
+/**
+ * 深拷贝
+ * @param {Object} p 
+ * @param {Object} c 
+ */
+function deepCopy(p, c){
+    if (null == p || "object" != typeof p) return p;
+    var c = c || {};
+    for( var i in p){
+        if(typeof p[i] === 'object') {
+            c[i] = (p[i].constructor === Array) ? [] : {};
+            deepCopy(p[i], c[i]);
+        } else if(typeof p[i] === 'function'){
+            c[i] = p[i].prototype.constructor;
+        } else c[i] = p[i];
+    }
+    return c;
+}
+
 //克隆对象
 function cloneObj(obj) {
     // Handle the 3 simple types, and null or undefined
@@ -321,66 +339,6 @@ function cloneObj(obj) {
     }
 
     throw new Error("Unable to copy obj! Its type isn't supported.");
-}
-
-
-//Object转换为json
-function objToJson(o) {
-    function getVal(obj) {
-        var val = '';
-        var type = typeof obj;
-        switch (type) {
-            case 'string':
-                val = '"' + obj + '"';
-                break;
-            case 'number':
-                val = obj;
-                break;
-            case 'boolean':
-                val = obj;
-                break;
-            case 'object':
-                val = toJson(obj);
-                break;
-            default:
-                break;
-        }
-        return val;
-    }
-
-    function f(n) {
-        return n < 10 ? '0' + n : n;
-    }
-
-    function toJson(obj) {
-        var json = '';
-        if (typeof obj != 'object') {
-            return json;
-        }
-        var i, len, v, arr = [];
-        if (obj instanceof Array) {
-            for (i = 0, len = obj.length; i < len; i++) {
-                arr.push(getVal(obj[i]));
-            }
-            arr.join(',');
-            json = '[' + arr.join(',') + ']';
-        } else if (obj instanceof Date) {
-            json = isFinite(obj.valueOf()) ? obj.getUTCFullYear() + '-' +
-                f(obj.getUTCMonth() + 1) + '-' +
-                f(obj.getUTCDate()) + 'T' +
-                f(obj.getUTCHours()) + ':' +
-                f(obj.getUTCMinutes()) + ':' +
-                f(obj.getUTCSeconds()) + '.' +
-                obj.getUTCMilliseconds() + 'Z' : null;
-        } else {
-            for (var v in obj) {
-                arr.push('"' + v + '":' + getVal(obj[v]));
-            }
-            json = '{' + arr.join(',') + '}';
-        }
-        return json;
-    }
-    return toJson(o);
 }
 
 /**
@@ -921,8 +879,8 @@ var MyLib = {
     },
     //将word-word转为wordWord
     camelize: function(s) {
-        return s.replace(/\-(\w)/g, function(strMatch, p1) {
-            return p1.toUpperCase();
+        return s.replace(/\-(\w)/g, function(strMatch, p) {
+            return p.toUpperCase();
         });
     },
     //将wordWord转为word-word
