@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mvvm</title>
+</head>
+<body>
+<div id="vm">
+    <input type="text" v-model="name">
+    <div>{{name}}</div>
+    <button v-click="say">sayhi</button>
+</div>
+<script>
+const mvvm = {
+    define(id,factory){
+        let scope = {};
+		//收集所有定义
+		factory(scope);
+        let model = modelFactory(scope);
+        factory(model); 
+    },
+    scan(id){
+
+    }
+}
+
+function modelFactory(scope) {
+    let vModel = {}; //真正的视图模型对象
+    let oModel = {}; //原始模型数据
+    let normalProperties = {} //普通属性       
+    let accessingProperties = {}; //监控属性,转化成set get访问控制器
+
+    for(let [k,v] in Object.entries(scope)){
+        oModel[k] = v;
+        if(typeof v == 'function'){
+            normalProperties[k] = v;
+        } else { //监控属性
+            accessingProperties[k] = createAccess(k,oModel);
+        }
+    }
+
+    //转成访问控制器
+    vModel = Object.defineProperties(vModel, withValue(accessingProperties));
+
+    return vModel
+}
+
+//创建对象访问规则
+function withValue(access) {
+	var descriptors = {}
+	for (var i in access) {
+		descriptors[i] = {
+			get: access[i],
+			set: access[i],
+			enumerable: true,
+			configurable: true
+		}
+	}
+	return descriptors
+}
+
+function createAccess(name,oModel){
+    let preValue = oModel[name];
+    let accessor = function(newValue) {
+        if (arguments.length) { //set
+            if(newValue !== preValue){
+                oModel[name] = newValue;
+                notifySubscribers(accessor);
+            }
+        } else {//get
+            collectSubscribers(accessor);
+            return preValue;
+        }
+    }
+    return accessor;
+}
+
+function collectSubscribers(accessor) {
+	if (Registry[expose]) { //只有当注册了才收集
+		var list = accessor[subscribers]
+		list && ensure(list, Registry[expose]) //只有数组不存在此元素才push进去
+	}
+}
+
+
+function notifySubscribers(accessor) {
+	var list = accessor[subscribers]
+	if (list && list.length) {
+		var args = [].slice.call(arguments, 1)
+		for (var i = list.length, fn; fn = list[--i];) {
+			var el = fn.element
+			fn.handler(fn.evaluator.apply(0, fn.args || []), el, fn)
+		}
+	}
+}
+    
+
+
+var book = {};
+Object.defineProperties(book, {
+    year: {
+        get: function(){
+            return this._year;
+        },
+        set: function(newValue){
+            this._year = newValue;
+        },
+        enumerable:true
+    }
+});
+
+setTimeout(function(){
+    book.year = 2019;
+},2000);
+
+</script>
+</body>
+</html>

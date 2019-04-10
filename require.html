@@ -1,235 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>requireJs</title>
+<meta charset="UTF-8">
+<title> 实现requirejs</title>
 </head>
 <body>
 <script>
-	(function(){
-		var config={
-			alias:{
-				'a':'a.js',
-				'b':'b.js',
-				'c':'c.js'
+	(function () {
+		var config = {
+			alias: {
+				'a': 'a.js',
+				'b': 'b.js',
+				'c': 'c.js'
 			}
 		};
 		var head = document.head || document.getElementsByTagName("head")[0]; //HEAD元素
 		var moduleClass = "require" + (new Date - 0);
 		var rmakeid = /(#.+|\W)/g; //用于处理掉href中的hash与所有特殊符号，生成长命名空间
-	    (function() {
-	        var cur = getCurrentScript(true);
-	        if (!cur) {//处理window safari的Error没有stack的问题
-	            cur = $.slice(document.scripts).pop().src;
-	        }
-	        var url = cur.replace(/[?#].*/, "");
-	        config.basepath=url.slice(0, url.lastIndexOf("/") + 1);
-	    })();
-		var factorys=[];
-		var modules={};
-		var loadings=[];
+		(function () {
+			var cur = getCurrentScript(true);
+			if (!cur) {//处理window safari的Error没有stack的问题
+				cur = $.slice(document.scripts).pop().src;
+			}
+			var url = cur.replace(/[?#].*/, "");
+			config.basepath = url.slice(0, url.lastIndexOf("/") + 1);
+		})();
+		var factorys = [];
+		var modules = {};
+		var loadings = [];
 
-		window.require=function(list,factory,parent){
-			var deps={},
-				args=[],
-				dn=0,
-				cn=0,
-				url='',
+		window.require = function (list, factory, parent) {
+			var deps = {},
+				args = [],
+				dn = 0,
+				cn = 0,
+				url = '',
 				id = parent || "callback" + setTimeout("1");
-			String(list).replace(/[^\,\s]+/g, function(el) {
-				url=config.alias[el]||config.basepath+el;//js路径
-				if(!modules[url]){
-					modules[url]={
-						id:url
+			String(list).replace(/[^\,\s]+/g, function (el) {
+				url = config.alias[el] || config.basepath + el;//js路径
+				if (!modules[url]) {
+					modules[url] = {
+						id: url
 					};
 					loadJS(url);
 				}
 				dn++;
-				if(modules[url]&&modules[url].state==2){
+				if (modules[url] && modules[url].state == 2) {
 					cn++;
 				}
-				if(!deps[url]){
+				if (!deps[url]) {
 					args.push(url);
-					deps[url]='jeff';
+					deps[url] = 'jeff';
 				}
 			});
 			modules[id] = {//创建一个对象,记录模块的加载情况与其他信息
-	            id: id,
-	            factory: factory,
-	            deps: deps,
-	            args: args,
-	            state: 1
-	        };
-	        if(dn==cn){//当没有依赖模块的时候，则dn=cn=0，也会执行
-	        	fireFactory(id,args,factory);
-	        } else {
-	        	loadings.unshift(id);
-	        }
-	        checkDeps();
+				id: id,
+				factory: factory,
+				deps: deps,
+				args: args,
+				state: 1
+			};
+			if (dn == cn) {//当没有依赖模块的时候，则dn=cn=0，也会执行
+				fireFactory(id, args, factory);
+			} else {
+				loadings.unshift(id);
+			}
+			checkDeps();
 		};
 
 		//js加载完成后则执行define
-		window.define=function(id,deps,factory){
-			var args=[].slice.call(arguments), _id='';
-			if(typeof id==='string'){
-				_id=args.shift();
+		window.define = function (id, deps, factory) {
+			var args = [].slice.call(arguments), _id = '';
+			if (typeof id === 'string') {
+				_id = args.shift();
 			}
-			if(typeof args[0]==='function'){
+			if (typeof args[0] === 'function') {
 				args.unshift([]);
 			}
 			id = modules[id] && modules[id].state >= 1 ? _id : getCurrentScript();
-			factory=args[1];
-			factory.id=_id;
-			factory.delay=function(id){
+			factory = args[1];
+			factory.id = _id;
+			factory.delay = function (id) {
 				args.push(id);
-	            var isCycle = true;
-	            try {
-	               isCycle = checkCycle(modules[id].deps, id);
-	            } catch (e) {}
+				var isCycle = true;
+				try {
+					isCycle = checkCycle(modules[id].deps, id);
+				} catch (e) { }
 
-	            if (isCycle) {
-	                throw new Error(id + "模块与之前的某些模块存在循环依赖");
-	            }
+				if (isCycle) {
+					throw new Error(id + "模块与之前的某些模块存在循环依赖");
+				}
 
-	            delete factory.delay; //释放内存
-	            require.apply(null, args); //如果deps为空，则进入require触发fireFactory，否则在require进行loadJS加载依赖模块
+				delete factory.delay; //释放内存
+				require.apply(null, args); //如果deps为空，则进入require触发fireFactory，否则在require进行loadJS加载依赖模块
 			};
 
 			if (id) {
 				factory.delay(id, args);
-	        } else {
-	        	factorys.push(factory);
-	        }
+			} else {
+				factorys.push(factory);
+			}
 		};
 
-		function checkDeps(){
-			loop: for (var i = loadings.length, id; id = loadings[--i]; ) {
-	            var obj = modules[id], deps = obj.deps;
-	            for (var key in deps) {
-	                if (Object.prototype.hasOwnProperty.call(deps, key) && modules[key].state !== 2) {
-	                    continue loop;
-	                }
-	            }
-	            //如果obj的deps是空对象或者其依赖的模块的状态都是2,同时该module还没安装，则使用fireFactory进行安装
-	            if (obj.state !== 2) {
-	                loadings.splice(i, 1); //必须先移除再安装，防止在IE下DOM树建完后手动刷新页面，会多次执行它
-	                fireFactory(obj.id, obj.args, obj.factory);
-	                checkDeps();//如果成功,则再执行一次,以防有些模块就差本模块没有安装好
-	            }
-	        }
+		function checkDeps() {
+			loop: for (var i = loadings.length, id; id = loadings[--i];) {
+				var obj = modules[id], deps = obj.deps;
+				for (var key in deps) {
+					if (Object.prototype.hasOwnProperty.call(deps, key) && modules[key].state !== 2) {
+						continue loop;
+					}
+				}
+				//如果obj的deps是空对象或者其依赖的模块的状态都是2,同时该module还没安装，则使用fireFactory进行安装
+				if (obj.state !== 2) {
+					loadings.splice(i, 1); //必须先移除再安装，防止在IE下DOM树建完后手动刷新页面，会多次执行它
+					fireFactory(obj.id, obj.args, obj.factory);
+					checkDeps();//如果成功,则再执行一次,以防有些模块就差本模块没有安装好
+				}
+			}
 		}
 
 		//检测是否存在循环依赖
-	    function checkCycle(deps, nick) {
-	        for (var id in deps) {
-	            if (deps[id] === "jeff" && modules[id].state !== 2 && (id === nick || checkCycle(modules[id].deps, nick))) {
-	                return true;
-	            }
-	        }
-	        return false;
-	    }
+		function checkCycle(deps, nick) {
+			for (var id in deps) {
+				if (deps[id] === "jeff" && modules[id].state !== 2 && (id === nick || checkCycle(modules[id].deps, nick))) {
+					return true;
+				}
+			}
+			return false;
+		}
 
 		function fireFactory(id, deps, factory) {
-			for(var i=0,arr=[],d;d = deps[i++];){
+			for (var i = 0, arr = [], d; d = deps[i++];) {
 				arr.push(modules[d].exports);
 			}
 
-	        var module = Object(modules[id]),
-	            ret = factory.apply(null,arr);
-	        module.state = 2;
-	        if (ret !== void 0) {//有返回结果，则赋值到exports
-	            modules[id].exports = ret;
-	        }
-	        return ret;
+			var module = Object(modules[id]),
+				ret = factory.apply(null, arr);
+			module.state = 2;
+			if (ret !== void 0) {//有返回结果，则赋值到exports
+				modules[id].exports = ret;
+			}
+			return ret;
 		}
 
 		/**
 		 * 获取当前文件的路径
 		 */
-	    function getCurrentScript(base) {
-	        // 参考 https://github.com/samyk/jiagra/blob/master/jiagra.js
-	        var stack;
-	        try {
-	            a.b.c(); //强制报错,以便捕获e.stack
-	        } catch (e) { //safari的错误对象只有line,sourceId,sourceURL
-	            stack = e.stack;
-	            if (!stack && window.opera) {
-	                //opera 9没有e.stack,但有e.Backtrace,但不能直接取得,需要对e对象转字符串进行抽取
-	                stack = (String(e).match(/of linked script \S+/g) || []).join(" ");
-	            }
-	        }
-	        if (stack) {
-	            stack = stack.split(/[@ ]/g).pop(); //取得最后一行,最后一个空格或@之后的部分
-	            stack = stack[0] === "(" ? stack.slice(1, -1) : stack.replace(/\s/, ""); //去掉换行符
-	            return stack.replace(/(:\d+)?:\d+$/i, ""); //去掉行号与或许存在的出错字符起始位置
-	        }
-	        var nodes = (base ? document : head).getElementsByTagName("script"); //只在head标签中寻找
-	        for (var i = nodes.length, node; node = nodes[--i]; ) {
-	            if ((base || node.className === moduleClass) && node.readyState === "interactive") {
-	                return node.className = node.src;
-	            }
-	        }
-	    }
+		function getCurrentScript(base) {
+			// 参考 https://github.com/samyk/jiagra/blob/master/jiagra.js
+			var stack;
+			try {
+				a.b.c(); //强制报错,以便捕获e.stack
+			} catch (e) { //safari的错误对象只有line,sourceId,sourceURL
+				stack = e.stack;
+				if (!stack && window.opera) {
+					//opera 9没有e.stack,但有e.Backtrace,但不能直接取得,需要对e对象转字符串进行抽取
+					stack = (String(e).match(/of linked script \S+/g) || []).join(" ");
+				}
+			}
+			if (stack) {
+				stack = stack.split(/[@ ]/g).pop(); //取得最后一行,最后一个空格或@之后的部分
+				stack = stack[0] === "(" ? stack.slice(1, -1) : stack.replace(/\s/, ""); //去掉换行符
+				return stack.replace(/(:\d+)?:\d+$/i, ""); //去掉行号与或许存在的出错字符起始位置
+			}
+			var nodes = (base ? document : head).getElementsByTagName("script"); //只在head标签中寻找
+			for (var i = nodes.length, node; node = nodes[--i];) {
+				if ((base || node.className === moduleClass) && node.readyState === "interactive") {
+					return node.className = node.src;
+				}
+			}
+		}
 
-	    /**
-	     * 加载js
-	     * @param    {[type]}                 url      [description]
-	     * @param    {Function}               callback [description]
-	     */
-	    function loadJS(url,callback){
-	    	var fn=function(){
-	    		var factory = factorys.pop();
-                factory && factory.delay(node.src);
-                callback && callback();
-                console.log('load success '+url);
-	    	},
-	    	script=document.createElement('script');
-	    	script.type="text/javascript";
-	    	script.className = moduleClass; //让getCurrentScript只处理类名为moduleClass的script节点
-	    	if(script.readyState){
-	    		script.onreadystatechange=function(){
-	    			if(/loaded|complete/i.test(script.readyState)){
-	    				fn();
-	    				script.onreadystatechange=null;
-	    			}
-	    		}
-	    	} else {
-	    		script.onload=function(){
-	    			fn();
-	    			script.onload = null;
-	    		}
-	    	}
-	    	script.src=url;
-	    	document.getElementsByTagName("head")[0].appendChild(script);
-	    	console.log('ready to load '+url);
-	    }
+		/**
+		 * 加载js
+		 * @param    {[type]}                 url      [description]
+		 * @param    {Function}               callback [description]
+		 */
+		function loadJS(url, callback) {
+			var fn = function () {
+				var factory = factorys.pop();
+				factory && factory.delay(node.src);
+				callback && callback();
+				console.log('load success ' + url);
+			},
+				script = document.createElement('script');
+			script.type = "text/javascript";
+			script.className = moduleClass; //让getCurrentScript只处理类名为moduleClass的script节点
+			if (script.readyState) {
+				script.onreadystatechange = function () {
+					if (/loaded|complete/i.test(script.readyState)) {
+						fn();
+						script.onreadystatechange = null;
+					}
+				}
+			} else {
+				script.onload = function () {
+					fn();
+					script.onload = null;
+				}
+			}
+			script.src = url;
+			document.getElementsByTagName("head")[0].appendChild(script);
+			console.log('ready to load ' + url);
+		}
 
-	    function loadCSS(url) {
-	        //通过link节点加载模块需要的CSS文件
-	        var id = url.replace(rmakeid, "");
-	        if (!document.getElementById(id)) {
-	            var node = document.createElement("link");
-	            node.rel = "stylesheet";
-	            node.href = url;
-	            node.id = id;
-	            head.insertBefore(node, head.firstChild);
-	        }
-	    }
+		function loadCSS(url) {
+			//通过link节点加载模块需要的CSS文件
+			var id = url.replace(rmakeid, "");
+			if (!document.getElementById(id)) {
+				var node = document.createElement("link");
+				node.rel = "stylesheet";
+				node.href = url;
+				node.id = id;
+				head.insertBefore(node, head.firstChild);
+			}
+		}
 
-  		//分析module的依赖关系
-  		function parseDependencies(code) {
-  			var commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg;
-  			var cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g;
-  			var ret = [];
-  			code.replace(commentRegExp, "").replace(cjsRequireRegExp, function(match, dep) {
-  				dep && ret.push(parseVars(dep));
-  			})
-  			return ret;
-  		}
+		//分析module的依赖关系
+		function parseDependencies(code) {
+			var commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg;
+			var cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g;
+			var ret = [];
+			code.replace(commentRegExp, "").replace(cjsRequireRegExp, function (match, dep) {
+				dep && ret.push(parseVars(dep));
+			})
+			return ret;
+		}
 	}());
 </script>
 <script>
-	require('a.js,c.js',function(a,c){
+	require('a.js,c.js', function (a, c) {
 		a();
 		c();
 	});

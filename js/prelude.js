@@ -191,11 +191,8 @@ function stringFormat(str, ...args) {
 }
 
 //密码必须包含数字,字母,符号
-function checkPassword(val) {
-    var rega = /[a-zA-Z]+/;
-    var regb = /\d+/;
-    var regc = /[\W\_]+/;
-    if (rega.test(val) && regb.test(val) && regc.test(val)) {
+function checkPass(val) {
+    if (/^(?=.*?\d)(?=.*?[a-zA-Z])(?![a-zA-Z\d]+$).+$/.test(val)) {
         return true;
     }
     return false;
@@ -239,7 +236,7 @@ function RandomColor() {
 //增强版取URL中的参数
 function getUrlParams(url) {
     var search = url || location.search,
-        reg = new RegExp('([^\\?\\&\\=]+)\\=([^\\?\\&\\=]*)', 'g'),
+        reg = new RegExp('([^?&=]+)=([^?&=]*)', 'g'),
         match = null,
         ret = {};
 
