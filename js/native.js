@@ -317,18 +317,18 @@ var native = {
         }
     },
     //同时查找每个节点的属性
-    walkTheDOMWithAttributes: function (node, func, depth, returnedFromParent) {
+    walkDOMWithAttributes: function (node, depth, fn, owner) {
         var root = node || window.document;
-        returnedFromParent = func(root, depth++, returnedFromParent);
+        fn(root, depth++, owner);
         if (root.attributes) {
-            for (var i = 0; i < attributes.length; i++) {
-                walkTheDOMWithAttributes(root.attributes[i], func, depth - 1, returnedFromParent);
+            for (var i = 0; i < root.attributes.length; i++) {
+                walkDOMWithAttributes(root.attributes[i], depth - 1, fn, root);
             }
         }
-        if (root.nodeType != NODE.ATTRIBUTE_NODE) {
+        if (root.nodeType != 2) {
             node = root.firstChild;
             while (node) {
-                walkTheDOMWithAttributes(node, func, depth, returnedFromParent);
+                walkDOMWithAttributes(node, depth, fn, node);
                 node = node.nextSibling;
             }
         }

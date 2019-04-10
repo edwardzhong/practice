@@ -23,6 +23,7 @@
 * [box-shadow](https://github.com/edwardzhong/practice/blob/master/boxshadow.html)
 
 ### 学习
+* [实现mvvm](https://github.com/edwardzhong/practice/blob/master/mvvm.html)
 * [实现defer的功能](https://github.com/edwardzhong/practice/blob/master/defer.html)
 * [实现requireJs的功能](https://github.com/edwardzhong/practice/blob/master/require.html)
 * [history实现单页面应用](https://github.com/edwardzhong/practice/blob/master/historyapp.html)
