@@ -26,30 +26,37 @@
 <body>
     <div id="vm" data-ctr="ctr">
         <input data-model="name" />
+        <input type="text" data-model="age">
         <div>{{ name }}</div>
+        <div>{{ age }}</div>
         <button data-click="say">sayhi</button>
     </div>
 <script>
     // 使用 Object.defineProperties 原理实现 mvvm 双向数据流动，非常简单饿样例
     // data-model : 双向绑定属性
     // {{xxx}} : 监控属性
-    var subscribers = {};//更新html的视图依赖
-    var model = {};//视图get/set对象
+    var SUBSCRIBE = {};//更新 html 的视图依赖
+    var VMODEL = {};//视图get/set对象
     const mvvm = {
-        define(id, factory) {
+        define(name, factory) {
             let scope = {};
             //收集所有定义
             factory(scope);
-            model = modelFactory(scope);
+            model = modelFactory(name,scope);
             factory(model);
+            model._id = name;
+            VMODEL[name] = model;
         },
-        scan(id) { // 扫描html，收集依赖
+        scan(id) { // 扫描html,收集依赖, 执行绑定
             let root = document.getElementById("vm");
-            walkAttributes(root,function( node,owner) {
+            let model = {};
+            let sub = {};
+            walkAttributes(root,function(node, owner) {
                 if(node.nodeType == 2){ //属性
-                    // if(node.name == 'data-ctr'){// 需要根据控制器名称区分视图对象
-                    //     subscribers[node.value] = {};
-                    // } 
+                    if(node.name == 'data-ctr'){// 需要根据控制器名称区分视图对象
+                        sub = SUBSCRIBE[node.value] = {};
+                        model = VMODEL[node.value];
+                    } 
                     if(node.name == 'data-model') { // 事件关联视图set
                         // input text|password|...
                         owner.oninput = function (e){
@@ -65,16 +72,16 @@
                 } 
                 if( node.nodeType == 1 && !node.childElementCount && /{{([^}]+)}}/.test(node.innerText)) { //文本节点
                     let name = RegExp.$1.trim();
-                    subscribers[name] = function(val){
+                    sub[name] = function(val){
                         node.innerText = val;
                     }
-                    subscribers[name](model[name]);
+                    sub[name](model[name]);
                 }
             });
         }
     };
 
-    function modelFactory(scope) {
+    function modelFactory(name, scope) {
         let vModel = {}; //真正的视图模型对象
         let sModel = {}; //原始模型数据
         let properties = {}; //监控属性,转化成set get访问控制器
@@ -85,7 +92,7 @@
                 normalProperties[k] = v;
             } else {
                 //监控属性
-                properties[k] = createAccess(k, sModel);
+                properties[k] = createAccess(name, k, sModel);
             }
         }
 
@@ -109,13 +116,13 @@
         return descriptors;
     }
 
-    function createAccess(key, sModel) {
+    function createAccess(name, key, sModel) {
         let preValue = sModel[key];
         let accessor = function(newValue) {
             if (arguments.length) {//set
                 if (newValue !== preValue) {
                     sModel[key] = newValue;
-                    subscribers[key](newValue);
+                    SUBSCRIBE[name][key](newValue);
                 }
             } else { //get
                 return sModel[key];
@@ -144,6 +151,7 @@
     /* === 使用方式 === */
     mvvm.define('ctr',function(vm){
         vm.name = 'alex';
+        vm.age = '16';
         vm.say = function(){
             alert('hello! '+ vm.name);
         }
