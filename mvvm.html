@@ -72,10 +72,11 @@
                 } 
                 if( node.nodeType == 1 && !node.childElementCount && /{{([^}]+)}}/.test(node.innerText)) { //文本节点
                     let name = RegExp.$1.trim();
-                    sub[name] = function(val){
+                    sub[name]=sub[name]||[];
+                    sub[name].push(function(val){
                         node.innerText = val;
-                    }
-                    sub[name](model[name]);
+                    });
+                    sub[name].slice(-1)[0](model[name]);
                 }
             });
         }
@@ -122,7 +123,9 @@
             if (arguments.length) {//set
                 if (newValue !== preValue) {
                     sModel[key] = newValue;
-                    SUBSCRIBE[name][key](newValue);
+                    SUBSCRIBE[name][key].forEach(fn=>{
+                        fn(newValue);
+                    });
                 }
             } else { //get
                 return sModel[key];
