@@ -23,11 +23,15 @@
 * [box-shadow](https://github.com/edwardzhong/practice/blob/master/boxshadow.html)
 
 ### 学习
-* [实现mvvm](https://github.com/edwardzhong/practice/blob/master/mvvm.html)
+* [Object.defineProperties实现mvvm](https://github.com/edwardzhong/practice/blob/master/mvvm.html)
 * [实现defer的功能](https://github.com/edwardzhong/practice/blob/master/defer.html)
 * [实现requireJs的功能](https://github.com/edwardzhong/practice/blob/master/require.html)
 * [history实现单页面应用](https://github.com/edwardzhong/practice/blob/master/historyapp.html)
 * [hashchange实现无刷新切换](https://github.com/edwardzhong/practice/blob/master/hashchange.html)
+* [拖拽上传](https://github.com/edwardzhong/practice/blob/master/dropUpload.html)
+* [html5FileReader的使用](https://github.com/edwardzhong/practice/blob/master/fileReader.html)
+* [鼠标滚轮](https://github.com/edwardzhong/practice/blob/master/mouseScroll.html)
+* [触摸手势](https://github.com/edwardzhong/practice/blob/master/gestures.html)
 * [jquery研究](https://github.com/edwardzhong/practice/blob/master/jquery.html)
 * [JavaScript语言精髓与编程实践技巧](https://github.com/edwardzhong/practice/blob/master/JavaScript_study_practice.html)
 * [indexDB的实践](https://github.com/edwardzhong/practice/blob/master/indexDB.html)
@@ -35,16 +39,12 @@
 * [css3D实现](https://github.com/edwardzhong/practice/blob/master/css3d.html)
 * [css3D和透视](https://github.com/edwardzhong/practice/blob/master/perspective.html)
 * [animation动画steps的应用](https://github.com/edwardzhong/practice/blob/master/animationSteps.html)
-* [拖拽上传](https://github.com/edwardzhong/practice/blob/master/dropUpload.html)
-* [html5FileReader的使用](https://github.com/edwardzhong/practice/blob/master/fileReader.html)
 * [如何数据和界面相分离](https://github.com/edwardzhong/practice/blob/master/ui_data.html)
 * [深入学习表单功能](https://github.com/edwardzhong/practice/blob/master/formStudy.html)
 * [常用代码总结](https://github.com/edwardzhong/practice/blob/master/js/code.js)
 * [三角函数的应用](https://github.com/edwardzhong/practice/blob/master/angle.html)
 * [简单模板引擎](https://github.com/edwardzhong/practice/blob/master/tempjs.html)
 * [简单运动框架](https://github.com/edwardzhong/practice/blob/master/js/Animate.js)
-* [鼠标滚轮](https://github.com/edwardzhong/practice/blob/master/mouseScroll.html)
-* [触摸手势](https://github.com/edwardzhong/practice/blob/master/gestures.html)
 
 
 ### 布局
