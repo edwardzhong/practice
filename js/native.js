@@ -583,25 +583,36 @@ var native = {
         }
         return true;
     },
+    insert: function(node,referenceNode){
+        return referenceNode.parentNode.insertBefore( node, referenceNode);
+    },
     //在node之后插入节点(insertBefore是之前插入)
     insertAfter: function(node, referenceNode) {
         return referenceNode.parentNode.insertBefore( node, referenceNode.nextSibling );
     },
-    //清空该节点下的子节点
-    removeChildren: function(parent) {
-        parent.innerHTML='';
-        // while (parent.firstChild) {
-        //     parent.firstChild.parentNode.removeChild(parent.firstChild);
-        // }
-        return true;
+    //默认的尾部插入
+    append: function(parent,newChild){
+        return parent.appendChild(newChild);
     },
     //从开头开始插入子节点(appendChild是从尾部开始插入)
-    prependChild: function(parent, newChild) {
+    prepend: function(parent, newChild) {
         if (parent.firstChild) {
             parent.insertBefore(newChild, parent.firstChild);
         } else {
             parent.appendChild(newChild);
         }
         return parent;
+    },
+    //删除节点
+    remove: function(node){
+        return node.parentNode.removeChild(node);
+    },
+    //清空该节点下的子节点
+    clear: function(node) {
+        node.innerHTML='';
+        // while (node.firstChild) {
+        //     node.removeChild(node.firstChild);
+        // }
+        return true;
     }
 };

@@ -126,35 +126,39 @@ function toArray(object) {
 }
 
 function isSpace(value) {
-    return /^[\s\n\t]+$/.test(value);
+    return /^[\s\t\r\n]+$/.test(value);
 }
 
 function isAlphaNum(value) {
     return isAlpha(value) || isNumber(value);
 }
 
-function isNumber(value) {
-    return typeof value == 'number';
-}
-
 function isAlpha(value) {
     return /^[a-zA-Z]+$/.test(value);
 }
 
-function isArray(value) {
+function isNumber(value) {
+    return typeof value == 'number';
+}
+
+function isArray(obj) {
     if (typeof Array.isArray === 'function') {
-        return Array.isArray(value);
+        return Array.isArray(obj);
     } else {
-        return Object.prototype.toString.call(value) === "[object Array]";
+        return Object.prototype.toString.call(obj) === "[object Array]";
     }
 }
 
-function isObject(value) {
-    return Object.prototype.toString.call(value) === "[object Object]";
+function isObject(obj) {
+    return type(obj) == "object";
 }
 
 function isString(value) {
     return typeof value == 'string';
+}
+
+function isWindow(obj){
+    return obj && obj == obj.window;
 }
 
 function type(obj) {
@@ -208,7 +212,7 @@ function Random(a, b) {
 }
 
 /**
- * 获取#aabbcc 格式的随机颜色
+ * 获取 #aabbcc 格式的随机颜色
  */
 function RandomColor() {
     var c = Math.floor(Math.random() * 16777216);
