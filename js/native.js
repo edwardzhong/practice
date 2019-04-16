@@ -177,34 +177,44 @@ function deleteKeyFrames(name){
  *来兼容（混杂模式下对document.documentElement.clientWidth不支持）。
  *使用方法 ： getViewPort().width;
  */
-function getViewPort() {
+function getWinSize() {
     return {
         width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
         height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
     };
 }
 
-//获得文档的大小 包括滚动高度（区别于视口）,与上面获取视口大小的方法如出一辙
-function getDocumentPort() {
-    if (document.compatMode == "BackCompat") {
-        return {
-            width: document.body.scrollWidth,
-            height: document.body.scrollHeight
-        };
-    } else {
-        return {
-            width: Math.max( document.documentElement.scrollWidth, document.documentElement.clientWidth ),
-            height: Math.max( document.documentElement.scrollHeight, document.documentElement.clientHeight )
-        };
-    }
+//获得文档的大小 包括滚动高度（区别于视口）,取所有属性中最大值
+function getPageSize() {
+    var root =  document.documentElement;
+    return {
+        width: Math.max( root.scrollWidth, root.clientWidth, root.offsetWidth, document.body.scrollWidth, document.body.offsetWidth ),
+        height: Math.max( root.scrollHeight, root.clientHeight, root.offsetHeight, document.body.scrollHeight, document.body.offsetHeight )
+    };
 }
 
-// 滚动条
-function getScroll() {
+// 滚动条位置
+function getScrollPos() {
     return {
         left: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
         top: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
     };
+}
+
+// 获取元素相对页面的距离
+function offset(node){
+    var pos = {left:0,top:0};
+    var doc = node && node.ownerDocument;
+    if(!doc) return pos;
+    var box = getBoundingClientRect(),
+        root = doc.documentElement,
+        clientLeft = root.clientLeft || 0,
+        clientTop = root.clientTop || 0;
+    var scrollLeft = window.pageXOffset || root.scrollLeft,
+        scrollTop = window.pageYOffset || root.scrollTop;
+    pos.left = box.left + scrollLeft - clientLeft;
+    pos.top = box.top + scrollTop - clientTop;
+    return pos;
 }
 
 //将word-word转为wordWord

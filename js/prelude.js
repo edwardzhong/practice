@@ -357,7 +357,7 @@ function walkDOMRecursive(node, callback, depth) {
  * @param  {String} str [description]
  * @return {String}     [description]
  */
-function htmlEncode(str){  
+function escapeHtml(str){  
     if(!str) return '';
     return str.replace(/&/g,'&amp;')
         .replace(/</g,'&lt;')
@@ -373,14 +373,25 @@ function htmlEncode(str){
  * @param  {String} str [description]
  * @return {String}     [description]
  */
-function htmlDecode (str){  
+function unescapeHtml (str){  
     if(!str) return '';
     return str.replace(/&amp;/g,"&")
         .replace(/&lt;/g,'<')
         .replace(/&gt;/g,'>')
         .replace(/&nbsp;/g,' ')
-        .replace(/&#39;/g,'\'')
-        .replace(/&quot;/g,'\"');
+        .replace(/&quot;/g,'\"')
+        .replace(/&#(\d+);/g,function(m,g){
+            return String.fromCharCode(parseInt(g,10))
+        });
+}
+
+/**
+ * encode RegExp string
+ * 正则字符串转义
+ * @param {String} str 
+ */
+function escapeRegExp(str){
+    return str.replace(/([+-*.?^${}[\]()\/\\])/g,'\\$1');
 }
 
 /**
