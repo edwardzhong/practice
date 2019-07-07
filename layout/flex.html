@@ -1,164 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<title>flex布局</title>
-	<style>
-		.wrap {
-			display: -webkit-flex;
-			display: -moz-flex;
-			display: -ms-flex;
-			display: -o-flex;
-			display: flex;
+<meta charset="UTF-8">
+<title>flex布局</title>
+<style>
+	.wrap {
+		display: flex;
+		width: 340px;
+		height: 340px;
+		margin: 10px;
+		border: 1px solid #aaa;
+		overflow: hidden;
+	}
 
-			width: 340px;
-			height: 340px;
-			margin: 10px;
-			border: 1px solid #aaa;
-			overflow: hidden;
-		}
+	.wrap div {
+		width: 100px;
+		height: 100px;
+		border: 1px solid #fff;
+		text-align: center;
+		line-height: 100px;
+		color: #fff;
+		font-weight: bold;
+	}
+	.wrap div:nth-child(1) {
+		background-color: #ef342a;
+	}
 
-		/* flex-flow:<direction> <wrap>;是flex-direction 和 flex-wrap 合成的*/
-		.flex-flow {
-			/*flex-direction: row;
+	.wrap div:nth-child(2) {
+		background-color: #f68f26;
+	}
+
+	.wrap div:nth-child(3) {
+		background-color: #4ba946;
+	}
+
+	.wrap div:nth-child(4) {
+		background-color: #0376c2;
+	}
+
+	.wrap div:nth-child(5) {
+		background-color: #c077af;
+	}
+
+	/* flex-flow:<direction> <wrap>;是flex-direction 和 flex-wrap 合成的*/
+	.flex-flow {
+		/*flex-direction: row;
 		flex-wrap: wrap; */
-			flex-flow: row wrap;
-			/* 横向排列 */
-			flex-flow: column nowrap;
-			/* 纵向排列 */
-			flex-flow: row wrap-reverse;
-			/* 从下向上排 */
-			flex-flow: column wrap-reverse;
-			/* 从左向右排 */
-		}
+		flex-flow: row wrap;
+		/* 横向排列 */
+		flex-flow: column nowrap;
+		/* 纵向排列 */
+		flex-flow: row wrap-reverse;
+		/* 从下向上排 */
+		flex-flow: column wrap-reverse;
+		/* 从左向右排 */
+	}
 
-		.wrap div {
-			width: 100px;
-			height: 100px;
-			/* margin: 5px; */
-			border: 1px solid #fff;
-			text-align: center;
-			line-height: 100px;
-			color: #fff;
-			font-weight: bold;
-			background-color: #f00;
-		}
+	.justify-content {
+		/* 主轴上的对齐方式（横向） */
+		flex-flow: row wrap;
+		justify-content: flex-start;
+		/* 左对齐 */
+		justify-content: flex-end;
+		/* 右对齐 */
+		justify-content: center;
+		/* 中间对齐 */
+		justify-content: space-between;
+		/* 两端对齐，项目之间的间隔都相等 */
+		justify-content: space-around;
+		/* 每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔大一倍 */
+		justify-content: space-evenly;
+	}
 
-		.justify-content {
-			/* 主轴上的对齐方式（横向） */
-			flex-flow: row wrap;
-			justify-content: flex-start;
-			/* 左对齐 */
-			justify-content: flex-end;
-			/* 右对齐 */
-			justify-content: center;
-			/* 中间对齐 */
-			justify-content: space-between;
-			/* 两端对齐，项目之间的间隔都相等 */
-			justify-content: space-around;
-			/* 每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔大一倍 */
-		}
+	.align-content {
+		/* 纵轴对齐(多行) ，align-content是针对flex容器里面多轴(多行)的情况,align-items是针对一行的情况进行排列。*/
+		flex-flow: row wrap;
+		justify-content: flex-start;
+		align-content: flex-start;
+		align-content: flex-end;
+		align-content: center;
+		align-content: space-between;
+		align-content: space-around;
+		align-content: stretch;
+		/* 轴线占满整个交叉轴。 */
+	}
 
-		.align-content {
-			/* 纵轴对齐(多行) ，align-content是针对flex容器里面多轴(多行)的情况,align-items是针对一行的情况进行排列。*/
-			flex-flow: row wrap;
-			justify-content: flex-start;
-			align-content: flex-start;
-			align-content: flex-end;
-			align-content: center;
-			align-content: space-between;
-			align-content: space-around;
-			align-content: stretch;
-			/* 轴线占满整个交叉轴。 */
-		}
+	.align-items {
+		/* 纵轴对齐(单行)*/
+		flex-flow: row nowrap;
+		justify-content: flex-start;
+		align-items: flex-start;
+		align-items: flex-end;
+		align-items: baseline;
+		align-items: stretch;
+		align-items: center;
+	}
 
-		.align-items {
-			/* 纵轴对齐(单行)*/
-			flex-flow: row nowrap;
-			justify-content: flex-start;
-			align-items: flex-start;
-			align-items: flex-end;
-			align-items: baseline;
-			align-items: stretch;
-			align-items: center;
-		}
+	.align-items div:nth-child(2) {
+		height: 150px;
+	}
 
-		.align-items div:nth-child(2) {
-			height: 150px;
-		}
+	.align-items div:nth-child(3) {
+		height: 80px;
+	}
 
-		.align-items div:nth-child(3) {
-			height: 80px;
-		}
+	.align-items div:nth-child(4) {
+		height: 200px;
+	}
 
-		.align-items div:nth-child(4) {
-			height: 200px;
-		}
+	.order {
+		width: 500px;
+		flex-flow: row nowrap;
+		justify-content: space-around;
+	}
 
-		.order {
-			width: 500px;
-			flex-flow: row nowrap;
-			justify-content: space-around;
-		}
+	/* order属性定义项目的排列顺序。数值越小，排列越靠前，默认为0。 */
+	.order div:nth-child(1) {
+		order: 2;
+	}
 
-		/* order属性定义项目的排列顺序。数值越小，排列越靠前，默认为0。 */
-		.order div:nth-child(1) {
-			order: 2;
-		}
+	.order div:nth-child(2) {
+		order: 1;
+	}
 
-		.order div:nth-child(2) {
-			order: 1;
-		}
+	.align-self {
+		flex-grow: row wrap;
+	}	
+	.align-self div:nth-child(3) {
+		align-self:center;
+	}
+	.align-self div:nth-child(5) {
+		align-self:flex-end;
+	}
 
-		/* flex-grow属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。 
-		如果所有项目的flex-grow属性都为1，则它们将等分剩余空间（如果有的话）。
-		如果一个项目的flex-grow属性为2，其他项目都为1，则前者占据的剩余空间将比其他项多一倍。
-		*/
-		.flex-grow {
-			flex-flow: row wrap;
-			width: 500px;
-			flex-grow: 1;
-		}
+	/* flex-grow属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。 
+	如果所有项目的flex-grow属性都为1，则它们将等分剩余空间（如果有的话）。
+	如果一个项目的flex-grow属性为2，其他项目都为1，则前者占据的剩余空间将比其他项多一倍。
+	*/
+	.flex-grow {
+		flex-flow: row wrap;
+		width: 500px;
+		flex-grow: 1;
+	}
 
-		.flex-grow div:nth-child(1) {
-			flex-grow: 1;
-		}
+	.flex-grow div:nth-child(1) {
+		flex-grow: 1;
+	}
 
-		.flex-grow div:nth-child(2) {
-			flex-grow: 2;
-		}
+	.flex-grow div:nth-child(2) {
+		flex-grow: 2;
+	}
 
-		/* flex-shrink属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。
-		如果所有项目的flex-shrink属性都为1，当空间不足时，都将等比例缩小。
-		如果一个项目的flex-shrink属性为0，其他项目都为1，则空间不足时，前者不缩小。
-		负值对该属性无效。 */
-		.flex-shrink {
-			flex-flow: row nowrap;
-		}
+	/* flex-shrink属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。
+	如果所有项目的flex-shrink属性都为1，当空间不足时，都将等比例缩小。
+	如果一个项目的flex-shrink属性为0，其他项目都为1，则空间不足时，前者不缩小。
+	负值对该属性无效。 */
+	.flex-shrink {
+		flex-flow: row nowrap;
+	}
 
-		.flex-shrink div:nth-child(1) {
-			flex-shrink: 1;
-		}
+	.flex-shrink div:nth-child(1) {
+		flex-shrink: 1;
+	}
 
-		.flex-shrink div:nth-child(2) {
-			flex-shrink: 2;
-		}
+	.flex-shrink div:nth-child(2) {
+		flex-shrink: 2;
+	}
 
-		/* flex属性是flex-grow, flex-shrink 和 flex-basis的简写，默认值为0 1 auto。后两个属性可选。
-		flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ] */
-	</style>
+	/* flex属性是flex-grow, flex-shrink 和 flex-basis的简写，默认值为0 1 auto。后两个属性可选。
+	flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ] */
+</style>
 </head>
-
 <body>
 	<h2>flex-flow</h2>
+	<p>flex-flow: direction wrap;是flex-direction 和 flex-wrap 合成</p>
+	<p>flex-direction:row/column</p>
+	<p>flex-wrap:wrap/nowrap</p>
 	<div class="wrap flex-flow">
 		<div>1</div>
 		<div>2</div>
 		<div>3</div>
 		<div>4</div>
+		<div>5</div>
 	</div>
 	<h2>justify-content</h2>
+	<p>主轴上的对齐方式（横向）</p>
 	<div class="wrap justify-content">
 		<div>1</div>
 		<div>2</div>
@@ -167,6 +193,7 @@
 		<div>5</div>
 	</div>
 	<h2>align-content</h2>
+	<p>纵轴对齐(多行) ，align-content是针对flex容器里面多轴(多行)的情况</p>
 	<div class="wrap align-content">
 		<div>1</div>
 		<div>2</div>
@@ -175,6 +202,7 @@
 		<div>5</div>
 	</div>
 	<h2>align-items</h2>
+	<p>纵轴对齐(单行),align-items是针对一行的情况进行排列</p>
 	<div class="wrap align-items">
 		<div>1</div>
 		<div>2</div>
@@ -182,23 +210,40 @@
 		<div>4</div>
 		<div>5</div>
 	</div>
+	<h2>align-self</h2>
+	<p>对单个子元素进行设置</p>
+	<div class="wrap align-self">
+		<div>1</div>
+		<div>2</div>
+		<div>3</div>
+		<div>4</div>
+		<div>5</div>
+	</div>
 	<h2>order</h2>
+	<p>order属性定义项目的排列顺序。数值越小，排列越靠前，默认为0</p>
 	<div class="wrap order">
 		<div>1</div>
 		<div>2</div>
 		<div>3</div>
 		<div>4</div>
-		<!-- <div>5</div> -->
+		<div>5</div>
 	</div>
 	<h2>flex-grow</h2>
+	<p>flex-grow属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。 </p>
+	<p>如果所有项目的flex-grow属性都为1，则它们将等分剩余空间（如果有的话）。</p>	
+	<p>如果一个项目的flex-grow属性为2，其他项目都为1，则前者占据的剩余空间将比其他项多一倍。</p>
 	<div class="wrap flex-grow">
 		<div>1</div>
 		<div>2</div>
 		<div>3</div>
-		<!-- <div>4</div> -->
-		<!-- <div>5</div> -->
+		<div>4</div>
+		<div>5</div>
 	</div>
 	<h2>flex-shrink</h2>
+	<p>flex-shrink属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。</p>
+	<p>如果所有项目的flex-shrink属性都为1，当空间不足时，都将等比例缩小。</p>
+	<p>如果一个项目的flex-shrink属性为0，其他项目都为1，则空间不足时，前者不缩小。</p>
+	<p>负值对该属性无效。</p>
 	<div class="wrap flex-shrink">
 		<div>1</div>
 		<div>2</div>
@@ -206,6 +251,10 @@
 		<div>4</div>
 		<div>5</div>
 	</div>
+
+	<h2>flex</h2>
+	<p>flex属性是flex-grow, flex-shrink 和 flex-basis的简写，默认值为: 0 1 auto。后两个属性可选。</p>
+	<p>flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]</p>
 </body>
 
 </html>

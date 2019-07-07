@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>grid布局</title>
+<style>
+html{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+.wrap{
+    width: 300px;
+    height: 300px;
+    display: grid;
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: 100px 100px 100px;
+}
+.display{
+    grid-template-columns: 50px 100px 50px;
+    grid-template-rows: 50px 100px 50px;
+}
+.repeat{
+    grid-template-columns: repeat(2,20px 80px);
+    grid-template-rows: repeat(3,33.3%);   
+}
+.fill{
+    width: 400px;
+    grid-template-columns: repeat(auto-fill, 100px);
+}
+.fr{
+    width: 800px;
+    grid-template-columns: 150px 1fr 2fr;
+}
+.minmax{
+    grid-template-columns: 1fr 2fr minmax(100px, 1fr); 
+}
+.auto{
+    width: 400px;
+    grid-template-columns: 100px auto 100px;
+}
+.name{
+    width: 400px;
+    grid-template-columns: [c1] 100px [c2] 100px [c3] auto [c4];
+    grid-template-rows: [r1] 100px [r2] 100px [r3] auto [r4];
+}
+
+.gap{
+    height: 400px;
+    gap: 20px 20px;
+}
+
+.flow{
+    grid-auto-flow: column;
+}
+.row-dense{
+    height: 400px;
+    grid-auto-flow: row dense;
+}
+.column-dense{
+    height: 400px;
+    grid-template-columns: 200px 100px 100px;
+    grid-template-rows: 100px 100px 100px;
+    grid-auto-flow: column dense;
+}
+.wrap div {
+    font-size: 2em;
+    text-align: center;
+    order: 1px solid #e5e4e9;
+}
+.wrap div:nth-child(1) {
+  background-color: #ef342a;
+}
+
+.wrap div:nth-child(2) {
+  background-color: #f68f26;
+}
+
+.wrap div:nth-child(3) {
+  background-color: #4ba946;
+}
+
+.wrap div:nth-child(4) {
+  background-color: #0376c2;
+}
+
+.wrap div:nth-child(5) {
+  background-color: #c077af;
+}
+
+.wrap div:nth-child(6) {
+  background-color: #f8d29d;
+}
+
+.wrap div:nth-child(7) {
+  background-color: #b5a87f;
+}
+
+.wrap div:nth-child(8) {
+  background-color: #d0e4a9;
+}
+
+.wrap div:nth-child(9) {
+  background-color: #4dc7ec;
+}
+</style>
+</head>
+<body>
+<h2>display 属性</h2>
+<p>grid-template-columns属性定义每一列的列宽</p>
+<p>grid-template-rows属性定义每一行的行高</p>
+<div class="wrap display">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+
+<h2>repeat()函数</h2>
+<p>简化重复的值  grid-template-columns: repeat(3, 33.33%); grid-template-rows: repeat(3, 33.33%);</p>
+<p>grid-template-columns: repeat(2, 20px 80px);定义了4列，第一列和第三列的宽度为20px，第二列和第四列为80px。</p>
+<div class="wrap repeat">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>  
+
+<h2>auto-fill 关键字 </h2>
+<p>单元格的大小是固定的，但是容器的大小不确定。如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用auto-fill关键字表示自动填充</p>
+<p>grid-template-columns: repeat(auto-fill, 100px);表示每列宽度100px，然后自动填充，直到容器不能放置更多的列</p>
+<div class="wrap fill">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+
+<h2>fr 关键字 </h2>
+<p>fr表示比例关系（fraction 的缩写，意为"片段"）。如果两列的宽度分别为1fr和2fr，就表示后者是前者的两倍。</p>
+<p>fr可以与绝对长度的单位结合使用会非常方便。</p>
+<div class="wrap fr">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+<h2>minmax()</h2>
+<p>minmax()函数产生一个长度范围，表示长度就在这个范围之中。它接受两个参数，分别为最小值和最大值。</p>
+<p>grid-template-columns: 1fr 2fr minmax(100px, 1fr); 表示列宽不小于100px，不大于1fr。 </p>
+<div class="wrap minmax">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+
+<h2>auto 关键字 </h2>
+<p>表示由浏览器自己决定长度</p>
+<p>grid-template-columns: 100px auto 100px; 第二列的宽度，基本上等于该列单元格的最大宽度，除非单元格内容设置了min-width，且这个值大于最大宽度。</p>
+<div class="wrap auto">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+
+<h2>网格线的名称</h2>
+<p>grid-template-columns属性和grid-template-rows属性里面，还可以使用方括号，指定每一根网格线的名字，方便以后的引用。</p>
+<p>定网格布局为3行 x 3列，因此有4根垂直网格线和4根水平网格线。方括号里面依次是这八根线的名字。 网格布局允许同一根线有多个名字，比如[fifth-line row-5]。</p>
+<div class="wrap name">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+
+<h2>row-gap, column-gap, gap 属性 </h2>
+<p>row-gap属性设置行与行的间隔（行间距），column-gap属性设置列与列的间隔（列间距）</p>
+<p>gap属性是column-gap和row-gap的合并简写形式，语法 gap: row-gap column-gap; </p>
+<div class="wrap gap">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+<h2>grid-auto-flow 属性 </h2>
+<p>子元素放置顺序，默认值是row，即"先行后列"，即先填满第一行，再开始放入第二行。也可以将它设成column，变成"先列后行"。 </p>
+<div class="wrap flow">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+<p>grid-auto-flow属性除了设置成row和column，还可以设成row dense和column dense。这两个值主要用于，某些项目指定位置以后，剩下的项目怎么自动放置。</p>
+<p>如果设为row dense，表示"先行后列"，并且尽可能紧密填满，尽量不出现空格。</p>
+<div class="wrap row-dense">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+<p>如果将设置改为column dense，表示"先列后行"，并且尽量填满空格。</p>
+<div class="wrap column-dense">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+</body>
+</html>
