@@ -42,10 +42,10 @@
 		background-color: #c077af;
 	}
 
-	/* flex-flow:<direction> <wrap>;是flex-direction 和 flex-wrap 合成的*/
 	.flex-flow {
 		/*flex-direction: row;
 		flex-wrap: wrap; */
+		/* flex-flow:<direction> <wrap>;是由 flex-direction 和 flex-wrap 合成的*/
 		flex-flow: row wrap;
 		/* 横向排列 */
 		flex-flow: column nowrap;
@@ -59,16 +59,17 @@
 	.justify-content {
 		/* 主轴上的对齐方式（横向） */
 		flex-flow: row wrap;
-		justify-content: flex-start;
 		/* 左对齐 */
-		justify-content: flex-end;
+		justify-content: flex-start;
 		/* 右对齐 */
-		justify-content: center;
+		justify-content: flex-end;
 		/* 中间对齐 */
+		justify-content: center;
+		/* 两端对齐，每个元素之间的间距相等 */
 		justify-content: space-between;
-		/* 两端对齐，项目之间的间隔都相等 */
+		/* 每个元素两侧的间隔相等，因此元素之间的间距是元素与边框的间距的两倍 */
 		justify-content: space-around;
-		/* 每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔大一倍 */
+		/* 每个元素之间间距以及元素与边框间距都相等 */
 		justify-content: space-evenly;
 	}
 
@@ -114,7 +115,7 @@
 		justify-content: space-around;
 	}
 
-	/* order属性定义项目的排列顺序。数值越小，排列越靠前，默认为0。 */
+	/* order属性定义元素的排列顺序。数值越小，排列越靠前，默认为0。 */
 	.order div:nth-child(1) {
 		order: 2;
 	}
@@ -133,9 +134,9 @@
 		align-self:flex-end;
 	}
 
-	/* flex-grow属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。 
-	如果所有项目的flex-grow属性都为1，则它们将等分剩余空间（如果有的话）。
-	如果一个项目的flex-grow属性为2，其他项目都为1，则前者占据的剩余空间将比其他项多一倍。
+	/* flex-grow属性定义元素的放大比例，默认为0，即如果存在剩余空间，也不放大。 
+	如果所有元素的flex-grow属性都为1，则它们将等分剩余空间（如果有的话）。
+	如果一个元素的flex-grow属性为2，其他元素都为1，则前者占据的剩余空间将比其他项多一倍。
 	*/
 	.flex-grow {
 		flex-flow: row wrap;
@@ -151,9 +152,9 @@
 		flex-grow: 2;
 	}
 
-	/* flex-shrink属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。
-	如果所有项目的flex-shrink属性都为1，当空间不足时，都将等比例缩小。
-	如果一个项目的flex-shrink属性为0，其他项目都为1，则空间不足时，前者不缩小。
+	/* flex-shrink属性定义了元素的缩小比例，默认为1，即如果空间不足，该元素将缩小。
+	如果所有元素的flex-shrink属性都为1，当空间不足时，都将等比例缩小。
+	如果一个元素的flex-shrink属性为0，其他元素都为1，则空间不足时，前者不缩小。
 	负值对该属性无效。 */
 	.flex-shrink {
 		flex-flow: row nowrap;
@@ -220,7 +221,7 @@
 		<div>5</div>
 	</div>
 	<h2>order</h2>
-	<p>order属性定义项目的排列顺序。数值越小，排列越靠前，默认为0</p>
+	<p>order属性定义元素的排列顺序。数值越小，排列越靠前，默认为0</p>
 	<div class="wrap order">
 		<div>1</div>
 		<div>2</div>
@@ -229,9 +230,9 @@
 		<div>5</div>
 	</div>
 	<h2>flex-grow</h2>
-	<p>flex-grow属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。 </p>
-	<p>如果所有项目的flex-grow属性都为1，则它们将等分剩余空间（如果有的话）。</p>	
-	<p>如果一个项目的flex-grow属性为2，其他项目都为1，则前者占据的剩余空间将比其他项多一倍。</p>
+	<p>flex-grow属性定义元素的放大比例，默认为0，即如果存在剩余空间，也不放大。 </p>
+	<p>如果所有元素的flex-grow属性都为1，则它们将等分剩余空间（如果有的话）。</p>	
+	<p>如果一个元素的flex-grow属性为2，其他元素都为1，则前者占据的剩余空间将比其他项多一倍。</p>
 	<div class="wrap flex-grow">
 		<div>1</div>
 		<div>2</div>
@@ -240,9 +241,9 @@
 		<div>5</div>
 	</div>
 	<h2>flex-shrink</h2>
-	<p>flex-shrink属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。</p>
-	<p>如果所有项目的flex-shrink属性都为1，当空间不足时，都将等比例缩小。</p>
-	<p>如果一个项目的flex-shrink属性为0，其他项目都为1，则空间不足时，前者不缩小。</p>
+	<p>flex-shrink属性定义了元素的缩小比例，默认为1，即如果空间不足，该元素将缩小。</p>
+	<p>如果所有元素的flex-shrink属性都为1，当空间不足时，都将等比例缩小。</p>
+	<p>如果一个元素的flex-shrink属性为0，其他元素都为1，则空间不足时，前者不缩小。</p>
 	<p>负值对该属性无效。</p>
 	<div class="wrap flex-shrink">
 		<div>1</div>
@@ -256,5 +257,4 @@
 	<p>flex属性是flex-grow, flex-shrink 和 flex-basis的简写，默认值为: 0 1 auto。后两个属性可选。</p>
 	<p>flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]</p>
 </body>
-
 </html>
