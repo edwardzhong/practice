@@ -59,11 +59,62 @@ html{
     height: 400px;
     grid-auto-flow: row dense;
 }
+.row-dense div:nth-child(1){
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+.row-dense div:nth-child(2){
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
 .column-dense{
-    height: 400px;
-    grid-template-columns: 200px 100px 100px;
-    grid-template-rows: 100px 100px 100px;
+    width: 400px;
     grid-auto-flow: column dense;
+}
+.column-dense div:nth-child(1){
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.column-dense div:nth-child(2){
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.items{
+    justify-items: center;
+    align-items: center;
+}
+.place-items{
+    place-items: start end;
+}
+.content{
+    width: 400px;
+    height: 400px;
+    place-content: center;
+}
+.place-content{
+    width: 400px;
+    height: 400px;
+    place-content: space-between space-evenly;
+}
+.start-end{
+    width: 400px;
+    height: 400px;
+}
+.start-end div:nth-child(1){
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 4;
+}
+.row-column{
+    width: 400px;
+    height: 400px;
+}
+.row-column div:nth-child(1){
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
 }
 .wrap div {
     font-size: 2em;
@@ -264,5 +315,107 @@ html{
     <div>8</div>
     <div>9</div>
 </div>
+
+<h2>justify-items，align-items，place-items 属性 </h2>
+<p>justify-items属性设置单元格内容的水平位置（左中右），align-items属性设置单元格内容的垂直位置（上中下</p>
+<p>place-items属性是align-items属性和justify-items属性的合并简写形式: place-items: align-items justify-items </p>
+<p>两个属性的写法完全相同，都可以取下面这些值</p>
+<p> start：对齐单元格的起始边缘。 end：对齐单元格的结束边缘。 center：单元格内部居中。 stretch：拉伸，占满单元格的整个宽度（默认值）。</p>
+<div class="wrap items">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+<div class="wrap place-items">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+
+<h2>justify-content， align-content， place-content 属性</h2>
+<p>justify-content属性是整个内容区域在容器里面的水平位置（左中右），align-content属性是整个内容区域的垂直位置（上中下）</p>
+<p>place-content属性是align-content属性和justify-content属性的合并简写形式。 place-content: align-content justify-content </p>
+<p>属性值与flex布局一致</p>
+<div class="wrap content">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+<div class="wrap place-content">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+
+<h2>grid-column-start， grid-column-end， grid-row-start， grid-row-end 属性 </h2>
+<p>grid-column-start属性：左边框所在的垂直网格线, grid-column-end属性：右边框所在的垂直网格线 </p>
+<p>grid-row-start属性：上边框所在的水平网格线, grid-row-end属性：下边框所在的水平网格线</p>
+<div class="wrap start-end">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+
+<h2>grid-column, grid-row 属性 </h2>
+<p>grid-column属性是grid-column-start和grid-column-end的合并简写形式，</p>
+<p>grid-row属性是grid-row-start属性和grid-row-end的合并简写形式。</p>
+<p>
+    .item-1 {
+        grid-column: 1 / 3;
+        grid-row: 1 / 2;
+      }
+      /* 等同于 */
+      .item-1 {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
+      }
+</p>
+<div class="wrap row-column">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+    <div>7</div>
+    <div>8</div>
+    <div>9</div>
+</div>
+<h2>justify-self， align-self， place-self 属性</h2>
+<p>justify-self属性设置单元格内容的水平位置（左中右），跟justify-items属性的用法完全一致，但只作用于单个项目。</p>
+<p>align-self属性设置单元格内容的垂直位置（上中下），跟align-items属性的用法完全一致，也是只作用于单个项目。 </p>
+<p>place-self属性是align-self属性和justify-self属性的合并简写形式。 place-self: align-self justify-self; </p>
 </body>
 </html>
