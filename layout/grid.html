@@ -9,6 +9,9 @@
 body{
     padding: 20px 40px;
 }
+h2{
+    text-align: center;
+}
 .wrap{
     width: 300px;
     height: 300px;
@@ -157,7 +160,8 @@ body{
 </style>
 </head>
 <body>
-<h2>display 属性</h2>
+<h2>grid 布局</h2>
+<h3>display 属性</h3>
 <p>grid-template-columns属性定义每一列的列宽</p>
 <p>grid-template-rows属性定义每一行的行高</p>
 <div class="wrap display">
@@ -172,7 +176,7 @@ body{
     <div>9</div>
 </div>
 
-<h2>repeat()函数</h2>
+<h3>repeat()函数</h3>
 <p>简化重复的值  grid-template-columns: repeat(3, 33.33%); grid-template-rows: repeat(3, 33.33%);</p>
 <p>grid-template-columns: repeat(2, 20px 80px);定义了4列，第一列和第三列的宽度为20px，第二列和第四列为80px。</p>
 <div class="wrap repeat">
@@ -187,7 +191,7 @@ body{
     <div>9</div>
 </div>  
 
-<h2>auto-fill 关键字 </h2>
+<h3>auto-fill 关键字 </h3>
 <p>单元格的大小是固定的，但是容器的大小不确定。如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用auto-fill关键字表示自动填充</p>
 <p>grid-template-columns: repeat(auto-fill, 100px);表示每列宽度100px，然后自动填充，直到容器不能放置更多的列</p>
 <div class="wrap fill">
@@ -202,7 +206,7 @@ body{
     <div>9</div>
 </div>
 
-<h2>fr 关键字 </h2>
+<h3>fr 关键字 </h3>
 <p>fr表示比例关系（fraction 的缩写，意为"片段"）。如果两列的宽度分别为1fr和2fr，就表示后者是前者的两倍。</p>
 <p>fr可以与绝对长度的单位结合使用会非常方便。</p>
 <div class="wrap fr">
@@ -216,7 +220,7 @@ body{
     <div>8</div>
     <div>9</div>
 </div>
-<h2>minmax()</h2>
+<h3>minmax()</h3>
 <p>minmax()函数产生一个长度范围，表示长度就在这个范围之中。它接受两个参数，分别为最小值和最大值。</p>
 <p>grid-template-columns: 1fr 2fr minmax(100px, 1fr); 表示列宽不小于100px，不大于1fr。 </p>
 <div class="wrap minmax">
@@ -231,7 +235,7 @@ body{
     <div>9</div>
 </div>
 
-<h2>auto 关键字 </h2>
+<h3>auto 关键字 </h3>
 <p>表示由浏览器自己决定长度</p>
 <p>grid-template-columns: 100px auto 100px; 第二列的宽度，基本上等于该列单元格的最大宽度，除非单元格内容设置了min-width，且这个值大于最大宽度。</p>
 <div class="wrap auto">
@@ -246,7 +250,7 @@ body{
     <div>9</div>
 </div>
 
-<h2>网格线的名称</h2>
+<h3>网格线的名称</h3>
 <p>grid-template-columns属性和grid-template-rows属性里面，还可以使用方括号，指定每一根网格线的名字，方便以后的引用。</p>
 <p>定网格布局为3行 x 3列，因此有4根垂直网格线和4根水平网格线。方括号里面依次是这八根线的名字。 网格布局允许同一根线有多个名字，比如[fifth-line row-5]。</p>
 <div class="wrap name">
@@ -261,7 +265,7 @@ body{
     <div>9</div>
 </div>
 
-<h2>row-gap, column-gap, gap 属性 </h2>
+<h3>row-gap, column-gap, gap 属性 </h3>
 <p>row-gap属性设置行与行的间隔（行间距），column-gap属性设置列与列的间隔（列间距）</p>
 <p>gap属性是column-gap和row-gap的合并简写形式，语法 gap: row-gap column-gap; </p>
 <div class="wrap gap">
@@ -275,7 +279,7 @@ body{
     <div>8</div>
     <div>9</div>
 </div>
-<h2>grid-auto-flow 属性 </h2>
+<h3>grid-auto-flow 属性 </h3>
 <p>子元素放置顺序，默认值是row，即"先行后列"，即先填满第一行，再开始放入第二行。也可以将它设成column，变成"先列后行"。 </p>
 <div class="wrap flow">
     <div>1</div>
@@ -314,7 +318,7 @@ body{
     <div>9</div>
 </div>
 
-<h2>justify-items，align-items，place-items 属性 </h2>
+<h3>justify-items，align-items，place-items 属性 </h3>
 <p>justify-items属性设置单元格内容的水平位置（左中右），align-items属性设置单元格内容的垂直位置（上中下</p>
 <p>place-items属性是align-items属性和justify-items属性的合并简写形式: place-items: align-items justify-items </p>
 <p>两个属性的写法完全相同，都可以取下面这些值</p>
@@ -342,7 +346,7 @@ body{
     <div>9</div>
 </div>
 
-<h2>justify-content， align-content， place-content 属性</h2>
+<h3>justify-content， align-content， place-content 属性</h3>
 <p>justify-content属性是整个内容区域在容器里面的水平位置（左中右），align-content属性是整个内容区域的垂直位置（上中下）</p>
 <p>place-content属性是align-content属性和justify-content属性的合并简写形式。 place-content: align-content justify-content </p>
 <p>属性值与flex布局一致</p>
@@ -369,7 +373,7 @@ body{
     <div>9</div>
 </div>
 
-<h2>grid-column-start， grid-column-end， grid-row-start， grid-row-end 属性 </h2>
+<h3>grid-column-start， grid-column-end， grid-row-start， grid-row-end 属性 </h3>
 <p>grid-column-start属性：左边框所在的垂直网格线, grid-column-end属性：右边框所在的垂直网格线 </p>
 <p>grid-row-start属性：上边框所在的水平网格线, grid-row-end属性：下边框所在的水平网格线</p>
 <div class="wrap start-end">
@@ -384,7 +388,7 @@ body{
     <div>9</div>
 </div>
 
-<h2>grid-column, grid-row 属性 </h2>
+<h3>grid-column, grid-row 属性 </h3>
 <p>grid-column属性是grid-column-start和grid-column-end的合并简写形式，</p>
 <p>grid-row属性是grid-row-start属性和grid-row-end的合并简写形式。</p>
 <p>
@@ -411,7 +415,7 @@ body{
     <div>8</div>
     <div>9</div>
 </div>
-<h2>justify-self， align-self， place-self 属性</h2>
+<h3>justify-self， align-self， place-self 属性</h3>
 <p>justify-self属性设置单元格内容的水平位置（左中右），跟justify-items属性的用法完全一致，但只作用于单个项目。</p>
 <p>align-self属性设置单元格内容的垂直位置（上中下），跟align-items属性的用法完全一致，也是只作用于单个项目。 </p>
 <p>place-self属性是align-self属性和justify-self属性的合并简写形式。 place-self: align-self justify-self; </p>

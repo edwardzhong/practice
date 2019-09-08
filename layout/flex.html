@@ -7,6 +7,9 @@
 	body{
 		padding: 20px 40px;
 	}
+	h2{
+		text-align: center;
+	}
 	.wrap {
 		display: flex;
 		width: 340px;
@@ -176,7 +179,8 @@
 </style>
 </head>
 <body>
-	<h2>flex-flow</h2>
+	<h2>flex 布局</h2>
+	<h3>flex-flow</h3>
 	<p>flex-flow: direction wrap;是flex-direction 和 flex-wrap 合成</p>
 	<p>flex-direction:row/column</p>
 	<p>flex-wrap:wrap/nowrap</p>
@@ -187,7 +191,7 @@
 		<div>4</div>
 		<div>5</div>
 	</div>
-	<h2>justify-content</h2>
+	<h3>justify-content</h3>
 	<p>主轴上的对齐方式（横向）</p>
 	<div class="wrap justify-content">
 		<div>1</div>
@@ -196,7 +200,7 @@
 		<div>4</div>
 		<div>5</div>
 	</div>
-	<h2>align-content</h2>
+	<h3>align-content</h3>
 	<p>纵轴对齐(多行) ，align-content是针对flex容器里面多轴(多行)的情况</p>
 	<div class="wrap align-content">
 		<div>1</div>
@@ -205,7 +209,7 @@
 		<div>4</div>
 		<div>5</div>
 	</div>
-	<h2>align-items</h2>
+	<h3>align-items</h3>
 	<p>纵轴对齐(单行),align-items是针对一行的情况进行排列</p>
 	<div class="wrap align-items">
 		<div>1</div>
@@ -214,7 +218,7 @@
 		<div>4</div>
 		<div>5</div>
 	</div>
-	<h2>align-self</h2>
+	<h3>align-self</h3>
 	<p>对单个子元素进行设置</p>
 	<div class="wrap align-self">
 		<div>1</div>
@@ -223,7 +227,7 @@
 		<div>4</div>
 		<div>5</div>
 	</div>
-	<h2>order</h2>
+	<h3>order</h3>
 	<p>order属性定义元素的排列顺序。数值越小，排列越靠前，默认为0</p>
 	<div class="wrap order">
 		<div>1</div>
@@ -232,7 +236,7 @@
 		<div>4</div>
 		<div>5</div>
 	</div>
-	<h2>flex-grow</h2>
+	<h3>flex-grow</h3>
 	<p>flex-grow属性定义元素的放大比例，默认为0，即如果存在剩余空间，也不放大。 </p>
 	<p>如果所有元素的flex-grow属性都为1，则它们将等分剩余空间（如果有的话）。</p>	
 	<p>如果一个元素的flex-grow属性为2，其他元素都为1，则前者占据的剩余空间将比其他项多一倍。</p>
@@ -243,7 +247,7 @@
 		<div>4</div>
 		<div>5</div>
 	</div>
-	<h2>flex-shrink</h2>
+	<h3>flex-shrink</h3>
 	<p>flex-shrink属性定义了元素的缩小比例，默认为1，即如果空间不足，该元素将缩小。</p>
 	<p>如果所有元素的flex-shrink属性都为1，当空间不足时，都将等比例缩小。</p>
 	<p>如果一个元素的flex-shrink属性为0，其他元素都为1，则空间不足时，前者不缩小。</p>
@@ -256,7 +260,7 @@
 		<div>5</div>
 	</div>
 
-	<h2>flex</h2>
+	<h3>flex</h3>
 	<p>flex属性是flex-grow, flex-shrink 和 flex-basis的简写，默认值为: 0 1 auto。后两个属性可选。</p>
 	<p>flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]</p>
 </body>
