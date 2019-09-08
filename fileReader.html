@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>html5 FileReader</title>
-	<style>
-		body{
-			font: 14px Verdana,"Lucida Grande",Geneva,Arial,sans-serif;
-		}
-		.img-wrap{
-			width: 100px;
-			height: 100px;
-			border: 1px solid  #ddd;
-			overflow: hidden;
-		}
-		.file-wrap{
-			position: relative;
-		}
-		input[type=button]{
-			border: 1px solid  #bbb;
-			padding: 5px 10px;
-			border-radius:4px;
-		}
-		input[type=file]{
-			position: absolute;
-			top: 0;
-			left: -1px;
-			width: 75px;
-			height: 20px;
-			opacity:0;
-		}
-	</style>
+<meta charset="UTF-8">
+<title>html5 FileReader</title>
+<style>
+	body{
+		font: 14px Verdana,"Lucida Grande",Geneva,Arial,sans-serif;
+	}
+	.img-wrap{
+		width: 100px;
+		height: 100px;
+		border: 1px solid  #ddd;
+		overflow: hidden;
+	}
+	.file-wrap{
+		position: relative;
+	}
+	input[type=button]{
+		border: 1px solid  #bbb;
+		padding: 5px 10px;
+		border-radius:4px;
+	}
+	input[type=file]{
+		position: absolute;
+		top: 0;
+		left: -1px;
+		width: 75px;
+		height: 20px;
+		opacity:0;
+	}
+</style>
 </head>
 <body>
 	<div class="img-wrap">
@@ -39,7 +39,7 @@
 		<input type="button" value="上传文件">
 		<input type="file" name="file" id="uploadFile">	
 	</div>
-<script src="../JS/Zepto.js"></script>
+<script src="../js/Zepto.js"></script>
 <script>
 	var inputFile=document.getElementById('uploadFile'),
 		imgWrap=document.getElementsByClassName('img-wrap')[0];

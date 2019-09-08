@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>字体</title>
+<style>
+	body{
+		font:italic 14px Helvetica,Arial,"Microsoft Yahei",sans-serif;
+		padding: 20px 40px;
+	}
+	.wp{
+		width:100px;
+		border:1px solid #f00;
+		margin-bottom: 20px;
+	}
+</style>
+</head>
+<body>
+	<h2>字体属性</h2>
+	<h3>font</h3>
+	<p>font: italic 14px Helvetica,Arial,"Microsoft Yahei",sans-serif;</p>
+	<p>font属性前三个值可以采用任意顺序，后两个值必须font-size在前，font-family在后，同时必须存在</p>
+	<h3>text-indent</h3>
+	<p>文本缩进</p>
+	<h3>text-align</h3>
+	<p>水平对齐</p>
+	<h3>line-height</h3>
+	<p>行高，line-height减font-size，然后再除以2，分别加到顶部和底部</p>
+	<h3>vertial-align</h3>
+	<p>垂直对齐文本，不影响块级元素中内容对齐，但可影响单元表格中元素的垂直对齐，正值使元素上升，负值使元素下降</p>
+	<h3>word-spacing</h3></p>
+	<p>字间隔</p>
+	<h3>text-transform</h3>
+	<p>
+		<span>文本转换 </span><br>
+		<span style="text-transform:uppercase">uppercase 将文本转换为大写</span><br />
+		<span style="text-transform:lowercase">lowercase 将文本转换为小写</span><br />
+		<span style="text-transform:capitalize">capitalize 将单词首字母大写</span>
+	</p>
+	<h3>text-decoration</h3>
+	<p>文本装饰，不能继承
+		<p style="text-decoration:underline">underline</p>
+		<p style="text-decoration:overline">overline</p>
+		<p style="text-decoration:line-through">line-through</p>
+		<p style="text-decoration:blink">blink</p>
+	</p>
+	<h3>white-space</h3>
+	<p>处理空白符<p>
+	<div>
+		<strong>nowrap</strong>
+		<div class="wp" style="white-space:nowrap;">nowrap文本不换行强制在一行显示</div>
+		<strong>pre</strong>
+		<div class="wp" style="white-space:pre;">pre会    保留   额外的空格和
+		回车，且文本不换行</div>
+		<strong>pre-wrap</strong>
+		<div class="wp" style="white-space:pre-wrap;">pre-wrap会    保留   额外的空格和回车，但文本会换行</div>
+		<strong>pre-line</strong>
+		<div class="wp" style="white-space:pre-line;">pre-line，会合并文本中的     空白符，但保留回车，
+			且文本会换行</div>
+	</div>
+
+</body>
+</html>

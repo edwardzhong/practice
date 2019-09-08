@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>选择器</title>
+	<style>
+		body{
+			padding: 20px 40px;
+		}
+		input{
+			outline: none;
+		}
+		p{
+			font-family:Verdana, Geneva, Tahoma, sans-serif;
+			margin: 0;
+			line-height: 1.6;
+		}
+		h3 + p { color: #555;} /* 兄弟选择器，只有p会应用样式 */
+		a[title]{color: #0f0;}/*简单属性选择器*/
+		a[href="http://www.google.hk/"]{color:#0aa;} /* 具体选择器 */
+		input[type="text"]{background-color: #ff0;}/*属性选择器*/
+		input[class^="txt"]{border:1px solid #f00;}/*class以txt开头的元素*/
+
+		.line:first-letter{font-size: 20px; font-weight: bold;} /*第一个字符*/
+		.line:first-line{color:#00f;} /* 第一行 */
+
+		a:link{color: #00f;}/*未访问过*/ 
+		a:visited{color:#666;}/*已经访问过*/ 
+		a:hover{color:#f00;}/*鼠标停留在元素上*/ 
+		a:active{color:#ff0;}/*按下鼠标激活时*/ 
+		a:visited:hover{color:#0ff;}/*组合伪类*/
+	</style>
+</head>
+<body>
+	<h2>选择器</h2>
+	<h3>兄弟选择器</h3>
+	<p>h3 + p { color: #f00 } 只有挨着的 p 会应用样式 </p>
+	<p>h3 ~ p { color: #f00 } 所有同级的 p 都会应用样式 </p>
+	
+	<h3>简单属性选择器</h3>
+	<p>a[title]{color: #0f0 } 有 title 属性的链接<br> *[title]{color:#00f;} 包含 title 的所有元素 </p>
+	<a href="#" title="简单属性选择器">简单属性选择器</a>
+
+	<h3>具体属性选择器</h3>
+	<p>a[href="http://www.google.hk/"]{color:#0aa;}</p>
+	<p>input[type="text"]{background-color: #ff0;}</p>
+	<a href="http://www.google.hk/">google</a><br>
+	<input type="text" value="属性选择器">
+	
+	<h3>正则匹配选择器</h3>
+	<p>input[class^="txt"]{border:1px solid #f00;} class 以 txt 开头的所有元素</p>
+	<p>input[class$="er"]{border:1px solid #f00;} class 以 er 结尾的所有元素</p>
+	<p>input[class*="txt"]{border:1px solid #f00;} class 包含 txt 的所有元素</p>
+	<input type="text" class="txt-name" value="name">
+	<input type="email" class="txt-mail" value="email">
+			
+	<h3>伪元素/状态选择器</h3>
+	<p>.tip:before{} before 伪元素</p>
+	<p>.tip:after{} after 伪元素</p>
+	<p>input:checked{} checked 状态的元素</p>
+	<p>p:first-letter{font-size: 20px;} 第一个字符</p>
+	<p>p:first-line{color:#00f;} 第一行</p>
+	<p class="line">伪元素选择器</p>
+
+	<h3>链接的状态顺序</h3>
+	<p>按 LVHA 顺序才能正确显示所有状态</p>
+	<p>a:link{color: #00f;}  未访问过</p>
+	<p>a:visited{color:#666;} 已经访问过</p>
+	<p>a:hover{color:#f00;} 鼠标停留在元素时</p>
+	<p>a:active{color:#ff0;} 鼠标按下激活时</p>
+	<p>a:visited:hover{color:#0ff;} 组合显示</p>
+</body>
+</html>

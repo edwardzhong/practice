@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>居中</title>
-	<style>
+<meta charset="UTF-8">
+<title>居中</title>
+<style>
 	body {
-  	font: 14px "Helvetica Neue",Helvetica,"Hiragino Sans GB","Segoe UI","Microsoft Yahei",Tahoma,Arial,STHeiti,sans-serif;
+		  font: 14px "Helvetica Neue",Helvetica,"Hiragino Sans GB","Segoe UI","Microsoft Yahei",Tahoma,Arial,STHeiti,sans-serif;
+		  padding: 20px 40px;
 	}
 	.clearfix:after{content: ".";display: block;visibility: visible;clear: both;}
 	.clearfix{*zoom:1;}
@@ -13,24 +14,24 @@
 	div{width: 100px;height: 100px;border: 1px solid  #f00;}
 	table{border-collapse: collapse;border: 1px solid  #aaa;}
 	tr td{height: 80px;width: 80px;border: 1px solid #aaa;text-align: center;vertical-align: middle;}
-	</style>
-	<script>
-	window.onload=function(){
-		var hs=document.getElementsByTagName('h3'),
-			len=hs.length,i,j,nextElem;
-		for(i=0;i<len;i++){
-			hs[i].onclick=function(evt){
-				for(j=0;j<len;j++){
-					nextElem=hs[j].nextElementSibling||hs[j].nextSibling;
-					nextElem.style.display='none';
-				}
-				nextElem=this.nextElementSibling||this.nextSibling;
-				nextElem.style.display='';
-			};
-		};
-		hs[0].click();
-	};
-	</script>
+</style>
+<script>
+	// window.onload=function(){
+	// 	var hs=document.getElementsByTagName('h3'),
+	// 		len=hs.length,i,j,nextElem;
+	// 	for(i=0;i<len;i++){
+	// 		hs[i].onclick=function(evt){
+	// 			for(j=0;j<len;j++){
+	// 				nextElem=hs[j].nextElementSibling||hs[j].nextSibling;
+	// 				nextElem.style.display='none';
+	// 			}
+	// 			nextElem=this.nextElementSibling||this.nextSibling;
+	// 			nextElem.style.display='';
+	// 		};
+	// 	};
+	// 	hs[0].click();
+	// };
+</script>
 </head>
 <body>
 	<h3>margin设为auto水平居中</h3>

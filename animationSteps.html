@@ -1,49 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>理解steps</title>
-	<style>
-		/*帧动画效果如果要显示一帧帧的变化，换句话就是帧之间没有过渡的效果，就需要引入step这个值了
-		steps 第1个参数，指的是每个关键帧之间进行多少次跳跃，
-		第2个参数，start指在跳跃的起点处进行变化，end指的是在跳跃结束处进行变化*/
-		@-webkit-keyframes circle{
-			0%{
-				-webkit-transform: rotate(0deg);
-			}
-			50%{
-				-webkit-transform: rotate(180deg);
-			}
-			100%{
-				-webkit-transform: rotate(360deg);
-			}
+<meta charset="UTF-8">
+<title>理解steps</title>
+<style>
+	/*帧动画效果如果要显示一帧帧的变化，换句话就是帧之间没有过渡的效果，就需要引入step这个值了
+	steps 第1个参数，指的是每个关键帧之间进行多少次跳跃，
+	第2个参数，start指在跳跃的起点处进行变化，end指的是在跳跃结束处进行变化*/
+	@-webkit-keyframes circle{
+		0%{
+			-webkit-transform: rotate(0deg);
 		}
-		.clock{
-			position: relative;
-			width: 100px;
-			height: 100px;
-			border-radius:50%;
-			border:1px solid #ccc;
+		50%{
+			-webkit-transform: rotate(180deg);
 		}
-		.second{
-			position: absolute;
-			top: 5px;
-			left: 48px;
-			width: 2px;
-			height: 45px;
-			border:1px solid #F50;
-			border-radius:4px;
-			background: #f60;
-			-webkit-transform-origin: bottom;
-			-webkit-animation: circle 30s steps(15,end) infinite;
+		100%{
+			-webkit-transform: rotate(360deg);
 		}
-
-	</style>
+	}
+	.clock{
+		position: relative;
+		width: 100px;
+		height: 100px;
+		border-radius:50%;
+		border:1px solid #ccc;
+	}
+	.second{
+		position: absolute;
+		top: 5px;
+		left: 48px;
+		width: 2px;
+		height: 45px;
+		border:1px solid #F50;
+		border-radius:4px;
+		background: #f60;
+		-webkit-transform-origin: bottom;
+		-webkit-animation: circle 30s steps(15,end) infinite;
+	}
+</style>
 </head>
 <body>
 	<div class="clock">
 		<div class="second"></div>
 	</div>
-	
 </body>
 </html>

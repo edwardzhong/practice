@@ -1,62 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Local DataBase</title>
-	<style>
-	body{
-		font-family:Helvetica,STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;
-		font-size:14px;
+<meta charset="UTF-8" />
+<title>Local DataBase</title>
+<style>
+	body {
+		font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei,
+			Microsoft YaHei, Arial;
+		font-size: 14px;
 	}
-	.left{
+	.left {
 		float: left;
 		width: 220px;
 	}
 	.left input {
 		margin-top: 10px;
 	}
-	.left label{
+	.left label {
 		display: inline-block;
 		width: 80px;
 	}
-	input[type="text"]{
+	input[type="text"] {
 		width: 120px;
 	}
-	input[type="button"]{
+	input[type="button"] {
 		margin-left: 80px;
 	}
-	.main{
+	.main {
 		margin-left: 220px;
 	}
-	table{
+	table {
 		width: 600px;
-		border-collapse:collapse;
-		border-radius:4px;
+		border-collapse: collapse;
+		border-radius: 4px;
 		color: #555;
 	}
-	table tr td,table tr th{
-		border: 1px solid  #ccc;
+	table tr td,
+	table tr th {
+		border: 1px solid #ccc;
 	}
-	table thead tr{
+	table thead tr {
 		background-color: #ddd;
 	}
-	table tbody tr{
-		cursor:pointer;
+	table tbody tr {
+		cursor: pointer;
 	}
-	table tbody tr:nth-child(2n){
-		background-color: #D3E2EC;
+	table tbody tr:nth-child(2n) {
+		background-color: #d3e2ec;
 	}
-	</style>
+</style>
 </head>
 <body>
 <div class="left">
-	<input type="hidden" name="id" id="id">
-	<label for="name">name:</label><input type="text" id="name"><br>
-	<label for="address">address:</label><input type="text" id="address"><br>
-	<label for="phone">phone：</label><input type="text" id="phone"><br>
-	<input type="button" value="reset" id="reset">
-	<input type="button" value="submit" id="submit">
-	<input type="button" value="delete" id="delete">
+	<input type="hidden" name="id" id="id" />
+	<label for="name">name:</label><input type="text" id="name" /><br />
+	<label for="address">address:</label
+	><input type="text" id="address" /><br />
+	<label for="phone">phone：</label
+	><input type="text" id="phone" /><br />
+	<input type="button" value="reset" id="reset" />
+	<input type="button" value="submit" id="submit" />
+	<input type="button" value="delete" id="delete" />
 </div>
 <div class="main">
 	<table id="userTb">
@@ -73,281 +77,264 @@
 	</table>
 </div>
 <script>
-function IndexedDB(options){
-	var opts={
-			name:'db',
-			version:1,
-			tables:{}
+	function IndexedDB(options) {
+		var opts = {
+			name: "db",
+			version: 1,
+			tables: {}
 		};
 
-	for(var name in options){
-		opts[name]=options[name];
+		for (var name in options) {
+			opts[name] = options[name];
+		}
+		this.name = opts.name;
+		this.version = parseInt(opts.version, 10);
+		this.tables = opts.tables;
+
+		if (!opts.name) {
+			console.log("db name is null or empty");
+			return;
+		}
+		this.indexedDB = window.indexedDB || window.webkitIndexedDB || window.msIndexedDB || window.mozIndexedDB;
 	}
-	this.name=opts.name;
-	this.version=parseInt(opts.version,10);
-	this.tables=opts.tables;
 
-	if(!opts.name){
-		console.log('db name is null or empty');
-		return;
-	}
-	this.indexedDB=window.indexedDB||window.webkitIndexedDB||window.msIndexedDB||window.mozIndexedDB;
-}
+	IndexedDB.prototype = {
+		//打开数据库连接
+		init: function(callback) {
+			var that = this;
+			var request = that.indexedDB.open(that.name, that.version);
+			return new Promise((resolve, reject) => {
+				request.onerror = reject;
+				request.onsuccess = function(event) {
+					that.db = event.target.result;
+					resolve(that);
+				};
 
-IndexedDB.prototype={
-	//打开数据库连接
-	init:function(callback){
-		var that=this;
-		var request=that.indexedDB.open(that.name,that.version);
-		return new Promise((resolve,reject)=>{
-			request.onerror=function(event){
-				console.log('oh! bad thing happen!!');
-				console.log(event.target);
-				reject(event);
-			};
-
-			request.onsuccess=function(event){
-				that.db=event.target.result;
-				resolve(that);
-			};
-
-			request.onupgradeneeded=function(event){
-				that.db=event.target.result;
-				var tables=that.tables;
-				//如果不存在表，则创建
-				for(var name in tables){ 
-					if(!that.db.objectStoreNames.contains(name)){
-						var table=that.db.createObjectStore(name,{keyPath:tables[name].id||'id'});
-						//建立索引
-						table.createIndex('idIndex',tables[name].id||'id',{unique:true});
+				request.onupgradeneeded = function(event) {
+					that.db = event.target.result;
+					var tables = that.tables;
+					//如果不存在表，则创建
+					for (var name in tables) {
+						if (!that.db.objectStoreNames.contains(name)) {
+							var table = that.db.createObjectStore( name, { keyPath: tables[name].id || "id" } );
+							//建立索引
+							table.createIndex( "idIndex", tables[name].id || "id", { unique: true } );
+						}
 					}
-				}
-				console.log('upgradeneeded:db version changed to '+that.version);
-				resolve(that);
-			};
-		});
+					console.log( "upgradeneeded:db version changed to " + that.version );
+					resolve(that);
+				};
+			});
 
-		return this;
-	},
-	//关闭数据库
-	closeDB:function(){
-		this.db.close();
-		return this;
-	},
-	//删除数据库
-	deleteDB:function() {
-		this.indexedDB.deleteDatabase(this.name);
-		return this;
-	},
-	//清除表数据
-	clearTable:function(tbName){
-		var store=this.db.transaction(tbName,'readwrite').objectStore(tbName);
-		store.clear();
-		return this;
-	},
-	//删除表
-	deleteTable:function(tbName){
-		if(this.db.objectStoreNames.contains(tbName)){ 
-        	this.db.deleteObjectStore(tbName); 
-		}
-		return this;
-	},
-	//获取表实例
-	getObjectStore:function(tbName,mode){
-		return this.db.transaction(tbName, mode||'readonly').objectStore(tbName);
-	},
-	getAll:function(tbName,callback){
-		var store=this.getObjectStore(tbName),
-			arr=[];
-		//打开游标
-		var cursor=store.openCursor();
-		return new Promise((resolve,reject)=>{
-			cursor.onsuccess=function(event){
-				var result=event.target.result;
-				if(result){
-					arr.push(result.value);
-					result.continue();
-				} else {
-					resolve(arr);
-					console.log('no more entries!');
-				}
-			};
-			cursor.onerror=function(event){
-				reject(false);
-			};
-		});
-		return this;
-	},
-	getById:function(tbName,id){
-		var store=this.getObjectStore(tbName);
-		var request=store.get(id);
-		return new Promise((resolve,reject)=>{
-			request.onsuccess=function(event){
-				resolve(event.target.result);
-			};
-			request.onerror=function(event){
-				console.log('get data error');
-				reject(false);
-			};
-		});
-		return this;
-	},
-	add:function(tbName,obj){
-		obj.id=''+new Date().getTime()+Math.floor(Math.random()*Math.pow(10,18));
-		var request=this.getObjectStore(tbName,'readwrite').add(obj);
-		return new Promise((resolve,reject)=>{
-			request.onsuccess=function(event){
-				resolve(event.target.result);
-			};
-			request.onerror=function(event){
-				console.log('add data fail:');
-				console.log(event.target);
-				reject(false);
-			};
-		});
-		return this;
-	},
-	update:function(tbName,obj){
-		var that=this,request;
-		return new Promise((resolve,reject)=>{
-			return this.getById(tbName,obj.id).then((data)=>{
-				if(data){
-					request=that.getObjectStore(tbName,'readwrite').put(obj);
-					request.onsuccess=function(event){
-						resolve(event.target.result);
-					};
-					request.onerror=function(event){
-						console.log('update data fail:');
-						console.log(event.target);
+			return this;
+		},
+		//关闭数据库
+		closeDB: function() {
+			this.db.close();
+			return this;
+		},
+		//删除数据库
+		deleteDB: function() {
+			this.indexedDB.deleteDatabase(this.name);
+			return this;
+		},
+		//清除表数据
+		clearTable: function(tbName) {
+			var store = this.db.transaction(tbName, "readwrite").objectStore(tbName);
+			store.clear();
+			return this;
+		},
+		//删除表
+		deleteTable: function(tbName) {
+			if (this.db.objectStoreNames.contains(tbName)) {
+				this.db.deleteObjectStore(tbName);
+			}
+			return this;
+		},
+		//获取表实例
+		getObjectStore: function(tbName, mode) {
+			return this.db.transaction(tbName, mode || "readonly").objectStore(tbName);
+		},
+		getAll: function(tbName, callback) {
+			var store = this.getObjectStore(tbName),
+				arr = [];
+			//打开游标
+			var cursor = store.openCursor();
+			return new Promise((resolve, reject) => {
+				cursor.onsuccess = function(event) {
+					var result = event.target.result;
+					if (result) {
+						arr.push(result.value);
+						result.continue();
+					} else {
+						resolve(arr);
+						console.log("no more entries!");
+					}
+				};
+				cursor.onerror = reject;
+			});
+			return this;
+		},
+		getById: function(tbName, id) {
+			var store = this.getObjectStore(tbName);
+			var request = store.get(id);
+			return new Promise((resolve, reject) => {
+				request.onsuccess = function(event) {
+					resolve(event.target.result);
+				};
+				request.onerror = reject;
+			});
+			return this;
+		},
+		add: function(tbName, obj) {
+			obj.id =
+				"" +
+				new Date().getTime() +
+				Math.floor(Math.random() * Math.pow(10, 18));
+			var request = this.getObjectStore(tbName, "readwrite").add(
+				obj
+			);
+			return new Promise((resolve, reject) => {
+				request.onsuccess = function(event) {
+					resolve(event.target.result);
+				};
+				request.onerror = reject;
+			});
+			return this;
+		},
+		update: function(tbName, obj) {
+			var that = this,
+				request;
+			return new Promise((resolve, reject) => {
+				return this.getById(tbName, obj.id).then(data => {
+					if (data) {
+						request = that.getObjectStore(tbName, "readwrite").put(obj);
+						request.onsuccess = function(event) {
+							resolve(event.target.result);
+						};
+						request.onerror = reject;
+					} else {
+						resolve(that.add(tbName, obj));
+					}
+				}, reject);
+			});
+			return this;
+		},
+		save: function(tbName, obj) {
+			if (!obj.id) {
+				return this.add(tbName, obj);
+			} else {
+				return this.update(tbName, obj);
+			}
+			return this;
+		},
+		deleteById: function(tbName, id) {
+			var that = this,
+				request = null;
+			return new Promise((resolve, reject) => {
+				return this.getById(tbName, id).then(data => {
+					if (data) {
+						request = that.getObjectStore(tbName, "readwrite").delete(id);
+						request.onsuccess = function(event) {
+							resolve(id);
+						};
+						request.onerror = reject;
+					} else {
+						console.log("data not exist!");
 						reject(false);
-					};
-				} else {
-					resolve(that.add(tbName,obj));
-				}
-			},reject);
-		});	
-		return this;
-	},
-	save:function(tbName,obj){
-		if(!obj.id){
-			return this.add(tbName,obj);
-		} else {
-			return this.update(tbName,obj);
-		}
-		return this;
-	},
-	deleteById:function(tbName,id){
-		var that=this,request=null;
-		return new Promise((resolve,reject)=>{
-			return this.getById(tbName,id).then((data)=>{
-				if(data){
-					request=that.getObjectStore(tbName,'readwrite').delete(id);
-					request.onsuccess=function(event){
-						resolve(id);
-					};
-					request.onerror=function(event){
-						console.log('delete data fail:');
-						console.log(event.target);
-						reject(false);
-					};
-				} else {
-					console.log('data not exist!');
-					reject(false);
-				}
-			},reject);
-		});	
-		return this;
-	}
-};
-
-var table=document.getElementById('userTb');
-var tbody=table.getElementsByTagName('tbody')[0];
-
-var txtName=document.getElementById('name');
-var txtAddress=document.getElementById('address');
-var txtPhone=document.getElementById('phone');
-var hid=document.getElementById('id');
-//显示列表
-var renderTable=function(data){
-	var arr=[];
-	tbody.innerHTML = '';
-	data.forEach(function(item,i){
-		arr.push('<tr data-id="'+item.id+'">');
-		arr.push('<td>'+(i+1)+'</td>');
-		arr.push('<td>'+item.id+'</td>');
-		arr.push('<td>'+item.name+'</td>');
-		arr.push('<td>'+item.address+'</td>');
-		arr.push('<td>'+item.phone+'</td>');
-		arr.push('</tr>');
-	});
-	tbody.innerHTML=arr.join('');
-};
-//填充表单
-var fillForm=function(data){
-	txtName.value=data.name;
-	txtAddress.value=data.address;
-	txtPhone.value=data.phone;
-	hid.value=data.id;
-};
-
-var clearForm=function(){
-	txtName.value='';
-	txtAddress.value='';
-	txtPhone.value='';
-	hid.value='';
-};
-
-
-(async function() {
-	let db = await new IndexedDB({
-		name:'books',
-		version:1,
-		tables:{
-			user:{id:'id'}, 
-			group:{id:'id'} 
-		}
-	}).init();
-
-	renderTable(await db.getAll('user'));
-
-	tbody.onclick=async function(event){
-		event=event||window.event;
-		var target=event.target||event.srcElement;
-		if(target.parentNode.nodeName=='TR'){
-			var id=target.parentNode.getAttribute('data-id');
-			fillForm(await db.getById('user',id));
-			return;
+					}
+				}, reject);
+			});
+			return this;
 		}
 	};
-	document.getElementById('reset').onclick=function(){
-		clearForm();
-	};
-	document.getElementById('delete').onclick= async function(){
-		var id=hid.value;
-		if(await db.deleteById('user',id)){
-			clearForm();
-			renderTable(await db.getAll('user'));
-		}
-	};
-	document.getElementById('submit').onclick = async function(){
-		var nameVal=txtName.value;
-		var addressVal=txtAddress.value;
-		var phoneVal=txtPhone.value;
-		var idVal=hid.value;
-		if(!nameVal||!addressVal||!phoneVal){
-			alert('值不能为空！');
-			return;
-		}
-		var id = await db.save('user',{
-			id:idVal,
-			name:nameVal,
-			address:addressVal,
-			phone:phoneVal
+
+	var table = document.getElementById("userTb");
+	var tbody = table.getElementsByTagName("tbody")[0];
+
+	var txtName = document.getElementById("name");
+	var txtAddress = document.getElementById("address");
+	var txtPhone = document.getElementById("phone");
+	var hid = document.getElementById("id");
+	//显示列表
+	var renderTable = function(data) {
+		var arr = [];
+		tbody.innerHTML = "";
+		data.forEach(function(item, i) {
+			arr.push('<tr data-id="' + item.id + '">');
+			arr.push("<td>" + (i + 1) + "</td>");
+			arr.push("<td>" + item.id + "</td>");
+			arr.push("<td>" + item.name + "</td>");
+			arr.push("<td>" + item.address + "</td>");
+			arr.push("<td>" + item.phone + "</td>");
+			arr.push("</tr>");
 		});
-		if(id){document.getElementById('id').value=id; }
-		renderTable(await db.getAll('user'));
+		tbody.innerHTML = arr.join("");
 	};
-})();
+	//填充表单
+	var fillForm = function(data) {
+		txtName.value = data.name;
+		txtAddress.value = data.address;
+		txtPhone.value = data.phone;
+		hid.value = data.id;
+	};
+
+	var clearForm = function() {
+		txtName.value = "";
+		txtAddress.value = "";
+		txtPhone.value = "";
+		hid.value = "";
+	};
+
+	(async function() {
+		let db = await new IndexedDB({
+			name: "books",
+			version: 1,
+			tables: {
+				user: { id: "id" },
+				group: { id: "id" }
+			}
+		}).init();
+
+		renderTable(await db.getAll("user"));
+
+		tbody.onclick = async function(event) {
+			event = event || window.event;
+			var target = event.target || event.srcElement;
+			if (target.parentNode.nodeName == "TR") {
+				var id = target.parentNode.getAttribute("data-id");
+				fillForm(await db.getById("user", id));
+			}
+		};
+		document.getElementById("reset").onclick = clearForm;
+		document.getElementById("delete").onclick = async function() {
+			var id = hid.value;
+			if (await db.deleteById("user", id)) {
+				clearForm();
+				renderTable(await db.getAll("user"));
+			}
+		};
+		document.getElementById("submit").onclick = async function() {
+			var nameVal = txtName.value;
+			var addressVal = txtAddress.value;
+			var phoneVal = txtPhone.value;
+			var idVal = hid.value;
+			if (!nameVal || !addressVal || !phoneVal) {
+				alert("值不能为空！");
+				return;
+			}
+			var id = await db.save("user", {
+				id: idVal,
+				name: nameVal,
+				address: addressVal,
+				phone: phoneVal
+			});
+			if (id) {
+				document.getElementById("id").value = id;
+			}
+			renderTable(await db.getAll("user"));
+		};
+	})();
 </script>
 </body>
 </html>

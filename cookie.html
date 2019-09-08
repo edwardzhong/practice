@@ -1,36 +1,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>封装原生的cookie功能</title>
-	<script>
-	//设置
-	function setCookie (name,value,days) {
-		var d=new Date();
-		d=d.setDate(d.getDate()+days);
-		document.cookie=name+'='+value+';expires='+d;
-	}
-	function getCookie(name){
-		var c=document.cookie;
-		var r=RegExp('(?:^|\\s)'+name+'\\=([^\\;]+)(?:\\;|$)','i');
-		var m=c.match(r);
-		var v='';
-		m&&(v=m[1]);
-		return v;
-	}
-	//删除
-	function removeCookie(name){
-		setCookie(name,'1',-1);
-	}
-	window.onload=function(){
-		setCookie('name','edward',365);
-		setCookie('pass','111111',10);
-		console.log(getCookie('aa'));
-	}
-
-	</script>
+<meta charset="UTF-8">
+<title>封装原生的cookie功能</title>
+<script>
+//设置
+function setCookie (name,value,days) {
+	var d=new Date();
+	d=d.setDate(d.getDate()+days);
+	document.cookie=name+'='+value+';expires='+d;
+}
+function getCookie(name){
+	var c=document.cookie;
+	var r=RegExp('(?:^|\\s)'+name+'\\=([^\\;]+)(?:\\;|$)','i');
+	var m=c.match(r);
+	var v='';
+	m&&(v=m[1]);
+	return v;
+}
+//删除
+function removeCookie(name){
+	setCookie(name,'1',-1);
+}
+window.onload=function(){
+	setCookie('name','edward',365);
+	setCookie('pass','111111',10);
+	console.log(getCookie('aa'));
+}
+</script>
 </head>
 <body>
-	
 </body>
 </html>

@@ -1,31 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>微博发布框</title>
 <style type="text/css">
-*{margin:0;padding:0;list-style-type:none;}
-a,img{border:0;}
-body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
-/* div1 */
-#div1{margin:50px auto 0 auto;width:402px;height:180px;overflow:hidden;font-size:12px;position:relative;}
-#div1 p{color:#00F;height:28px;line-height:28px;overflow:hidden;text-align:right;margin:0 0 10px 0;}
-#div1 p span{color:#0F0;font-family:Georgia, "Times New Roman", Times, serif;font-size:16px;}
-#div1 p a:hover{text-decoration:underline;}
-#div1 textarea{
-	border:solid 1px #ccc;width:400px;height:88px;border-radius:3px;background-color:#fff;
-	-webkit-box-shadow:1px 1px 1px 0px #eaeaea inset;
-	-moz-box-shadow:1px 1px 1px 0px #eaeaea inset;
-	box-shadow:1px 1px 1px 0px #eaeaea inset;
-}
-
-.button{width:82px;height:30px;overflow:hidden;float:right;border:0;margin-top:8px;background:url(images/btn.png) no-repeat 0 -30px;cursor:pointer;color:#fff;font-family:"微软雅黑","宋体";}
-.dis{color:#999;background-position:0 0;border:0;color:#ccc;}
+	*{margin:0;padding:0;list-style-type:none;}
+	a,img{border:0;}
+	body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
+	#div1{margin:50px auto 0 auto;width:402px;height:180px;overflow:hidden;font-size:12px;position:relative;}
+	#div1 p{color:#00F;height:28px;line-height:28px;overflow:hidden;text-align:right;margin:0 0 10px 0;}
+	#div1 p span{color:#0F0;font-family:Georgia, "Times New Roman", Times, serif;font-size:16px;}
+	#div1 p a:hover{text-decoration:underline;}
+	#div1 textarea{
+		border:solid 1px #ccc;width:400px;height:88px;border-radius:3px;background-color:#fff;
+		-webkit-box-shadow:1px 1px 1px 0px #eaeaea inset;
+		-moz-box-shadow:1px 1px 1px 0px #eaeaea inset;
+		box-shadow:1px 1px 1px 0px #eaeaea inset;
+	}
+	.button{width:82px;height:30px;overflow:hidden;float:right;border:0;margin-top:8px;background:url(images/btn.png) no-repeat 0 -30px;cursor:pointer;color:#fff;font-family:"微软雅黑","宋体";}
+	.dis{color:#999;background-position:0 0;border:0;color:#ccc;}
 </style>
-<script type="text/javascript" src="../jquery.js"></script>
+<script type="text/javascript" src="./js/jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){
-	
 	//设置一个定时器，为BUTTON点击事件用
 	var timer=null;
 	var flashCount=0;
@@ -100,18 +99,14 @@ $(function(){
 			$('#textarea').blur();
 		}
 	});
-
 });
 </script>
 </head>
-
 <body>
-
 <div id="div1">
 	<p><a class="ap">相亲没对上眼双方拒买单，网友调侃难怪单身　热门微博</a></p>
     <textarea id="textarea"></textarea>
     <button class="dis button"  >发布</button>
 </div>
-
 </body>
 </html>

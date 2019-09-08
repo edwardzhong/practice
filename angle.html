@@ -1,65 +1,64 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>三角函数的应用</title>
-	<style>
-	.map{
-		position: relative;
-		height: 200px;
-		background-color: #ddd;
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>三角函数的应用</title>
+<style>
+.map{
+	position: relative;
+	height: 200px;
+	background-color: #ddd;
+}
+.point{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 2px;
+	height: 2px;
+	border-radius: 50%;
+	background-color: #f00;
+}
+</style>
+<script src="./js/jquery.min.js"></script>
+<script>
+$(function(){
+	var map=$('.map'),h=map.height();
+	//正弦函数曲线图
+	function drawSin(){
+		for(var x=0;x<360;x++){
+			var y=h/2*Math.sin(Math.PI/180*x)+h/2;
+			map.append($('<div class="point"></div>').css({'top':y+'px','left':x+'px'}));
+		}
 	}
-	.point{
-		position: absolute;
-		top: 10px;
-		left: 10px;
-		width: 2px;
-		height: 2px;
-		border-radius: 50%;
-		background-color: #f00;
+	//圆形,使用三角函数
+	function drawCircle(x,y,r,p){
+		var top=0;left=0;
+		for(var i=0;i<360;i+=p){
+			top=h/2+Math.sin(Math.PI/180*i)*r;
+			left=x-Math.cos(Math.PI/180*i)*r;
+			map.append($('<div class="point"></div>').css({'top':top+'px','left':left+'px'}));
+		}
 	}
-	</style>
-	<script src="./js/jquery.min.js"></script>
-	<script>
-	$(function(){
-		var map=$('.map'),h=map.height();
-		//正弦函数曲线图
-		function drawSin(){
-			for(var x=0;x<360;x++){
-				var y=h/2*Math.sin(Math.PI/180*x)+h/2;
-				map.append($('<div class="point"></div>').css({'top':y+'px','left':x+'px'}));
-			}
+	//圆形2，使用勾股弦定理
+	function drawCircle2(x,y,r,p){
+		var top=0;left=0;
+		for(var i=x-r;i<x+r;i+=p){
+			left=i;
+			top=Math.sqrt(Math.abs(Math.pow(r,2)-Math.pow(x-left,2)));
+			map.append($('<div class="point"></div>').css({'top':y-top+'px','left':left+'px'}));//上半圆
+			map.append($('<div class="point"></div>').css({'top':y+top+'px','left':left+'px'}));//下半圆
 		}
-		//圆形,使用三角函数
-		function drawCircle(x,y,r,p){
-			var top=0;left=0;
-			for(var i=0;i<360;i+=p){
-				top=h/2+Math.sin(Math.PI/180*i)*r;
-				left=x-Math.cos(Math.PI/180*i)*r;
-				map.append($('<div class="point"></div>').css({'top':top+'px','left':left+'px'}));
-			}
-		}
-		//圆形2，使用勾股弦定理
-		function drawCircle2(x,y,r,p){
-			var top=0;left=0;
-			for(var i=x-r;i<x+r;i+=p){
-				left=i;
-				top=Math.sqrt(Math.abs(Math.pow(r,2)-Math.pow(x-left,2)));
-				map.append($('<div class="point"></div>').css({'top':y-top+'px','left':left+'px'}));//上半圆
-				map.append($('<div class="point"></div>').css({'top':y+top+'px','left':left+'px'}));//下半圆
-			}
-		}
-		drawSin();
-		drawCircle(300,100,90,5);
-		for(var i=0;i<90;i++){
-			drawCircle2(300,100,i,5);
-		}
-		
-	});
-	</script>
+	}
+	drawSin();
+	drawCircle(300,100,90,5);
+	for(var i=0;i<90;i++){
+		drawCircle2(300,100,i,5);
+	}
+	
+});
+</script>
 </head>
 <body>
-<div class="map">
-</div>
+<div class="map"></div>
 </body>
 </html>

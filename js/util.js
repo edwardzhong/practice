@@ -207,18 +207,17 @@ function checkPass(val) {
  * @param {Number} a 
  * @param {Number} b
  */
-function Random(a, b) {
+function random(a, b) {
     return Math.random() * (b - a) + a;
 }
 
 /**
  * 获取 #aabbcc 格式的随机颜色
  */
-function RandomColor() {
+function randomColor() {
     var c = Math.floor(Math.random() * 16777216);
     return '#' + ('000' + c.toString(16)).slice(-6);
 }
-
 
 // //实现bind的功能
 // Function.prototype.myBind = function(obj) {
@@ -234,8 +233,6 @@ function RandomColor() {
 //         return this.replace(/^\s+|\s+$/g, '');
 //     }
 // }
-
-
 
 //增强版取URL中的参数
 function getUrlParams(url) {
@@ -320,7 +317,6 @@ function cloneObj(obj) {
 
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
-
 
 /**
  * 顺序遍历dom
@@ -504,6 +500,47 @@ var scrollEventCtr=(function(){
     };
 }());
 
+
+function formatTime (str) {
+    const d = new Date(str);
+    const n = new Date();
+    const r = n - d;
+    const dateStr = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    const timeStr = ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
+    const just = 1000 * 10;
+    const min = 1000 * 60;
+    const hour = 1000 * 60 * 60;
+    const day = hour * 24;
+    const month = day * 30;
+    let s = timeStr;
+    
+    if (r < day && n.getDate() - d.getDate() == 0) {
+        if (r < just) {
+            s = "刚刚";
+        } else if (r < min) {
+            s = Math.floor(r / 1000) + "秒前";
+        } else if (r < hour) {
+            s = Math.floor(r / min) + "分钟前";
+        } else if (r < hour * 24) {
+            s = Math.floor(r / hour) + "小时前";
+        }
+    } else if (r < day * 2 && new Date(n.getTime() - day).getDate() - d.getDate() == 0) {
+        s = `昨天 ${timeStr}`;
+    } else if (r < day * 3 && new Date(n.getTime() - day *2).getDate() - d.getDate() == 0) {
+        s = `前天 ${timeStr}`;
+    } else if (r < day * 8) {
+        s = Math.floor(r / day) + "天前";
+    } else if (r < day * 30) {
+        s = dateStr;
+    } else if (r < month * 12) {
+        s = Math.floor(r / month) + "个月前";
+    } else if (r < day * 365 * 5) {
+        s = Math.floor(r / (day * 365)) + "年前";
+    } else {
+        s = `${dateStr} ${timeStr}`;
+    }
+    return s;
+}
 
 // 观察者模式，发布订阅
 function Observer() {

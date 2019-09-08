@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>三角形</title>
+<style>
+	.wrap{
+		width: 400px;
+		margin: 10px auto;
+	}
+	.list{
+		display: flex;
+		align-items: center;
+	}
+	.list div {
+		margin: 20px 20px 20px 10px;
+	}
+	.angle{
+		display: inline-block;
+		width: 0;
+		border:10px solid transparent;
+	}
+	.angle.left{
+		border-right-color: #f00;
+	}
+	.angle.right{
+		border-left-color: #f00;
+	}
+	.angle.top{
+		border-bottom-color: #f00;
+	}
+	.angle.bottom{
+		border-top-color: #f00;
+	}
+	.angle2{
+		margin-bottom: 20px;
+		border-width:10px 20px;
+		border-style: solid;
+		border-color: transparent transparent transparent #f00;
+	}
+	.angle3{
+		margin-bottom: 20px;
+		width: 0;
+		border-width:10px 20px;
+		border-style: solid;
+		border-color: transparent transparent #f00 #f00;
+	}
+	.tip{
+		position: relative;
+		width:50px;
+		height: 50px;
+		background-color: #f00;
+	}
+	.tip:after {
+		position: absolute;
+		content: "";
+		top:15px;
+		right:-20px;
+		border:10px solid transparent;
+		border-left-color: #f00;
+	}
+	.frame{
+		position: relative;
+		width:50px;
+		height: 50px;
+		background: #fff;
+		border:1px solid hsl(220, 90%, 60%);
+	}
+	.frame:before{
+		position: absolute;
+		content: "";
+		top:15px;
+		right:-20px;
+		border:10px solid transparent;
+		border-left-color: hsl(220, 90%, 60%);
+	}
+	.frame:after{
+		position: absolute;
+		content: "";
+		top:15px;
+		right:-19px;
+		border:10px solid transparent;
+		border-left-color: #fff;
+	}
+</style>
+</head>
+<body>
+<div class="wrap">
+	<div class="list">
+		<span>left</span><div class="angle left"></div>
+		<span>right</span><div class="angle right"></div>
+		<span>top</span><div class="angle top"></div>
+		<span>bottom</span><div class="angle bottom"></div>
+	</div>
+	<div class="list">
+		<span>尖锐</span><div class="angle2"></div>
+		<span>直角</span><div class="angle3"></div>
+	</div>
+	<div class="list">
+		<span>伪元素填充</span><div class="tip"></div>
+		<span>伪元素边框</span><div class="frame"></div>
+	</div>
+</div>
+</body>
+</html>

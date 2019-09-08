@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>自适应布局</title>
+<style>
+	.wrap{
+		margin: 20px;
+	}
+	h2{
+		text-align: center;
+	}
+	div{
+		line-height: 2;
+	}
+	/* 左边固定,右边自适应 */
+	.lside{
+		height: 100px;
+		background-color: hsl(240, 100%, 80%);
+		width: 300px;
+		float: left;
+	}
+	.lmain{
+		height: 100px;
+		background-color: hsl(0, 100%, 80%);
+		margin-left:310px;
+	}
+
+	/* 右边固定,左边自适应 */
+	.rside{
+		height: 100px;
+		background-color: hsl(240, 100%, 80%);
+		width: 300px;
+		float: right;
+	}
+	.rmain{
+		height: 100px;
+		background-color: hsl(0, 100%, 80%);
+		margin-right: 310px;
+	}
+
+	/* 左右固定,中间自适应 */
+	.cmain{
+		height: 100px;
+		background-color: hsl(0, 100%, 80%);
+		margin-right: 310px;
+		margin-left: 310px;
+	}
+</style>
+</head>
+<body>
+	<h2>左边固定,右边自适应</h2>
+	<div class="wrap">
+		<!-- 左边固定,右边自适应 -->
+		<div class="lside">float: left;width: 300px;</div>
+		<div class="lmain">margin-left: 310px;</div>
+	</div>
+	<h2>右边固定,左边自适应</h2>
+	<div class="wrap">
+		<!-- 右边固定,左边自适应 -->
+		<div class="rside">float: right;width: 300px; </div>
+		<div class="rmain">margin-right: 310px;</div>
+	</div>
+	<h2>左右固定,中间自适应</h2>
+	<div class="wrap">
+		<!-- 左右固定,中间自适应 -->
+		<div class="lside">float: left;width: 300px;</div>
+		<div class="rside">float: right;width: 300px;</div>
+		<div class="cmain">margin-left: 310px;margin-right: 310px;</div>
+	</div>
+</body>
+</html>
