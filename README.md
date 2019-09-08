@@ -19,7 +19,6 @@
 * [简单烟花效果](https://github.com/edwardzhong/practice/blob/master/smoke.html)
 * [实现3D标签云](https://github.com/edwardzhong/practice/blob/master/3dtags.html)
 * [纯CSS实现导航栏下划线跟随效果](https://github.com/edwardzhong/practice/blob/master/underlineEffect.html)
-* [box-shadow](https://github.com/edwardzhong/practice/blob/master/boxshadow.html)
 
 ### 学习
 * [Object.defineProperties实现mvvm](https://github.com/edwardzhong/practice/blob/master/mvvm.html)
@@ -33,11 +32,10 @@
 * [触摸手势](https://github.com/edwardzhong/practice/blob/master/gestures.html)
 * [jquery研究](https://github.com/edwardzhong/practice/blob/master/jquery.html)
 * [zepto研究](https://github.com/edwardzhong/practice/blob/master/zepto.html)
-* [JavaScript语言精髓与编程实践技巧](https://github.com/edwardzhong/practice/blob/master/JavaScript_study_practice.html)
 * [indexDB的实践](https://github.com/edwardzhong/practice/blob/master/indexDB.html)
 * [封装原生的cookie功能](https://github.com/edwardzhong/practice/blob/master/cookie.html)
 * [css3D实现](https://github.com/edwardzhong/practice/blob/master/css3d.html)
-* [css3D和透视](https://github.com/edwardzhong/practice/blob/master/perspective.html)
+* [css3D和透视](https://github.com/edwardzhong/practice/blob/master/css3perspecttive.html)
 * [animation动画steps的应用](https://github.com/edwardzhong/practice/blob/master/animationSteps.html)
 * [如何数据和界面相分离](https://github.com/edwardzhong/practice/blob/master/uiData.html)
 * [深入学习表单功能](https://github.com/edwardzhong/practice/blob/master/formStudy.html)
@@ -56,11 +54,11 @@
 7. [grid布局](https://github.com/edwardzhong/practice/blob/master/layout/grid.html)
 
 ### css权威指南
-1. [块级元素](https://github.com/edwardzhong/practice/blob/master/css权威指南/block.html)
-2. [行内元素](https://github.com/edwardzhong/practice/blob/master/css权威指南/inline.html)
-3. [字体](https://github.com/edwardzhong/practice/blob/master/css权威指南/font.html)
-4. [web安全色](https://github.com/edwardzhong/practice/blob/master/css权威指南/color.html)
-5. [选择器](https://github.com/edwardzhong/practice/blob/master/css权威指南/color.html)
+1. [块级元素](https://github.com/edwardzhong/practice/blob/master/css_guide/block.html)
+2. [行内元素](https://github.com/edwardzhong/practice/blob/master/css_guide/inline.html)
+3. [字体](https://github.com/edwardzhong/practice/blob/master/css_guide/font.html)
+4. [选择器](https://github.com/edwardzhong/practice/blob/master/css_guide/select.html)
+5. [web安全色](https://github.com/edwardzhong/practice/blob/master/css_guide/color.html)
 
 ### 数据结构和算法
 1. [链表linkList](https://github.com/edwardzhong/practice/blob/master/algorithm/linkList.html)
