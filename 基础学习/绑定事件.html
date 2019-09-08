@@ -1,14 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>绑定</title>
-	<style>
+<meta charset="UTF-8">
+<title>线框拖拽</title>
+<style>
 	#div1{width: 100px;height: 100px;background-color: #ff0;position: absolute;}
 	.box{border: 1px dotted Gray;position: absolute;}
-	</style>
-	<script src="../jquery-1.7.2.js"></script>
-	<script>
+</style>
+<script>
 	function addEvent(obj,type,fn){
 		if(obj.attachEvent){
 			obj.attachEvent(obj,'on'+type,fn);
@@ -57,9 +56,10 @@
 			return false;
 		}
 	}
-	</script>
+</script>
 </head>
 <body>
+	<h2>线框拖拽</h2>
 	<!-- <button id="btn">点击</button> -->
 	<div id="div1"></div>
 </body>

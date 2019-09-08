@@ -1,65 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>焦点图</title>
-	<style>
-	img,ul,li,div{margin: 0;padding: 0;}
-	div{position: relative;margin:100px auto;background-color: #f00;overflow: hidden;}
-	ul{position:absolute; list-style-type: none;cursor: pointer;}
-	ul li{float: left;}
-	</style>
-	<script>
-	window.onload=function () {
-		var div=document.getElementsByTagName('div')[0],
-			ul=document.getElementsByTagName('ul')[0],
-			lis=ul.getElementsByTagName('li'),
-			btns=document.getElementsByTagName('button'),
-			timer=null,
-			speed=-2;
-		div.style.height=lis[0].offsetHeight+'px';
-		div.style.width=lis[0].offsetWidth*lis.length+'px';
-		ul.innerHTML+=ul.innerHTML;
-		ul.style.width=lis[0].offsetWidth*lis.length+'px';
+<meta charset="UTF-8" />
+<title>焦点图</title>
+<style>
+	img, ul, li, div {
+		margin: 0;
+		padding: 0;
+		width: 160px;
+	}
+	div {
+		position: relative;
+		margin: 100px auto;
+		background-color: #f00;
+		overflow: hidden;
+	}
+	ul {
+		position: absolute;
+		list-style-type: none;
+		cursor: pointer;
+	}
+	ul li {
+		float: left;
+	}
+</style>
+<script>
+	window.onload = function() {
+		var div = document.getElementsByTagName("div")[0],
+			ul = document.getElementsByTagName("ul")[0],
+			lis = ul.getElementsByTagName("li"),
+			btns = document.getElementsByTagName("button"),
+			timer = null,
+			speed = -2;
+		div.style.height = lis[0].offsetHeight + "px";
+		div.style.width = lis[0].offsetWidth * lis.length + "px";
+		ul.innerHTML += ul.innerHTML;
+		ul.style.width = lis[0].offsetWidth * lis.length + "px";
 
-		var move=function(){
-			if(ul.offsetLeft<-ul.offsetWidth/2){
+		var move = function() {
+			if (ul.offsetLeft < -ul.offsetWidth / 2) {
 				console.log(ul.offsetLeft);
-				ul.style.left=0;
+				ul.style.left = 0;
 			}
-			if(ul.offsetLeft>0){
+			if (ul.offsetLeft > 0) {
 				console.log(ul.offsetLeft);
-				ul.style.left=-ul.offsetWidth/2+'px';
+				ul.style.left = -ul.offsetWidth / 2 + "px";
 			}
-			ul.style.left=ul.offsetLeft+speed+'px';
+			ul.style.left = ul.offsetLeft + speed + "px";
 		};
-		timer=setInterval(move,30);
-		ul.onmouseover=function(){
+		timer = setInterval(move, 30);
+		ul.onmouseover = function() {
 			clearInterval(timer);
 		};
-		ul.onmouseout=function(){
-			timer=setInterval(move,30);
-		}
-		btns[0].onclick=function(){
-			speed=-2;
+		ul.onmouseout = function() {
+			timer = setInterval(move, 30);
 		};
-		btns[1].onclick=function(){
-			speed=2;
+		btns[0].onclick = function() {
+			speed = -2;
 		};
-	}
-	</script>
+		btns[1].onclick = function() {
+			speed = 2;
+		};
+	};
+</script>
 </head>
 <body>
 	<button>向左</button>
 	<button>向右</button>
 	<div>
 		<ul>
-			<li><img src="../Images/Jellyfish.jpg" width="160" alt=""></li>
-			<li><img src="../Images/Koala.jpg" width="160" alt=""></li>
-			<li><img src="../Images/Lighthouse.jpg" width="160" alt=""></li>
-			<li><img src="../Images/Tulips.jpg" width="160" alt=""></li>
+			<li><img src="../Images/Jellyfish.jpg" width="160" alt="" /> </li>
+			<li><img src="../Images/Koala.jpg" width="160" alt="" /></li>
+			<li> <img src="../Images/Lighthouse.jpg" width="160" alt="" /> </li>
+			<li><img src="../Images/Tulips.jpg" width="160" alt="" /></li>
 		</ul>
 	</div>
-
 </body>
 </html>
