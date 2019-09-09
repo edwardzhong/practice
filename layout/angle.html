@@ -18,6 +18,18 @@
 	.list div {
 		margin: 20px 20px 20px 10px;
 	}
+	.box {
+		width: 30px;
+		height: 30px;
+		border: 15px solid;
+		border-color: #FFA500 #F00 #008000 #808080;
+	}
+	.box2 {
+		width: 0;
+		height: 0;
+		border: 15px solid;
+		border-color: #FFA500 #F00 #008000 #808080;
+	}
 	.angle{
 		display: inline-block;
 		width: 0;
@@ -53,6 +65,7 @@
 		width:50px;
 		height: 50px;
 		background-color: #f00;
+		border-radius: 4px;
 	}
 	.tip:after {
 		position: absolute;
@@ -68,6 +81,7 @@
 		height: 50px;
 		background: #fff;
 		border:1px solid hsl(220, 90%, 60%);
+		border-radius: 4px;
 	}
 	.frame:before{
 		position: absolute;
@@ -89,21 +103,25 @@
 </head>
 <body>
 	<h2>实现三角形</h2>
-<div class="wrap">
-	<div class="list">
-		<span>left</span><div class="angle left"></div>
-		<span>right</span><div class="angle right"></div>
-		<span>top</span><div class="angle top"></div>
-		<span>bottom</span><div class="angle bottom"></div>
+	<div class="wrap">
+		<div class="list">
+			<div class="box"></div>
+			<div class="box2"></div>
+		</div>
+		<div class="list">
+			<span>left</span><div class="angle left"></div>
+			<span>right</span><div class="angle right"></div>
+			<span>top</span><div class="angle top"></div>
+			<span>bottom</span><div class="angle bottom"></div>
+		</div>
+		<div class="list">
+			<span>尖锐</span><div class="angle2"></div>
+			<span>直角</span><div class="angle3"></div>
+		</div>
+		<div class="list">
+			<span>伪元素填充</span><div class="tip"></div>
+			<span>伪元素边框</span><div class="frame"></div>
+		</div>
 	</div>
-	<div class="list">
-		<span>尖锐</span><div class="angle2"></div>
-		<span>直角</span><div class="angle3"></div>
-	</div>
-	<div class="list">
-		<span>伪元素填充</span><div class="tip"></div>
-		<span>伪元素边框</span><div class="frame"></div>
-	</div>
-</div>
 </body>
 </html>

@@ -46,6 +46,75 @@
 		margin-right: 310px;
 		margin-left: 310px;
 	}
+
+	/* 双飞翼布局 */
+	.g-container {
+		position: relative;
+		height: 200px;
+		min-width: 400px;
+	}
+	.g-container > div {
+        height: 200px;
+        float: left;
+        text-align: center;
+        color: #fff;
+        line-height: 200px;
+        font-size: 3vw;
+    }
+	.g-middle {
+		position: relative;
+		width: 100%;
+		background: #cc6630;
+	}
+	.g-middle-inner {
+		margin: 0 200px;
+	}
+	.g-left {
+		position: relative;
+		width: 200px;
+		background: #ffcc00;
+		margin-left: -100%;
+	}
+	.g-right {
+		position: relative;
+		width: 200px;
+		background: pink;
+		margin-left: -200px;
+	}
+
+	/* flex 实现的圣杯布局 */
+	.f-container {
+		position: relative;
+		height: 200px;
+		min-width: 400px;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+    .f-container > div {
+        height: 200px;
+        text-align: center;
+        color: #fff;
+        line-height: 200px;
+        font-size: 3vw;
+    }
+	.f-middle {
+		order: 2;
+		flex: auto 1 0 ;
+		background: #cc6630;
+	}
+
+	.f-left {
+		order: 1;
+		flex: 200px 0 0;
+		background: #ffcc00;
+	}
+
+	.f-right {
+		order: 3;
+		flex: 200px 0 0;
+		background: pink;
+	}
 </style>
 </head>
 <body>
@@ -67,6 +136,20 @@
 		<div class="lside">float: left;width: 300px;</div>
 		<div class="rside">float: right;width: 300px;</div>
 		<div class="cmain">margin-left: 310px;margin-right: 310px;</div>
+	</div>
+	<h2>双飞翼布局</h2>
+	<div class="g-container">
+		<div class="g-middle">
+			<div class="g-middle-inner">middle-inner</div>
+		</div> 
+		<div class="g-left">left</div>
+		<div class="g-right">right</div>
+	</div>
+	<h2>flex 实现的圣杯布局</h2>
+	<div class="f-container">		
+		<div class="f-middle">middle</div>
+		<div class="f-left">left</div>
+		<div class="f-right">right</div>
 	</div>
 </body>
 </html>
