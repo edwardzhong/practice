@@ -38,7 +38,7 @@
 </head>
 <body>
 	<h2>居中对齐总结</h2>
-	<h3>margin设为auto水平居中</h3>
+	<h3>margin:auto 水平居中</h3>
 	<section>
 		<div style="height:80px;">
 			<div style="width:50px;height:50px;margin:0 auto;"></div>
@@ -46,7 +46,7 @@
 		<p>只能水平居中,必须指定宽度,且对浮动或绝对定位元素无效</p>
 		<p>关键样式:margin:0 auto;</p>
 	</section>
-	<h3>text-align文字水平居中</h3>
+	<h3>text-align:center 文字水平居中</h3>
 	<section>
 		<div style="text-align:center;">
 			<span>行内元素span</span><br>
@@ -56,7 +56,7 @@
 		<p>只能对图片,文字,按钮等行内元素水平居中, 但是ie6,ie7能对任何元素居中</p>
 		<p>关键样式:text-align:center;</p>
 	</section>
-	<h3>单行文字垂直居中</h3>
+	<h3>line-height 和 height 等高设置单行文字垂直居中</h3>
 	<section>
 		<div style="height:40px;line-height:40px;">单行文字内容</div>
 		<p>line-height 和height 设置为等高, 单行文字垂直居中,只适用一行文字情况</p>
@@ -69,7 +69,7 @@
 		<p>关键样式:padding:40px;</p>
 		<p>缺点：高度不固定</p>
 	</section>
-	<h3>表格内容居中</h3>
+	<h3>table表格放置居中</h3>
 	<section>
 		<table>
 		<tr>
@@ -81,7 +81,7 @@
 	<p>vertical-align垂直居中,text-align:水平居中 块级元素使用display:inline-block;才能水平居中</p>
 	<p>关键样式:text-align: center;vertical-align: middle;</p>	
 	</section>
-	<h3>转化为table-cell进行居中</h3>
+	<h3>display:table-cell进行居中</h3>
 	<section>
 		<div style="display:table-cell;vertical-align:middle;text-align:center;">
 			<div style="display:inline-block;height:50px;width:50px;background-color:#00f;"></div>
@@ -130,10 +130,10 @@
 	</section>
 	<h3>flex布局居中</h3>
 	<section>
-		<div style="display:flex;justify-content:center;">
-			<div style="height:50px;width:50px;background-color:#00f;align-self:center;"></div>
+		<div style="display:flex;justify-content:center;align-items:center;">
+			<div style="height:50px;width:50px;background-color:#00f;"></div>
 		</div>
-		<p>关键样式：父元素：display:flex;justify-content:center; 子元素：align-self:center;</p>
+		<p>关键样式：父元素：display:flex;justify-content:center;align-self:center; 或者 子元素：align-self:center;</p>
 	</section>
 </body>
 </html>

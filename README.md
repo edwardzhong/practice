@@ -45,14 +45,13 @@
 * [简单运动框架](https://github.com/edwardzhong/practice/blob/master/js/Animate.js)
 
 ### 布局
-1. [基本自适应布局](https://github.com/edwardzhong/practice/blob/master/layout/auto.html)
-2. [三角形](https://github.com/edwardzhong/practice/blob/master/layout/angle.html)
-3. [样式居中总结](https://github.com/edwardzhong/practice/blob/master/layout/center.html)
-4. [justify两端对齐](https://github.com/edwardzhong/practice/blob/master/layout/justify.html)
-5. [等高布局](https://github.com/edwardzhong/practice/blob/master/layout/height.html)
-6. [flex布局](https://github.com/edwardzhong/practice/blob/master/layout/flex.html)
-7. [grid布局](https://github.com/edwardzhong/practice/blob/master/layout/grid.html)
-8. [checked伪类实现纯 CSSTab 切换](https://github.com/edwardzhong/practice/blob/master/layout/tab.html)
+1. [居中](https://github.com/edwardzhong/practice/blob/master/layout/center.html)
+2. [自适应布局](https://github.com/edwardzhong/practice/blob/master/layout/auto.html)
+3. [等高布局](https://github.com/edwardzhong/practice/blob/master/layout/height.html)
+4. [flex布局](https://github.com/edwardzhong/practice/blob/master/layout/flex.html)
+5. [grid布局](https://github.com/edwardzhong/practice/blob/master/layout/grid.html)
+6. [三角形](https://github.com/edwardzhong/practice/blob/master/layout/angle.html)
+7. [checked伪类实现纯 CSSTab 切换](https://github.com/edwardzhong/practice/blob/master/layout/tab.html)
 
 ### css权威指南
 1. [块级元素](https://github.com/edwardzhong/practice/blob/master/css_guide/block.html)

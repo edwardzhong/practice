@@ -35,19 +35,18 @@ $('#upload')[0].addEventListener("drop",function(e){
     e.preventDefault(); //取消默认浏览器拖拽效果 
     var files = e.dataTransfer.files; //获取文件对象 
     //检测是否是拖拽文件到页面的操作 
-    if(files.length == 0){ 
-        return false; 
-    } 
+    if(files.length == 0) return false;
+    var file = files[0];
     //检测文件是不是图片 
-    if(files[0].type.indexOf('image') === -1){ 
+    if(file.type.indexOf('image') === -1){ 
         alert("您拖的不是图片！"); 
         return false; 
     } 
      
     //拖拉图片到浏览器，可以实现预览功能 
-    // var url = window.URL.createObjectURL(files[0]); 
-    var fileName = files[0].name; //图片名称 
-    var fileSize = Math.floor((files[0].size)/1024);  
+    // var url = window.URL.createObjectURL(file); 
+    var fileName = file.name; //图片名称 
+    var fileSize = Math.floor((file.size)/1024);  
     if(fileSize>500){ 
         alert("上传大小不能超过500K."); 
         return false; 
@@ -61,7 +60,7 @@ $('#upload')[0].addEventListener("drop",function(e){
 				console.log(data);
 			});
 		};
-        fr.readAsBinaryString(files[0]);
+        fr.readAsBinaryString(file);
 	} else {
 	    alert("浏览器不支持上传");
 	}
