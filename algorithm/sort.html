@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>排序</title>
-	<script>
-	var arr=[2,7,6,8,4,5,3,1];
+<meta charset="UTF-8" />
+<title>排序</title>
+<script>
+	var arr = [2, 7, 6, 8, 4, 5, 3, 1];
 	/**
 	 * 冒泡排序
 	 * 每次直接进行交换
 	 */
-	function bubbleSort(){
-		var isSort=true,//是否已经排好序
-			temp,i,j,
-			len=arr.length;
+	function bubbleSort() {
+		var isSort = true, //是否已经排好序
+			temp, i, j,
+			len = arr.length;
 
-		for(i=0;i<len-1;i++){
-			isSort=true;
-			for(j=i+1;j<len;j++){
-				if(arr[i]>arr[j]){
-					isSort=false;
-					temp=arr[i];
-					arr[i]=arr[j];
-					arr[j]=temp;
+		for (i = 0; i < len - 1; i++) {
+			isSort = true;
+			for (j = i + 1; j < len; j++) {
+				if (arr[i] > arr[j]) {
+					isSort = false;
+					temp = arr[i];
+					arr[i] = arr[j];
+					arr[j] = temp;
 				}
 			}
-			if(isSort){break; }
+			if (isSort) {
+				break;
+			}
 		}
 	}
 
@@ -32,21 +34,22 @@
 	 * 选择排序
 	 * 每次选出最小的下标，然后再与当前左边的项进行交换
 	 */
-	function selectSort(){
-		var temp,i,j,
-			minIndex=0,
-			len=arr.length;
-		for(i=0;i<len-1;i++){
-			minIndex=i;
-			for(j=i+1;j<len;j++){
-				if(arr[minIndex]>arr[j]){//找出值最小的下标
-					minIndex=j;
+	function selectSort() {
+		var temp, i, j,
+			minIndex = 0,
+			len = arr.length;
+		for (i = 0; i < len - 1; i++) {
+			minIndex = i;
+			for (j = i + 1; j < len; j++) {
+				if (arr[minIndex] > arr[j]) {
+					//找出值最小的下标
+					minIndex = j;
 				}
 			}
-			if(minIndex!=i){
-				temp=arr[minIndex];
-				arr[minIndex]=arr[i];
-				arr[i]=temp;
+			if (minIndex != i) {
+				temp = arr[minIndex];
+				arr[minIndex] = arr[i];
+				arr[i] = temp;
 			}
 		}
 	}
@@ -55,19 +58,17 @@
 	 * 插入排序
 	 * 将无序数列的第一项与有序数列的项从后往前逐个比较，找到插入位置
 	 */
-	function insertSort(){
-		var temp,i,j,
-			len=arr.length;
-
-		for(i=1;i<len;i++){
-			temp=arr[i];
-			for(j=i-1;j>-1;j--){
-				if(temp>=arr[j]){
+	function insertSort() {
+		var temp, i, j, len = arr.length;
+		for (i = 1; i < len; i++) {
+			temp = arr[i];
+			for (j = i - 1; j > -1; j--) {
+				if (temp >= arr[j]) {
 					break;
 				}
-				arr[j+1]=arr[j];
+				arr[j + 1] = arr[j];
 			}
-			arr[j+1]=temp;
+			arr[j + 1] = temp;
 		}
 	}
 
@@ -75,23 +76,23 @@
 	 * 希尔排序，直接插入排序的改进，又称为缩小增量排序
 	 * 先将序列分成几个子序列，分别进行插入排序，最后合并
 	 */
-	function shellSort(){
-		var temp,i,j,
-			len=arr.length,
-			d=Math.floor(len/2);
+	function shellSort() {
+		var temp, i, j,
+			len = arr.length,
+			d = Math.floor(len / 2);
 
 		while (d) {
-			for(i=d;i<len;i++){
-				temp=arr[i];
-				for(j=i-d;j>-1;j-=d){
-					if(temp>=arr[j]){
+			for (i = d; i < len; i++) {
+				temp = arr[i];
+				for (j = i - d; j > -1; j -= d) {
+					if (temp >= arr[j]) {
 						break;
 					}
-					arr[j+d]=arr[j];	
+					arr[j + d] = arr[j];
 				}
-				arr[j+d]=temp;
+				arr[j + d] = temp;
 			}
-			d=Math.floor(d/2);
+			d = Math.floor(d / 2);
 		}
 	}
 
@@ -100,52 +101,56 @@
 	 * @param  {[type]} low  [description]
 	 * @param  {[type]} high [description]
 	 */
-	function quickSort(low,high){
-		if(low>high){return;}
-		var first=low,
-			last=high,
-			key=arr[first];
+	function quickSort(low, high) {
+		if (low > high) {
+			return;
+		}
+		var first = low,
+			last = high,
+			key = arr[first];
 
-		while (first<last) {
-			while(first<last&&arr[last]>=key){//从右向左找第一个小于key的数
+		while (first < last) {
+			while (first < last && arr[last] >= key) {
+				//从右向左找第一个小于key的数
 				last--;
 			}
-			arr[first]=arr[last];
+			arr[first] = arr[last];
 
-			while (first<last&&arr[first]<key) {//从左向右找第一个大于等于key的数
+			while (first < last && arr[first] < key) {
+				//从左向右找第一个大于等于key的数
 				first++;
 			}
-			arr[last]=arr[first];
+			arr[last] = arr[first];
 		}
-		arr[first]=key;//当在当组内找完一遍以后就把中间数key回归
-		quickSort(low,first-1);//递归左边的分组
-		quickSort(first+1,high);//递归右边的分组
+		arr[first] = key; //当在当组内找完一遍以后就把中间数key回归
+		quickSort(low, first - 1); //递归左边的分组
+		quickSort(first + 1, high); //递归右边的分组
 	}
 
 	/**
 	 * 奇偶排序 多线程有优势
 	 */
-	function oddEvenSort(){
-		var len=arr.length,
-			isSort=false,
+	function oddEvenSort() {
+		var len = arr.length,
+			isSort = false,
 			temp;
-		while(!isSort){
-			isSort=true;
-			for(var i=0;i<len;i+=2){
-				if(i+1<len&&arr[i]>arr[i+1]){
-					temp=arr[i];
-					arr[i]=arr[i+1];
-					arr[i+1]=temp;
-					isSort=false;
+		while (!isSort) {
+			isSort = true;
+			for (var i = 0; i < len; i += 2) {
+				if (i + 1 < len && arr[i] > arr[i + 1]) {
+					temp = arr[i];
+					arr[i] = arr[i + 1];
+					arr[i + 1] = temp;
+					isSort = false;
 				}
 			}
 
-			for(var i=1;i<len;i+=2){
-				if(i+1<len&&arr[i]>arr[i+1]){
-					temp=arr[i];
-					arr[i]=arr[i+1];
-					arr[i+1]=temp;
-					isSort=false;
+			for (var i = 1; i < len; i += 2) {
+				if (i + 1 < len && arr[i] > arr[i + 1]) {
+					temp = arr[i];
+					arr[i] = arr[i + 1];
+					arr[i + 1] = temp;
+					isSort = false;
 				}
 			}
 		}
@@ -154,30 +159,32 @@
 	/**
 	 * 鸡尾酒排序 头尾分别进行冒泡排序
 	 */
-	function cockTailSort(){
-		var len=arr.length,
-			isSort=false,
+	function cockTailSort() {
+		var len = arr.length,
+			isSort = false,
 			temp;
 
-		for(var i=1;i<Math.floor(len/2);i++){
-			isSort=true;
-			for(var j=i-1;j<len;j++){
-				if(j+1<len&&arr[j]>arr[j+1]){
-					temp=arr[j];
-					arr[j]=arr[j+1];
-					arr[j+1]=temp;
-					isSort=false;
+		for (var i = 1; i < Math.floor(len / 2); i++) {
+			isSort = true;
+			for (var j = i - 1; j < len; j++) {
+				if (j + 1 < len && arr[j] > arr[j + 1]) {
+					temp = arr[j];
+					arr[j] = arr[j + 1];
+					arr[j + 1] = temp;
+					isSort = false;
 				}
 			}
-			for(var j=len-i-1;j>=i;j--){
-				if(j>0&&arr[j-1]>arr[j]){
-					temp=arr[j-1];
-					arr[j-1]=arr[j];
-					arr[j]=temp;
-					isSort=false;
+			for (var j = len - i - 1; j >= i; j--) {
+				if (j > 0 && arr[j - 1] > arr[j]) {
+					temp = arr[j - 1];
+					arr[j - 1] = arr[j];
+					arr[j] = temp;
+					isSort = false;
 				}
 			}
-			if(isSort){break;}
+			if (isSort) {
+				break;
+			}
 		}
 	}
 	// [2,7,6,8,4,5,3,1]
@@ -189,9 +196,7 @@
 	// oddEvenSort();
 	cockTailSort();
 	console.log(arr);
-	</script>
+</script>
 </head>
-<body>
-	
-</body>
+<body></body>
 </html>
