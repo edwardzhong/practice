@@ -61,12 +61,9 @@
 5. [web安全色](https://github.com/edwardzhong/practice/blob/master/css_guide/color.html)
 
 ### 数据结构和算法
-1. [链表linkList](https://github.com/edwardzhong/practice/blob/master/algorithm/linkList.html)
-2. [图map](https://github.com/edwardzhong/practice/blob/master/algorithm/map.html)
-3. [排序算法sort](https://github.com/edwardzhong/practice/blob/master/algorithm/sort.html)
-4. [二叉树1 tree](https://github.com/edwardzhong/practice/blob/master/algorithm/tree.html)
-5. [二叉树2 tree2](https://github.com/edwardzhong/practice/blob/master/algorithm/tree2.html)
-6. [ac自动机](https://github.com/edwardzhong/practice/blob/master/algorithm/trie.html)
+1. [Sort 排序](https://github.com/edwardzhong/practice/blob/master/algorithm/sort.html)
+2. [Tree 二叉树](https://github.com/edwardzhong/practice/blob/master/algorithm/tree.html)
+3. [Map 图](https://github.com/edwardzhong/practice/blob/master/algorithm/map.html)
 
 ### javascript设计模式
 1. [面向对象基础](https://github.com/edwardzhong/practice/blob/master/javascript_design_pattern/base.html)

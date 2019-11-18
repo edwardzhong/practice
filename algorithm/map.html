@@ -84,10 +84,10 @@
 		for(var i=0;i<vertexNum;i++){
 			for(var j=i;j<vertexNum;j++){
 				if(this.edges[i][j]){
-					edgeList.push({
+					this.edgeList.push({
 						start:i,
 						end:j,
-						this.edges[i][j]
+						weight:this.edges[i][j]
 					});
 				}
 			}
