@@ -7,7 +7,7 @@
 	var arr = [2, 7, 6, 8, 4, 5, 3, 1];
 	/**
 	 * 冒泡排序
-	 * 每次直接进行交换
+	 * 从最小开始冒
 	 */
 	function bubbleSort() {
 		var isSort = true, //是否已经排好序
@@ -36,19 +36,18 @@
 	 */
 	function selectSort() {
 		var temp, i, j,
-			minIndex = 0,
+			m = 0,
 			len = arr.length;
 		for (i = 0; i < len - 1; i++) {
-			minIndex = i;
+			m = i;
 			for (j = i + 1; j < len; j++) {
-				if (arr[minIndex] > arr[j]) {
-					//找出值最小的下标
-					minIndex = j;
+				if (arr[m] > arr[j]) {
+					m = j;//找出值最小项的索引
 				}
 			}
-			if (minIndex != i) {
-				temp = arr[minIndex];
-				arr[minIndex] = arr[i];
+			if (m != i) {
+				temp = arr[m];
+				arr[m] = arr[i];
 				arr[i] = temp;
 			}
 		}
@@ -59,16 +58,13 @@
 	 * 将无序数列的第一项与有序数列的项从后往前逐个比较，找到插入位置
 	 */
 	function insertSort() {
-		var temp, i, j, len = arr.length;
+		var i, j, temp, len = arr.length;
 		for (i = 1; i < len; i++) {
-			temp = arr[i];
-			for (j = i - 1; j > -1; j--) {
-				if (temp >= arr[j]) {
-					break;
-				}
-				arr[j + 1] = arr[j];
+			for (j = i; arr[j] < arr[j-1] && j > 0; j--) {
+				temp = arr[j];
+				arr[j] = arr[j-1];
+				arr[j - 1] = temp;
 			}
-			arr[j + 1] = temp;
 		}
 	}
 
@@ -77,22 +73,38 @@
 	 * 先将序列分成几个子序列，分别进行插入排序，最后合并
 	 */
 	function shellSort() {
-		var temp, i, j,
-			len = arr.length,
-			d = Math.floor(len / 2);
-
+		var temp, i, j, d = 1,
+			len = arr.length;
+		while(Math.floor(len/d)>0) d = d * 3 + 1;
 		while (d) {
 			for (i = d; i < len; i++) {
-				temp = arr[i];
-				for (j = i - d; j > -1; j -= d) {
-					if (temp >= arr[j]) {
-						break;
-					}
-					arr[j + d] = arr[j];
+				for (j = i; j >= d && arr[j] < arr[j-d]; j-=d) {
+					temp = arr[j];
+					arr[j] = arr[j-d];
+					arr[j - d] = temp;
 				}
-				arr[j + d] = temp;
 			}
-			d = Math.floor(d / 2);
+			d = Math.floor(d / 3);
+		}
+	}
+
+	//归并排序
+	function mergeSort(low, high) {
+		if(low >= high) return;
+		var mid = low + Math.floor((high - low) /2);
+		mergeSort(low, mid);
+		mergeSort(mid + 1, high);
+		merge(low, mid, high);
+	}
+
+	function merge(low, mid, high) {
+		var i = low, j = mid + 1, l = 0, r = 0;
+		var lArr = arr.slice(i, j), rArr = arr.slice(j, high +1);
+		for(;i <= high; i++) {
+			if(l == j - low) arr[i] = rArr[r++];//左半部分已空
+			else if(r == high - mid) arr[i] = lArr[l++];//右半部分已空
+			else if(lArr[l] > rArr[r]) arr[i] = rArr[r++];
+			else arr[i] = lArr[l++];
 		}
 	}
 
@@ -102,29 +114,21 @@
 	 * @param  {[type]} high [description]
 	 */
 	function quickSort(low, high) {
-		if (low > high) {
-			return;
+		if(low >= high) return;
+		var i = low, k = low +1, j = high, key = arr[low];
+		while(k <= j) {
+			if(arr[k] < key) swap(k++, i++); //小于切分，与切分元素交换后，左边届和游标向右推进
+			else if(arr[k] > key) swap(k, j--);//大于切分，与右侧元素交换后，右边界往左推进
+			else k++; // 等于切分，游标直接向右推进
 		}
-		var first = low,
-			last = high,
-			key = arr[first];
+		quickSort(low, i-1);
+		quickSort(j + 1, high);
+	}
 
-		while (first < last) {
-			while (first < last && arr[last] >= key) {
-				//从右向左找第一个小于key的数
-				last--;
-			}
-			arr[first] = arr[last];
-
-			while (first < last && arr[first] < key) {
-				//从左向右找第一个大于等于key的数
-				first++;
-			}
-			arr[last] = arr[first];
-		}
-		arr[first] = key; //当在当组内找完一遍以后就把中间数key回归
-		quickSort(low, first - 1); //递归左边的分组
-		quickSort(first + 1, high); //递归右边的分组
+	function swap(i,j){
+		var t = arr[i];
+		arr[i] = arr[j];
+		arr[j] = t;
 	}
 
 	/**
@@ -188,35 +192,15 @@
 		}
 	}
 
-	//归并排序
-	function mergeSort(low, high) {
-		if(low >= high) return;
-		var mid = low + Math.floor((high - low) /2);
-		mergeSort(low, mid);
-		mergeSort(mid + 1, high);
-		merge(low, mid, high);
-	}
-
-	function merge(low, mid, high) {
-		var i = low, j = mid + 1, l = 0, r = 0;
-		var lArr = arr.slice(i, j), rArr = arr.slice(j, high +1);
-		for(;i <= high; i++) {
-			if(l == j - low) arr[i] = rArr[r++];//左半部分已空
-			else if(r == high - mid) arr[i] = lArr[l++];//右半部分已空
-			else if(lArr[l] > rArr[r]) arr[i] = rArr[r++];
-			else arr[i] = lArr[l++];
-		}
-	}
-	
 	// [2,7,6,8,4,5,3,1]
 	// bubbleSort();
 	// selectSort();
 	// insertSort();
 	// shellSort();
-	// quickSort(0,arr.length-1);
+	// mergeSort(0, arr.length-1);
+	quickSort(0,arr.length-1);
 	// oddEvenSort();
 	// cockTailSort();
-	mergeSort(0, arr.length-1);
 	console.log(arr);
 </script>
 </head>
