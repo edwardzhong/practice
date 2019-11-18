@@ -187,6 +187,27 @@
 			}
 		}
 	}
+
+	//归并排序
+	function mergeSort(low, high) {
+		if(low >= high) return;
+		var mid = low + Math.floor((high - low) /2);
+		mergeSort(low, mid);
+		mergeSort(mid + 1, high);
+		merge(low, mid, high);
+	}
+
+	function merge(low, mid, high) {
+		var i = low, j = mid + 1, l = 0, r = 0;
+		var lArr = arr.slice(i, j), rArr = arr.slice(j, high +1);
+		for(;i <= high; i++) {
+			if(l == j - low) arr[i] = rArr[r++];//左半部分已空
+			else if(r == high - mid) arr[i] = lArr[l++];//右半部分已空
+			else if(lArr[l] > rArr[r]) arr[i] = rArr[r++];
+			else arr[i] = lArr[l++];
+		}
+	}
+	
 	// [2,7,6,8,4,5,3,1]
 	// bubbleSort();
 	// selectSort();
@@ -194,7 +215,8 @@
 	// shellSort();
 	// quickSort(0,arr.length-1);
 	// oddEvenSort();
-	cockTailSort();
+	// cockTailSort();
+	mergeSort(0, arr.length-1);
 	console.log(arr);
 </script>
 </head>
