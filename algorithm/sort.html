@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>排序</title>
+<title>排序算法</title>
 <script>
 	var arr = [10, 2, 7, 11, 24, 6, 56, 8, 4, 33, 5, 3, 1, 17];
 	/**
@@ -131,6 +131,50 @@
 		arr[j] = t;
 	}
 
+	// 上浮
+	function swim(k, l) {
+		if(k>l) return;
+		while(k > 1 && arr[Math.floor(k/2)] < arr[k]) {
+			swap(k, Math.floor(k/2));
+			k = Math.floor(k/2);
+		}
+	}
+
+	// 下沉
+	function sink(k, l) {
+		while( k*2 + 1 <= l) {
+        	var i = k * 2 + 1;
+			if(i < l && arr[i] < arr[i+1]) i++;
+			if(arr[k] >= arr[i]) break;
+			swap(k, i);
+			k = i;
+		}
+	}
+
+	/*
+	* 堆排序
+	* 只需对前半部分的节点进行 sink 操作构建二叉堆，因为二叉堆后半部分是最后一层子节点
+	*/
+	function pileSort() {
+		// var N = arr.length;
+		// arr.unshift(0);
+		// for(var k = Math.floor(N/2); k > 0; k--)//构建二叉堆
+		// 	sink(k, N);
+		// while(N>1){
+		// 	swap(1,N--);
+		// 	sink(1, N);
+		// }
+		// arr.shift();
+
+		var N = arr.length - 1;
+		for(var k = Math.floor(N/2); k >= 0; k--)//构建二叉堆
+			sink(k, N);
+		while(N){ // 下沉排序，将堆中最大的元素删除后，放入堆缩小后数组空出来的位置
+			swap(0, N--);
+			sink(0, N);
+		}
+	}
+
 	/**
 	 * 奇偶排序 多线程有优势
 	 */
@@ -192,13 +236,14 @@
 		}
 	}
 
-	// [2,7,6,8,4,5,3,1]
+	// [10, 2, 7, 11, 24, 6, 56, 8, 4, 33, 5, 3, 1, 17]
 	// bubbleSort();
 	// selectSort();
 	// insertSort();
 	// shellSort();
 	// mergeSort(0, arr.length-1);
-	quickSort(0,arr.length-1);
+	// quickSort(0,arr.length-1);
+	pileSort();
 	// oddEvenSort();
 	// cockTailSort();
 	console.log(arr);
