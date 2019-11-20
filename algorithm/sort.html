@@ -5,23 +5,28 @@
 <title>排序算法</title>
 <script>
 	var arr = [10, 2, 7, 11, 24, 6, 56, 8, 4, 33, 5, 3, 1, 17];
+
+	function swap(i,j){
+		var t = arr[i];
+		arr[i] = arr[j];
+		arr[j] = t;
+	}
+
 	/**
 	 * 冒泡排序
 	 * 从最小开始冒
 	 */
 	function bubbleSort() {
 		var isSort = true, //是否已经排好序
-			temp, i, j,
-			len = arr.length;
+			i, j,
+			l = arr.length;
 
-		for (i = 0; i < len - 1; i++) {
+		for (i = 0; i < l - 1; i++) {
 			isSort = true;
-			for (j = i + 1; j < len; j++) {
+			for (j = i + 1; j < l; j++) {
 				if (arr[i] > arr[j]) {
 					isSort = false;
-					temp = arr[i];
-					arr[i] = arr[j];
-					arr[j] = temp;
+					swap(i,j);
 				}
 			}
 			if (isSort) {
@@ -35,20 +40,18 @@
 	 * 每次选出最小的下标，然后再与当前左边的项进行交换
 	 */
 	function selectSort() {
-		var temp, i, j,
+		var i, j,
 			m = 0,
-			len = arr.length;
-		for (i = 0; i < len - 1; i++) {
+			l = arr.length;
+		for (i = 0; i < l - 1; i++) {
 			m = i;
-			for (j = i + 1; j < len; j++) {
+			for (j = i + 1; j < l; j++) {
 				if (arr[m] > arr[j]) {
 					m = j;//找出值最小项的索引
 				}
 			}
 			if (m != i) {
-				temp = arr[m];
-				arr[m] = arr[i];
-				arr[i] = temp;
+				swap(m,i);
 			}
 		}
 	}
@@ -58,12 +61,10 @@
 	 * 将无序数列的第一项与有序数列的项从后往前逐个比较，找到插入位置
 	 */
 	function insertSort() {
-		var i, j, temp, len = arr.length;
-		for (i = 1; i < len; i++) {
+		var i, j, l = arr.length;
+		for (i = 1; i < l; i++) {
 			for (j = i; arr[j] < arr[j-1] && j > 0; j--) {
-				temp = arr[j];
-				arr[j] = arr[j-1];
-				arr[j - 1] = temp;
+				swap(j,j-1);
 			}
 		}
 	}
@@ -73,15 +74,13 @@
 	 * 先将序列分成几个子序列，分别进行插入排序，最后合并
 	 */
 	function shellSort() {
-		var temp, i, j, d = 1,
-			len = arr.length;
-		while(Math.floor(len/d)>0) d = d * 3 + 1;
+		var i, j, d = 1,
+			l = arr.length;
+		while(Math.floor(l/d)>0) d = d * 3 + 1;
 		while (d) {
-			for (i = d; i < len; i++) {
+			for (i = d; i < l; i++) {
 				for (j = i; j >= d && arr[j] < arr[j-d]; j-=d) {
-					temp = arr[j];
-					arr[j] = arr[j-d];
-					arr[j - d] = temp;
+					swap(j,j-d);
 				}
 			}
 			d = Math.floor(d / 3);
@@ -125,12 +124,6 @@
 		quickSort(j + 1, high);
 	}
 
-	function swap(i,j){
-		var t = arr[i];
-		arr[i] = arr[j];
-		arr[j] = t;
-	}
-
 	// 上浮
 	function swim(k, l) {
 		if(k>l) return;
@@ -153,22 +146,12 @@
 
 	/*
 	* 堆排序
-	* 只需对前半部分的节点进行 sink 操作构建二叉堆，因为二叉堆后半部分是最后一层子节点
+	* 构建二叉堆只需对前半部分的节点进行 sink 操作，因为二叉堆后半部分是最后一层子节点
 	*/
 	function pileSort() {
-		// var N = arr.length;
-		// arr.unshift(0);
-		// for(var k = Math.floor(N/2); k > 0; k--)//构建二叉堆
-		// 	sink(k, N);
-		// while(N>1){
-		// 	swap(1,N--);
-		// 	sink(1, N);
-		// }
-		// arr.shift();
-
 		var N = arr.length - 1;
-		for(var k = Math.floor(N/2); k >= 0; k--)//构建二叉堆
-			sink(k, N);
+		for(var i = Math.floor(N/2); i >= 0; i--)//构建二叉堆
+			sink(i, N);
 		while(N){ // 下沉排序，将堆中最大的元素删除后，放入堆缩小后数组空出来的位置
 			swap(0, N--);
 			sink(0, N);
@@ -180,25 +163,20 @@
 	 */
 	function oddEvenSort() {
 		var len = arr.length,
-			isSort = false,
-			temp;
+			isSort = false;
 		while (!isSort) {
 			isSort = true;
 			for (var i = 0; i < len; i += 2) {
 				if (i + 1 < len && arr[i] > arr[i + 1]) {
-					temp = arr[i];
-					arr[i] = arr[i + 1];
-					arr[i + 1] = temp;
 					isSort = false;
+					swap(i,i+1);
 				}
 			}
 
 			for (var i = 1; i < len; i += 2) {
 				if (i + 1 < len && arr[i] > arr[i + 1]) {
-					temp = arr[i];
-					arr[i] = arr[i + 1];
-					arr[i + 1] = temp;
 					isSort = false;
+					swap(i,i+1);
 				}
 			}
 		}
@@ -209,25 +187,20 @@
 	 */
 	function cockTailSort() {
 		var len = arr.length,
-			isSort = false,
-			temp;
+			isSort = false;
 
 		for (var i = 1; i < Math.floor(len / 2); i++) {
 			isSort = true;
 			for (var j = i - 1; j < len; j++) {
 				if (j + 1 < len && arr[j] > arr[j + 1]) {
-					temp = arr[j];
-					arr[j] = arr[j + 1];
-					arr[j + 1] = temp;
 					isSort = false;
+					swap(j,j+1);
 				}
 			}
 			for (var j = len - i - 1; j >= i; j--) {
 				if (j > 0 && arr[j - 1] > arr[j]) {
-					temp = arr[j - 1];
-					arr[j - 1] = arr[j];
-					arr[j] = temp;
 					isSort = false;
+					swap(j-1,j);
 				}
 			}
 			if (isSort) {
