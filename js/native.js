@@ -8,37 +8,37 @@
 var browser = (function() {
 	var u = navigator.userAgent;
 	return {
-		trident: u.indexOf("Trident") > -1, //IE内核
-		presto: u.indexOf("Presto") > -1, //opera内核
-		webKit: u.indexOf("AppleWebKit") > -1, //苹果、谷歌内核
-		gecko: u.indexOf("Gecko") > -1 && u.indexOf("KHTML") == -1, //火狐内核
-		isIE: u.indexOf("MSIE") > 0,
-		isChrome: u.indexOf("Chrome") > -1,
-		isSafari: u.indexOf("Safari") > 0 && /webkit|khtml/i.test(u),
-		isFirefox: u.indexOf("Firefox") > -1,
+		trident: u.indexOf('Trident') > -1, //IE内核
+		presto: u.indexOf('Presto') > -1, //opera内核
+		webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+		gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+		isIE: u.indexOf('MSIE') > 0,
+		isChrome: u.indexOf('Chrome') > -1,
+		isSafari: u.indexOf('Safari') > 0 && /webkit|khtml/i.test(u),
+		isFirefox: u.indexOf('Firefox') > -1,
 		mobile: !!u.match(/AppleWebKit.*Mobile.*/),
 		ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
-		android: u.indexOf("Android") > -1 || u.indexOf("Linux") > -1,
-		iPhone: u.indexOf("iPhone") > -1,
-		iPad: u.indexOf("iPad") > -1,
-		winPhone: u.indexOf("Windows Phone") > -1
+		android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
+		iPhone: u.indexOf('iPhone') > -1,
+		iPad: u.indexOf('iPad') > -1,
+		winPhone: u.indexOf('Windows Phone') > -1,
 	};
 })();
 
 function getBrowser() {
 	var u = navigator.userAgent;
-	if (u.indexOf("Chrome") > -1) {
-		return "Chrome";
-	} else if (u.indexOf("MSIE") > -1) {
-		return "MSIE"; //IE浏览器
-	} else if (u.indexOf("Firefox") > -1) {
-		return "Firefox"; //Firefox浏览器
-	} else if (u.indexOf("Safari") > -1) {
-		return "Safari"; //Safan浏览器
-	} else if (u.indexOf("Camino") > -1) {
-		return "Camino"; //Camino浏览器
-	} else if (u.indexOf("Gecko/") > -1) {
-		return "Gecko"; //Gecko浏览器
+	if (u.indexOf('Chrome') > -1) {
+		return 'Chrome';
+	} else if (u.indexOf('MSIE') > -1) {
+		return 'MSIE'; //IE浏览器
+	} else if (u.indexOf('Firefox') > -1) {
+		return 'Firefox'; //Firefox浏览器
+	} else if (u.indexOf('Safari') > -1) {
+		return 'Safari'; //Safan浏览器
+	} else if (u.indexOf('Camino') > -1) {
+		return 'Camino'; //Camino浏览器
+	} else if (u.indexOf('Gecko/') > -1) {
+		return 'Gecko'; //Gecko浏览器
 	}
 }
 
@@ -46,23 +46,23 @@ function getBrowser() {
 function getEnv() {
 	var ua = navigator.userAgent.toLowerCase();
 	if (/micromessenger(\/[\d\.]+)*/.test(ua)) {
-		return "weixin";
+		return 'weixin';
 	} else if (/qq\/(\/[\d\.]+)*/.test(ua) || /qzone\//.test(ua)) {
-		return "qq";
-	} else if (u.indexOf("chrome") > -1) {
-		return "Chrome";
-	} else if (u.indexOf("msie") > 0) {
-		return "MSIE"; //IE浏览器
-	} else if (u.indexOf("firefox") > 0) {
-		return "Firefox"; //Firefox浏览器
-	} else if (u.indexOf("safari") > 0) {
-		return "Safari"; //Safan浏览器
-	} else if (u.indexOf("camino") > 0) {
-		return "Camino"; //Camino浏览器
-	} else if (u.indexOf("gecko/") > 0) {
-		return "Gecko"; //Gecko浏览器
+		return 'qq';
+	} else if (u.indexOf('chrome') > -1) {
+		return 'Chrome';
+	} else if (u.indexOf('msie') > 0) {
+		return 'MSIE'; //IE浏览器
+	} else if (u.indexOf('firefox') > 0) {
+		return 'Firefox'; //Firefox浏览器
+	} else if (u.indexOf('safari') > 0) {
+		return 'Safari'; //Safan浏览器
+	} else if (u.indexOf('camino') > 0) {
+		return 'Camino'; //Camino浏览器
+	} else if (u.indexOf('gecko/') > 0) {
+		return 'Gecko'; //Gecko浏览器
 	} else {
-		return "h5";
+		return 'h5';
 	}
 }
 
@@ -70,19 +70,19 @@ function getEnv() {
  * 返回浏览器特有css前缀
  */
 var webkit = (function() {
-	var css3_div = document.createElement("div");
+	var css3_div = document.createElement('div');
 	css3_div.style.cssText =
-		"-webkit-transition:all .1s; -moz-transition:all .1s; -o-transition:all .1s; -ms-transition:all .1s; transition:all .1s;";
+		'-webkit-transition:all .1s; -moz-transition:all .1s; -o-transition:all .1s; -ms-transition:all .1s; transition:all .1s;';
 	if (css3_div.style.webkitTransition) {
-		return "-webkit-";
+		return '-webkit-';
 	} else if (css3_div.style.MozTransition) {
-		return "-moz-";
+		return '-moz-';
 	} else if (css3_div.style.oTransition) {
-		return "-o-";
+		return '-o-';
 	} else if (css3_div.style.msTransition) {
-		return "-ms-";
+		return '-ms-';
 	} else {
-		return "";
+		return '';
 	}
 })();
 
@@ -91,10 +91,10 @@ var webkit = (function() {
  */
 var transitionEnd = (function() {
 	var obj = {
-		TransitionEvent: "transitionend",
-		WebkitTransitionEvent: "webkitTransitionEnd",
-		OTransitionEvent: "oTransitionEnd",
-		otransitionEvent: "otransitionend"
+		TransitionEvent: 'transitionend',
+		WebkitTransitionEvent: 'webkitTransitionEnd',
+		OTransitionEvent: 'oTransitionEnd',
+		otransitionEvent: 'otransitionend',
 	};
 	var ret;
 	for (var name in obj) {
@@ -116,8 +116,8 @@ var transitionEnd = (function() {
  */
 var animationend = (function() {
 	var obj = {
-		AnimationEvent: "animationend",
-		WebKitAnimationEvent: "webkitAnimationEnd"
+		AnimationEvent: 'animationend',
+		WebKitAnimationEvent: 'webkitAnimationEnd',
 	};
 	var ret;
 	for (var name in obj) {
@@ -143,7 +143,7 @@ function insertCSSRule(rule) {
 			console.log(e.message + rule);
 		}
 	} else {
-		styleElement = document.createElement("style");
+		styleElement = document.createElement('style');
 		styleElement.innerHTML = rule;
 		document.head.appendChild(styleElement);
 	}
@@ -151,8 +151,8 @@ function insertCSSRule(rule) {
 
 //删除一条样式规则
 function deleteCSSRule(ruleName, keyframes) {
-	var prop = keyframes ? "name" : "selectorText";
-	var name = keyframes ? "@keyframes" : "cssRule"; //调试用
+	var prop = keyframes ? 'name' : 'selectorText';
+	var name = keyframes ? '@keyframes' : 'cssRule'; //调试用
 	if (styleElement) {
 		var sheet = styleElement.sheet; //styleElement.styleSheet
 		var cssRules = sheet.cssRules; //sheet.rules
@@ -160,7 +160,7 @@ function deleteCSSRule(ruleName, keyframes) {
 			var rule = cssRules[i];
 			if (rule[prop] === ruleName) {
 				sheet.deleteRule(i);
-				console.log("success delete " + name + " " + ruleName);
+				console.log('success delete ' + name + ' ' + ruleName);
 				break;
 			}
 		}
@@ -179,14 +179,8 @@ function deleteKeyFrames(name) {
  */
 function getWinSize() {
 	return {
-		width:
-			window.innerWidth ||
-			document.documentElement.clientWidth ||
-			document.body.clientWidth,
-		height:
-			window.innerHeight ||
-			document.documentElement.clientHeight ||
-			document.body.clientHeight
+		width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+		height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
 	};
 }
 
@@ -199,29 +193,23 @@ function getPageSize() {
 			root.clientWidth,
 			root.offsetWidth,
 			document.body.scrollWidth,
-			document.body.offsetWidth
+			document.body.offsetWidth,
 		),
 		height: Math.max(
 			root.scrollHeight,
 			root.clientHeight,
 			root.offsetHeight,
 			document.body.scrollHeight,
-			document.body.offsetHeight
-		)
+			document.body.offsetHeight,
+		),
 	};
 }
 
 // 滚动条位置
 function getScrollPos() {
 	return {
-		left:
-			window.pageXOffset ||
-			document.documentElement.scrollLeft ||
-			document.body.scrollLeft,
-		top:
-			window.pageYOffset ||
-			document.documentElement.scrollTop ||
-			document.body.scrollTop
+		left: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+		top: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop,
 	};
 }
 
@@ -249,7 +237,7 @@ function camelize(s) {
 }
 //将wordWord转为word-word
 function uncamelize(s) {
-	return s.replace(/[A-Z]/g, "-$&").toLowerCase();
+	return s.replace(/[A-Z]/g, '-$&').toLowerCase();
 }
 
 /**
@@ -267,13 +255,13 @@ var NODE = {
 	DOCUMENT_NODE: 9,
 	DOCUMENT_TYPE_NODE: 10,
 	DOCUMENT_FRAGMENT_NODE: 11,
-	NOTATION_NODE: 12
+	NOTATION_NODE: 12,
 };
 var native = {
 	//遍历节点,并执行函数func(非递归)
 	walkDoms: function(node, fn) {
 		var root = node || window.document;
-		var nodes = root.getElementsByTagName("*"),
+		var nodes = root.getElementsByTagName('*'),
 			i,
 			len = nodes.length;
 		for (i = 0; i < len; i++) {
@@ -318,19 +306,19 @@ var native = {
 				}
 			},
 			completed = function(event) {
-				d.removeEventListener("DOMContentLoaded", completed, false);
-				window.removeEventListener("load", completed, false);
+				d.removeEventListener('DOMContentLoaded', completed, false);
+				window.removeEventListener('load', completed, false);
 				init();
 			};
 		//w3c
 		if (d.addEventListener) {
-			d.addEventListener("DOMContentLoaded", completed, false);
-			window.addEventListener("load", completed, false);
+			d.addEventListener('DOMContentLoaded', completed, false);
+			window.addEventListener('load', completed, false);
 		} else {
 			//ie
-			d.attachEvent("onreadystatechange", function() {
+			d.attachEvent('onreadystatechange', function() {
 				if (/loaded|complete/.test(d.readyState)) {
-					d.detachEvent("onreadystatechange", arguments.callee);
+					d.detachEvent('onreadystatechange', arguments.callee);
 					init();
 				}
 			});
@@ -338,7 +326,7 @@ var native = {
 			(function() {
 				try {
 					// DOM树未创建完之前调用doScroll会抛出错误
-					d.documentElement.doScroll("left");
+					d.documentElement.doScroll('left');
 				} catch (e) {
 					//延迟再试一次
 					setTimeout(arguments.callee, 50);
@@ -350,12 +338,12 @@ var native = {
 	},
 	//script加载完成后执行回调
 	loadScript: function(url, callback) {
-		var script = document.createElement("script");
-		script.type = "text/javascript";
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
 		if (script.readyState) {
 			//ie
 			script.onreadystatechange = function() {
-				if ( script.readyState == "loaded" || script.readyState == "complete" ) {
+				if (script.readyState == 'loaded' || script.readyState == 'complete') {
 					callback();
 				}
 			};
@@ -366,61 +354,79 @@ var native = {
 			};
 		}
 		script.src = url;
-		document.getElementsByTagName("head")[0].appendChild(script);
+		document.getElementsByTagName('head')[0].appendChild(script);
 	},
-	//原生ajax
-	ajax: function(url, param, isPost, async) {
-		if (!url || !param) {
-			return;
+
+	/**
+	 * 原生ajax
+	 * @param {Object} opt
+	 * {
+	 * 	url:string;
+	 * 	data:object;
+	 * 	method:'GET'/'POST'
+	 * 	async:boolean;
+	 * 	success:function;
+	 * 	error:function;
+	 * }
+	 */
+	ajax: function(opt) {
+		var opt = {
+			url: '/',
+			method: 'GET',
+			data: {},
+			async: true,
+			success: function() {},
+			error: function() {},
+		};
+		for (var p in option) {
+			opt[p] = option[p];
 		}
-		if (typeof url != "string" || typeof param != "string") {
-			return;
-		}
-		async = async && async === true ? true : false;
-		var xmlhttp = null;
+		var xhr = null;
 		if (window.XMLHttpRequest) {
-			xmlhttp = new XMLHttpRequest();
+			xhr = new XMLHttpRequest();
 		} else if (window.ActiveXObject) {
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			xhr = new ActiveXObject('Microsoft.XMLHTTP');
 		} else {
-			throw new Error("创建xmlhttp对象异常");
+			throw new Error('创建xmlhttp对象异常');
 		}
-		var method = isPost && isPost == true ? "POST" : "GET";
-		if (method == "GET") {
-			url = encodeURI(url) + "?" + encodeURIComponent(param);
-		}
-		var postParam = method === "POST" ? param : null;
-		xmlhttp.open(method, url, async);
-		xmlhttp.onreadystatechange = function() {
-			if (xmlhttp.readyState == 4) {
-				//服务器完成
-				if (xmlhttp.status == 200) {
-					//如果状态码为200则成功|
-					return xmlhttp.responseText; //responseText属性为服务器返回的文本
+
+		var param = JSON.stringify(opt.data)
+			.replace(/[\{\}\"]/g, '')
+			.replace(/:/g, '=')
+			.replace(/,/g, '&');
+		var url = opt.method == 'GET' && opt.data ? opt.url + '?' + param : opt.url;
+		// xhr.responseType = 'json';
+		xhr.open(opt.method, url, opt.async);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.onreadystatechange = function(e) {
+			if (xhr.readyState == 4) {
+				if (xhr.status == 200) {
+					opt.success(xhr.responseText);
 				} else {
-					throw new Error("Ajax服务器返回错误!");
+					opt.error(e.target.response);
 				}
 			}
 		};
-		xmlhttp.send(postParam); //这时才开始发送请求
+		xhr.send(param);
 	},
 	//原生jsonp
-	jsonp: function(url, callback) {
-        url += (url.indexOf('?') < 0 ? '?':'&') + 'callback=' + callback + '&_t=' + new Date().getTime();
-		var script = document.createElement("script");
-		script.setAttribute("src", url);
-		script.setAttribute("type", "text/javascript");
-		script.setAttribute("charset", "utf-8");
-		document.getElementsByTagName("head")[0].appendChild(script);
+	jsonp: function(url, callbackName, callback) {
+		url += (url.indexOf('?') < 0 ? '?' : '&') + 'callback=' + callbackName + '&_t=' + new Date().getTime();
+		var script = document.createElement('script');
+		script.setAttribute('src', url);
+		script.setAttribute('type', 'text/javascript');
+		script.setAttribute('charset', 'utf-8');
+		document.getElementsByTagName('head')[0].appendChild(script);
+		window.callbackName = callback;
 	},
 	//添加事件
 	addEvent: function(el, type, fn) {
 		if (el.addEventListener) {
 			el.addEventListener(type, fn, false);
 		} else if (el.attachEvent) {
-			el.attachEvent("on" + type, fn);
+			el.attachEvent('on' + type, fn);
 		} else {
-			el["on" + type] = fn;
+			el['on' + type] = fn;
 		}
 		return true;
 	},
@@ -429,26 +435,26 @@ var native = {
 		if (el.removeEventListener) {
 			el.removeEventListener(type, fn, false);
 		} else if (el.detachEvent) {
-			el.detachEvent("on" + type, fn);
+			el.detachEvent('on' + type, fn);
 		} else {
-			el["on" + type] = null;
+			el['on' + type] = null;
 		}
 	},
 	//滚轮事件兼容
 	wheel: function(obj, callback) {
-		var wheelType = "mousewheel";
+		var wheelType = 'mousewheel';
 		try {
-			document.createEvent("MouseScrollEvents");
-			wheelType = "DOMMouseScroll";
+			document.createEvent('MouseScrollEvents');
+			wheelType = 'DOMMouseScroll';
 		} catch (e) {}
 		this.addEvent(obj, wheelType, function(event) {
-			if ("wheelDelta" in event) {
+			if ('wheelDelta' in event) {
 				var delta = event.wheelDelta;
 				if (window.opera && opera.version() < 10) {
 					delta = -delta;
 				}
 				event.delta = Math.round(delta) / 120;
-			} else if ("detail" in event) {
+			} else if ('detail' in event) {
 				event.wheelDelta = -event.detail * 40;
 				event.delta = event.wheelDelta / 120;
 			}
@@ -507,12 +513,14 @@ var native = {
 	//根据ClassName获取元素
 	getElementsByClassName: function(className, tag, parent) {
 		parent = parent || document;
-		tag = tag || "*";
-		var allTags = tag == "*" && parent.all ? parent.all : parent.getElementsByTagName(tag);
+		tag = tag || '*';
+		var allTags = tag == '*' && parent.all ? parent.all : parent.getElementsByTagName(tag);
 		var matchElemets = [];
-		className = className.replace(/\-/g, "\\-");
-		var regex = new RegExp("(^|\\s)" + className + "(\\s|$)");
-		var el, i, l = allTags.length;
+		className = className.replace(/\-/g, '\\-');
+		var regex = new RegExp('(^|\\s)' + className + '(\\s|$)');
+		var el,
+			i,
+			l = allTags.length;
 		for (i = 0; i < l; i++) {
 			el = allTags[i];
 			if (regex.test(el.className)) {
@@ -524,14 +532,14 @@ var native = {
 	//通过id修改元素样式
 	setStylesById: function(el, styles) {
 		if (!el) return false;
-		el = typeof el == "string" ? document.getElementById(el) : el;
+		el = typeof el == 'string' ? document.getElementById(el) : el;
 		var prop;
 		for (prop in styles) {
 			if (!styles.hasOwnProperty(prop)) {
 				continue;
 			}
 			if (el.style.setProperty) {
-				el.style.setProperty(uncamelize(prop, "-"), styles[prop], null);
+				el.style.setProperty(uncamelize(prop, '-'), styles[prop], null);
 			} else {
 				el.style[camelize(prop)] = styles[prop];
 			}
@@ -561,22 +569,22 @@ var native = {
 	},
 	//获取元素的class名属性
 	getClass: function(el) {
-		return el.className.replace(/\s+/, " ").split(" ");
+		return el.className.replace(/\s+/, ' ').split(' ');
 	},
 	//是否存在某个className
 	hasClass: function(el, name) {
-		return (" " + el.className + " ").indexOf(" " + name + "") > -1;
+		return (' ' + el.className + ' ').indexOf(' ' + name + '') > -1;
 	},
 	//为元素添加class
 	addClass: function(el, name) {
 		if (!this.hasClass(el, name)) {
-			el.className += " " + name;
+			el.className += ' ' + name;
 		}
 	},
 	//删除元素的某个class
 	removeClass: function(el, name) {
 		if (this.hasClass(el, name)) {
-			el.className = el.className.replace( new RegExp("(^|\\s)" + name + "(\\s|$)"), name );
+			el.className = el.className.replace(new RegExp('(^|\\s)' + name + '(\\s|$)'), name);
 		}
 	},
 	//toggleclass
@@ -588,10 +596,10 @@ var native = {
 		}
 	},
 	toggleDisplay: function(node, value) {
-		if (node.style.display != "none") {
-			node.style.display = "none";
+		if (node.style.display != 'none') {
+			node.style.display = 'none';
 		} else {
-			node.style.display = value || "";
+			node.style.display = value || '';
 		}
 		return true;
 	},
@@ -600,7 +608,7 @@ var native = {
 	},
 	//在node之后插入节点(insertBefore是之前插入)
 	insertAfter: function(node, referenceNode) {
-		return referenceNode.parentNode.insertBefore( node, referenceNode.nextSibling );
+		return referenceNode.parentNode.insertBefore(node, referenceNode.nextSibling);
 	},
 	//默认的尾部插入
 	append: function(parent, newChild) {
@@ -621,10 +629,10 @@ var native = {
 	},
 	//清空该节点下的子节点
 	clear: function(node) {
-		node.innerHTML = "";
+		node.innerHTML = '';
 		// while (node.firstChild) {
 		//     node.removeChild(node.firstChild);
 		// }
 		return true;
-	}
+	},
 };
