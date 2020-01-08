@@ -369,7 +369,7 @@ var native = {
 	 * 	error:function;
 	 * }
 	 */
-	ajax: function(opt) {
+	ajax: function(option) {
 		var opt = {
 			url: '/',
 			method: 'GET',
