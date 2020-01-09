@@ -5,6 +5,9 @@
  * Time: 下午8:38
  */
 
+function isMobile(){
+	return /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
+}
 var browser = (function() {
 	var u = navigator.userAgent;
 	return {
