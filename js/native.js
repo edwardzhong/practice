@@ -5,8 +5,8 @@
  * Time: 下午8:38
  */
 
-function isMobile(){
-	return /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
+function isMobile() {
+	return /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
 }
 var browser = (function() {
 	var u = navigator.userAgent;
@@ -281,6 +281,7 @@ var native = {
 			node = node.nextSibling;
 		}
 	},
+	
 	//同时查找每个节点的属性
 	walkDOMWithAttributes: function(node, depth, fn, owner) {
 		var root = node || window.document;
@@ -413,14 +414,16 @@ var native = {
 		xhr.send(param);
 	},
 	//原生jsonp
-	jsonp: function(url, callbackName, callback) {
-		url += (url.indexOf('?') < 0 ? '?' : '&') + 'callback=' + callbackName + '&_t=' + new Date().getTime();
+	jsonp: function(url, callback, callbackName) {
+		var t = new Date().getTime() + '' + Math.floor(Math.random() * 10000);
+		callbackName = callbackName || 'callback' + t;
+		url += (url.indexOf('?') < 0 ? '?' : '&') + 'callback=' + callbackName + '&_t=' + t;
 		var script = document.createElement('script');
 		script.setAttribute('src', url);
 		script.setAttribute('type', 'text/javascript');
 		script.setAttribute('charset', 'utf-8');
 		document.getElementsByTagName('head')[0].appendChild(script);
-		window.callbackName = callback;
+		window[callbackName] = callback;
 	},
 	//添加事件
 	addEvent: function(el, type, fn) {

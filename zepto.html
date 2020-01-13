@@ -1,73 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>zepto Deferred的使用</title>
-	<script src="js/Zepto.js"></script>
-	<script>
-		//使用deferred
-		//方式1
-		function getData(){
-			var defer=$.Deferred();
+<meta charset="UTF-8" />
+<title>zepto Deferred的使用</title>
+<script src="js/Zepto.js"></script>
+<script>
+	//使用deferred
+	//方式1
+	function getData() {
+		var defer = $.Deferred();
+		setTimeout(function() {
+			defer.resolve(true);
+		}, 2000);
+		return defer.promise();
+	}
+	getData().then(function(ret) {
+		console.log(ret);
+	});
+
+	//方式2
+	function getData2(name) {
+		return $.Deferred(function(deferred) {
 			setTimeout(function() {
-				defer.resolve(true);
+				deferred.resolve(name);
 			}, 2000);
-			return defer.promise();
-		}
-		getData().then(function(ret){
+		});
+	}
+
+	function getData3() {
+		return $.Deferred(function(deferred) {
+			setTimeout(function() {
+				deferred.reject('false');
+			}, 3000);
+		});
+	}
+
+	// getData3().then(function(ret){
+	// 	console.log(ret);
+	// },function(ret){
+	// 	console.log(ret);
+	// });
+
+	//使用done和fail区分resolve和reject状态的回调
+	//done对应then第1个回调函数，fail对应then的第2个回调函数
+	getData3()
+		.done(function(ret) {
+			console.log(ret);
+		})
+		.fail(function(ret) {
 			console.log(ret);
 		});
 
-		//方式2
-		function getData2(name){
-			return $.Deferred(function(deferred){
-				setTimeout(function() {
-					deferred.resolve(name);
-				}, 2000);
-			});
-		}
+	getData2('aa').then(function(ret) {
+		console.log(ret);
+	});
 
-		function getData3(){
-			return $.Deferred(function(deferred){
-				setTimeout(function() {
-					deferred.reject('false');
-				}, 3000);
-			});
-		}
-
-		// getData3().then(function(ret){
-		// 	console.log(ret);
-		// },function(ret){
-		// 	console.log(ret);
-		// });
-		
-		//使用done和fail区分resolve和reject状态的回调
-		//done对应then第1个回调函数，fail对应then的第2个回调函数
-		getData3().done(function(ret){
-			console.log(ret);
-		}).fail(function(ret){
-			console.log(ret);
+	//deferred 嵌套
+	getData().then(function(ret) {
+		console.log(ret);
+		getData2('bb').then(function(ret2) {
+			console.log(ret2);
 		});
+	});
 
-		getData2('aa').then(function(ret){
-			console.log(ret);
-		});
-
-		//deferred 嵌套
-		getData().then(function(ret){
-			console.log(ret);
-			getData2('bb').then(function(ret2){
-				console.log(ret2);
-			});
-		});
-
-		//使用when同时加载异步，所有异步结果都成功返回后，再一起返回数据，有一条返回不成功则不返回
-		$.when(getData(),getData2('cc')).then(function(ret,ret2){
-			console.log(ret,ret2);
-		});
-	</script>
+	//使用when同时加载异步，所有异步结果都成功返回后，再一起返回数据，有一条返回不成功则不返回
+	$.when(getData(), getData2('cc')).then(function(ret, ret2) {
+		console.log(ret, ret2);
+	});
+</script>
 </head>
-<body>
-	
-</body>
+<body></body>
 </html>

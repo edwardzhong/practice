@@ -56,9 +56,11 @@
 ### css权威指南
 1. [块级元素](https://github.com/edwardzhong/practice/blob/master/css_guide/block.html)
 2. [行内元素](https://github.com/edwardzhong/practice/blob/master/css_guide/inline.html)
-3. [字体](https://github.com/edwardzhong/practice/blob/master/css_guide/font.html)
+3. [字体字符](https://github.com/edwardzhong/practice/blob/master/css_guide/font.html)
 4. [选择器](https://github.com/edwardzhong/practice/blob/master/css_guide/select.html)
 5. [web安全色](https://github.com/edwardzhong/practice/blob/master/css_guide/color.html)
+6. [nth-child/nth-of-type](https://github.com/edwardzhong/practice/blob/master/css_guide/nth.html)
+7. [unicode特殊字符](https://github.com/edwardzhong/practice/blob/master/css_guide/unicode.html)
 
 ### 数据结构和算法
 1. [Sort 排序](https://github.com/edwardzhong/practice/blob/master/algorithm/sort.html)

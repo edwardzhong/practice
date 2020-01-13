@@ -1,101 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>html5 FileReader</title>
-<style>
-	body{
-		font: 14px Verdana,"Lucida Grande",Geneva,Arial,sans-serif;
-	}
-	.img-wrap{
-		width: 100px;
-		height: 100px;
-		border: 1px solid  #ddd;
-		overflow: hidden;
-	}
-	.file-wrap{
-		position: relative;
-	}
-	input[type=button]{
-		border: 1px solid  #bbb;
-		padding: 5px 10px;
-		border-radius:4px;
-	}
-	input[type=file]{
-		position: absolute;
-		top: 0;
-		left: -1px;
-		width: 75px;
-		height: 20px;
-		opacity:0;
-	}
-</style>
+	<meta charset="UTF-8" />
+	<title>html5 FileReader</title>
+	<style>
+		body {
+			font: 14px Verdana, 'Lucida Grande', Geneva, Arial, sans-serif;
+		}
+		.img-wrap {
+			width: 100px;
+			height: 100px;
+			border: 1px solid #ddd;
+			overflow: hidden;
+		}
+		.file-wrap {
+			position: relative;
+		}
+		input[type='button'] {
+			border: 1px solid #bbb;
+			padding: 5px 10px;
+			border-radius: 4px;
+		}
+		input[type='file'] {
+			position: absolute;
+			top: 0;
+			left: -1px;
+			width: 75px;
+			height: 20px;
+			opacity: 0;
+		}
+	</style>
 </head>
 <body>
 	<div class="img-wrap">
-		<img src="" alt="">
+		<img src="" alt="" />
 	</div>
 	<div class="file-wrap">
-		<input type="button" value="上传文件">
-		<input type="file" name="file" id="uploadFile">	
+		<input type="button" value="上传文件" />
+		<input type="file" name="file" id="uploadFile" />
 	</div>
-<script src="../js/Zepto.js"></script>
-<script>
-	var inputFile=document.getElementById('uploadFile'),
-		imgWrap=document.getElementsByClassName('img-wrap')[0];
-		img=document.getElementsByTagName('img')[0];
+	<script src="../js/Zepto.js"></script>
+	<script>
+		var inputFile = document.getElementById('uploadFile'),
+			imgWrap = document.getElementsByClassName('img-wrap')[0];
+		img = document.getElementsByTagName('img')[0];
 
-	function bindFileUpload(input,wrap,img){
-		input.onchange=function(e){
-			var file=e.target.files[0],
-				fSize=file.size,
-				fType=file.type,
-				fr;
+		function bindFileUpload(input, wrap, img) {
+			input.onchange = function(e) {
+				var file = e.target.files[0],
+					fSize = file.size,
+					fType = file.type,
+					fr;
 
-			if(['image/jpg','image/jpeg','image/png'].indexOf(fType)<0){
-				alert('只能上传jpg和png格式的图片');
-				return;
-			}
-			if(fSize>2*1024*1024){//不能大于2M
-				alert('您上传的图片太大了，不能超过2M哦！');
-				return;
-			}
-			if(window.FileReader) {
-				fr = new FileReader();
-				//加载完成后显示图片
-				fr.onloadend=function(e){
-					img.src = e.target.result;
-					setImgPosition(wrap,img);
-				};
-	            fr.readAsDataURL(file);
-			} else {
-			    alert("浏览器不支持上传");
-			}
-		};
-
-		//设置图片位置
-		function setImgPosition(imgWrap,img){
-			var w=0,h=0,
-				wrapWidth=0,
-				wrapHeight=0;
-
-			img.onload=function(){
-				w=img.width;
-				h=img.height;
-				wrapWidth=imgWrap.offsetWidth-2;
-				wrapHeight=imgWrap.offsetHeight-2;
-
-				if(w/h>wrapWidth/wrapHeight){//宽度大于高度
-					img.style.height='100%';
-					imgWrap.scrollLeft=(wrapHeight/h*w-wrapWidth)/2;
+				if (['image/jpg', 'image/jpeg', 'image/png'].indexOf(fType) < 0) {
+					alert('只能上传jpg和png格式的图片');
+					return;
+				}
+				if (fSize > 2 * 1024 * 1024) {
+					//不能大于2M
+					alert('您上传的图片太大了，不能超过2M哦！');
+					return;
+				}
+				if (window.FileReader) {
+					fr = new FileReader();
+					//加载完成后显示图片
+					fr.onloadend = function(e) {
+						img.src = e.target.result;
+						setImgPosition(wrap, img);
+					};
+					fr.readAsDataURL(file);
 				} else {
-					img.style.width='100%';
-					imgWrap.scrollTop=(wrapWidth/w*h-wrapHeight)/2;
+					alert('浏览器不支持上传');
 				}
 			};
-		}	
-	}
-	bindFileUpload(inputFile,imgWrap,img);
-</script>
+
+			//设置图片位置
+			function setImgPosition(imgWrap, img) {
+				var w = 0,
+					h = 0,
+					wrapWidth = 0,
+					wrapHeight = 0;
+
+				img.onload = function() {
+					w = img.width;
+					h = img.height;
+					wrapWidth = imgWrap.offsetWidth - 2;
+					wrapHeight = imgWrap.offsetHeight - 2;
+
+					if (w / h > wrapWidth / wrapHeight) {
+						//宽度大于高度
+						img.style.height = '100%';
+						imgWrap.scrollLeft = ((wrapHeight / h) * w - wrapWidth) / 2;
+					} else {
+						img.style.width = '100%';
+						imgWrap.scrollTop = ((wrapWidth / w) * h - wrapHeight) / 2;
+					}
+				};
+			}
+		}
+		bindFileUpload(inputFile, imgWrap, img);
+	</script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>实现defer的功能</title>
-    <script>
+<meta charset="UTF-8" />
+<title>实现defer的功能</title>
+<script>
     //=======================================================================
     // Deferred.next(function(){
     //     console.log(1);
@@ -14,7 +14,7 @@
     // });
 
     function Defer() {
-        return (this instanceof Defer) ? this.init() : new this.constructor();
+        return this instanceof Defer ? this.init() : new this.constructor();
     }
     Defer.prototype = {
         _id: 'xxx123',
@@ -22,15 +22,15 @@
             this._next = null;
             this.callback = {
                 ok: Defer.ok,
-                ng: Defer.ng
-            }
+                ng: Defer.ng,
+            };
             return this;
         },
         call: function(val) {
             return this._fire('ok', val);
         },
         fail: function(err) {
-            return this._fire("ng", err);
+            return this._fire('ng', err);
         },
         _fire: function(okng, value) {
             var next = 'ok';
@@ -52,13 +52,13 @@
             return this._post('ok', fun);
         },
         error: function(fun) {
-            return this._post("ng", fun);
+            return this._post('ng', fun);
         },
         _post: function(okng, fun) {
             this._next = new Defer();
             this._next.callback[okng] = fun;
             return this._next;
-        }
+        },
     };
     Defer.ok = function(x) {
         return x;
@@ -109,11 +109,12 @@
         }, 2000);
         return d;
     }
-    Defer.next(time300).next(time100).next(function(val) {
-        console.log(val);
-    });
-    </script>
+    Defer.next(time300)
+        .next(time100)
+        .next(function(val) {
+            console.log(val);
+        });
+</script>
 </head>
-<body>
-</body>
+<body></body>
 </html>

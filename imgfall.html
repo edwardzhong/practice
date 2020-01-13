@@ -1,149 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>图片瀑布流</title>
-<style>
-	html,
-	body {
-		height: 100%;
-	}
-	#con {
-		position: relative;
-		height: auto;
-	}
-	img {
-		opacity: 0.1;
-		filter: alpha(opacity=10);
-	}
-	#con img {
-		position: absolute;
-		opacity: 0.1;
-		filter: alpha(opacity=10);
-	}
-</style>
-<script src="./js/jquery.min.js"></script>
-<script>
-	$(function() {
-		var con = $("#con"),
-			space = 10,
-			cellWidth = 200,
-			cellLen = 3,
-			conWitch = 1000,
-			page = 0,
-			isLoading = false;
-		(arr = []), (imgArr = []);
-
-		//设置初始化数据
-		function setCells() {
-			var winWidth = window.innerWidth || document.body.clientWidth;
-			cellLen = winWidth / (cellWidth + space);
-			if (cellLen < 3) {
-				cellLen = 3;
-			} else if (cellLen > 6) {
-				cellLen = 6;
-			}
-			conWidth = (cellWidth + space) * cellLen - 10;
-			con.css({ width: conWidth + "px" });
-
-			for (var i = 0; i < cellLen; i++) {
-				arr.push({
-					left: (cellWidth + space) * i,
-					top: 0
-				});
-			}
+	<meta charset="UTF-8" />
+	<title>图片瀑布流</title>
+	<style>
+		html,
+		body {
+			height: 100%;
 		}
+		#con {
+			position: relative;
+			height: auto;
+		}
+		img {
+			opacity: 0.1;
+			filter: alpha(opacity=10);
+		}
+		#con img {
+			position: absolute;
+			opacity: 0.1;
+			filter: alpha(opacity=10);
+		}
+	</style>
+	<script src="./js/jquery.min.js"></script>
+	<script>
+		$(function() {
+			var con = $('#con'),
+				space = 10,
+				cellWidth = 200,
+				cellLen = 3,
+				conWitch = 1000,
+				page = 0,
+				isLoading = false;
+			(arr = []), (imgArr = []);
 
-		//获取数据
-		function getData() {
-			if (isLoading) return;
-			isLoading = true;
-			$.ajax({
-				type: "GET",
-				url: "http://www.wookmark.com/api/json/popular",
-				data: { page: page },
-				dataType: "jsonp",
-				success: function(data) {
-					page++;
-					data.forEach(function(item, i) {
-						var minIndex = getMin();
-						var img = new Image();
-						var iw = parseFloat(item.width, 10);
-						var ih = parseFloat(item.height, 10);
-						img.src = item.preview;
-						if (!iw || !ih) {
-							//如果数据中没有高度和宽度，则通过加载图片来判断高度
-							img.onload = function(event) {
-								iw = img.width;
-								ih = img.height;
+			//设置初始化数据
+			function setCells() {
+				var winWidth = window.innerWidth || document.body.clientWidth;
+				cellLen = winWidth / (cellWidth + space);
+				if (cellLen < 3) {
+					cellLen = 3;
+				} else if (cellLen > 6) {
+					cellLen = 6;
+				}
+				conWidth = (cellWidth + space) * cellLen - 10;
+				con.css({ width: conWidth + 'px' });
+
+				for (var i = 0; i < cellLen; i++) {
+					arr.push({
+						left: (cellWidth + space) * i,
+						top: 0,
+					});
+				}
+			}
+
+			//获取数据
+			function getData() {
+				if (isLoading) return;
+				isLoading = true;
+				$.ajax({
+					type: 'GET',
+					url: 'http://www.wookmark.com/api/json/popular',
+					data: { page: page },
+					dataType: 'jsonp',
+					success: function(data) {
+						page++;
+						data.forEach(function(item, i) {
+							var minIndex = getMin();
+							var img = new Image();
+							var iw = parseFloat(item.width, 10);
+							var ih = parseFloat(item.height, 10);
+							img.src = item.preview;
+							if (!iw || !ih) {
+								//如果数据中没有高度和宽度，则通过加载图片来判断高度
+								img.onload = function(event) {
+									iw = img.width;
+									ih = img.height;
+									setImg(img, iw, ih, minIndex);
+									imgArr.push(img);
+									con.append(img);
+								};
+							} else {
 								setImg(img, iw, ih, minIndex);
 								imgArr.push(img);
 								con.append(img);
-							};
-						} else {
-							setImg(img, iw, ih, minIndex);
-							imgArr.push(img);
-							con.append(img);
-						}
-					});
-					isLoading = false;
-				}
-			});
-		}
-
-		//设置图片大小位置，更新每列的top值
-		function setImg(img, iw, ih, minIndex) {
-			var h = (cellWidth / iw) * ih;
-			img.style.height = h + "px";
-			img.style.top = arr[minIndex].top + "px";
-			img.style.left = arr[minIndex].left + "px";
-			img.style.width = cellWidth + "px";
-			arr[minIndex].top = arr[minIndex].top + h + space;
-		}
-
-		//获取top值最低的列索引号
-		function getMin() {
-			var minIndex = 0;
-			for (var i = 0, len = arr.length; i < len; i++) {
-				if (arr[i].top < arr[minIndex].top) {
-					minIndex = i;
-				}
+							}
+						});
+						isLoading = false;
+					},
+				});
 			}
-			return minIndex;
-		}
 
-		//初始化
-		function init() {
-			setCells();
-			getData();
-		}
+			//设置图片大小位置，更新每列的top值
+			function setImg(img, iw, ih, minIndex) {
+				var h = (cellWidth / iw) * ih;
+				img.style.height = h + 'px';
+				img.style.top = arr[minIndex].top + 'px';
+				img.style.left = arr[minIndex].left + 'px';
+				img.style.width = cellWidth + 'px';
+				arr[minIndex].top = arr[minIndex].top + h + space;
+			}
 
-		//滚动加载
-		$(window).on("scroll", function(event) {
-			var winHeight = window.innerHeight || document.body.clientHeight;
-			var scrollTop = window.pageYOffset || document.body.scrollTop;
-			var minIndex = getMin();
-			if (winHeight + scrollTop > arr[minIndex].top) {
+			//获取top值最低的列索引号
+			function getMin() {
+				var minIndex = 0;
+				for (var i = 0, len = arr.length; i < len; i++) {
+					if (arr[i].top < arr[minIndex].top) {
+						minIndex = i;
+					}
+				}
+				return minIndex;
+			}
+
+			//初始化
+			function init() {
+				setCells();
 				getData();
 			}
-		});
-		//调整窗口大小时，将已经加载的图片重新自适应
-		$(window).on("resize", function(event) {
-			arr = [];
-			setCells();
-			$(imgArr).each(function(i, item) {
-				var minIndex = getMin();
-				var iw = item.width;
-				var ih = item.height;
-				setImg(item, iw, ih, minIndex);
-			});
-		});
 
-		init();
-	});
-</script>
+			//滚动加载
+			$(window).on('scroll', function(event) {
+				var winHeight = window.innerHeight || document.body.clientHeight;
+				var scrollTop = window.pageYOffset || document.body.scrollTop;
+				var minIndex = getMin();
+				if (winHeight + scrollTop > arr[minIndex].top) {
+					getData();
+				}
+			});
+			//调整窗口大小时，将已经加载的图片重新自适应
+			$(window).on('resize', function(event) {
+				arr = [];
+				setCells();
+				$(imgArr).each(function(i, item) {
+					var minIndex = getMin();
+					var iw = item.width;
+					var ih = item.height;
+					setImg(item, iw, ih, minIndex);
+				});
+			});
+
+			init();
+		});
+	</script>
 </head>
 <body>
-<div id="con"></div>
+	<div id="con"></div>
 </body>
 </html>

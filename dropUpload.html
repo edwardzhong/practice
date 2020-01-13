@@ -1,70 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>drop upload</title>
+<meta charset="UTF-8" />
+<title>drop upload</title>
 <style>
-	#upload{
-		height: 100px;
-		border: 1px dotted #aaa;
-	}
+    #upload {
+        height: 100px;
+        border: 1px dotted #aaa;
+    }
 </style>
 </head>
 <body>
-<div id="upload">
-	
-</div>
+<div id="upload"></div>
 <script src="js/jquery.min.js"></script>
 <script>
-//阻止浏览器默认行。 
-$(document).on({ 
-    dragleave:function(e){    //拖离 
-        e.preventDefault(); 
-    }, 
-    drop:function(e){  //拖后放 
-        e.preventDefault(); 
-    }, 
-    dragenter:function(e){    //拖进 
-        e.preventDefault(); 
-    }, 
-    dragover:function(e){    //拖来拖去 
-        e.preventDefault(); 
-    } 
-}); 
-$('#upload')[0].addEventListener("drop",function(e){ 
-    e.preventDefault(); //取消默认浏览器拖拽效果 
-    var files = e.dataTransfer.files; //获取文件对象 
-    //检测是否是拖拽文件到页面的操作 
-    if(files.length == 0) return false;
-    var file = files[0];
-    //检测文件是不是图片 
-    if(file.type.indexOf('image') === -1){ 
-        alert("您拖的不是图片！"); 
-        return false; 
-    } 
-     
-    //拖拉图片到浏览器，可以实现预览功能 
-    // var url = window.URL.createObjectURL(file); 
-    var fileName = file.name; //图片名称 
-    var fileSize = Math.floor((file.size)/1024);  
-    if(fileSize>500){ 
-        alert("上传大小不能超过500K."); 
-        return false; 
-    }
+    //阻止浏览器默认行。
+    $(document).on({
+        dragleave: function(e) {
+            //拖离
+            e.preventDefault();
+        },
+        drop: function(e) {
+            //拖后放
+            e.preventDefault();
+        },
+        dragenter: function(e) {
+            //拖进
+            e.preventDefault();
+        },
+        dragover: function(e) {
+            //拖来拖去
+            e.preventDefault();
+        },
+    });
+    $('#upload')[0].addEventListener(
+        'drop',
+        function(e) {
+            e.preventDefault(); //取消默认浏览器拖拽效果
+            var files = e.dataTransfer.files; //获取文件对象
+            //检测是否是拖拽文件到页面的操作
+            if (files.length == 0) return false;
+            var file = files[0];
+            //检测文件是不是图片
+            if (file.type.indexOf('image') === -1) {
+                alert('您拖的不是图片！');
+                return false;
+            }
 
-	if(window.FileReader) {
-		var fr = new FileReader();
-		//加载完成后显示图片
-		fr.onloadend=function(e){
-			$.post('/uploadFile',{data:e.target.result,name:fileName}).done(function(data){
-				console.log(data);
-			});
-		};
-        fr.readAsBinaryString(file);
-	} else {
-	    alert("浏览器不支持上传");
-	}
-},false); 
+            //拖拉图片到浏览器，可以实现预览功能
+            // var url = window.URL.createObjectURL(file);
+            var fileName = file.name; //图片名称
+            var fileSize = Math.floor(file.size / 1024);
+            if (fileSize > 500) {
+                alert('上传大小不能超过500K.');
+                return false;
+            }
+
+            if (window.FileReader) {
+                var fr = new FileReader();
+                //加载完成后显示图片
+                fr.onloadend = function(e) {
+                    $.post('/uploadFile', { data: e.target.result, name: fileName }).done(function(data) {
+                        console.log(data);
+                    });
+                };
+                fr.readAsBinaryString(file);
+            } else {
+                alert('浏览器不支持上传');
+            }
+        },
+        false,
+    );
 </script>
 </body>
 </html>

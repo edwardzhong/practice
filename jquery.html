@@ -1,149 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
+	<meta charset="UTF-8" />
 	<title>jquery</title>
 	<script src="js/jquery.min.js"></script>
-<script>
-	    $(document).ready(function(){
-    	//1.jquery默认已经将ajax promise化
-    	// $.get('/getList')
-    	// .then($.get('/getDetail')
-    	// 	.done(function(data){
-    	// 		console.log(data);
-    	// 	}));
-    	//2.使用when,同时加载
-	    // $.when($.get('/getList'),$.get('/getDetail'))
-	    // .then(function(data1,data2){
-	    // 	console.log(data1[0]);
-	    // 	console.log(data2[0]);
-	    // },function(err){
-	    // 	console.error(err);
-	    // })
-	    // .fail(function(err){
-	    // 	console.log(err);
-	    // });
-		//3.使用deferred自定义promise对象
-		function getData(url){
-		    var defer=$.Deferred();
-		    $.ajax({
-		    	type:'get',
-		    	url:url,
-		    	dataType:'json',
-		    	success:function(data){
-		    		if(data){
-		    			defer.resolve(data);
-		    		}else{
-		    			defer.reject('err happen');
-		    		}
-		    	}
-		    });
-		    return defer.promise();
-		}
-		// 4.这是第二种自定义promise对象写法，效果和上面一样
-		function loadData(){
-			return $.Deferred(function(deferred){
-				if(Content){
-					deferred.resolve(Content);
-					return;
-				}
-				$.get('content.json', function(data) {
-					if(data){
-						Content=data;
-						deferred.resolve(data);
-					} else{
-						deferred.reject(null);
-					}
+	<script>
+		$(document).ready(function() {
+			//1.jquery默认已经将ajax promise化
+			// $.get('/getList')
+			// .then($.get('/getDetail')
+			// 	.done(function(data){
+			// 		console.log(data);
+			// 	}));
+			//2.使用when,同时加载
+			// $.when($.get('/getList'),$.get('/getDetail'))
+			// .then(function(data1,data2){
+			// 	console.log(data1[0]);
+			// 	console.log(data2[0]);
+			// },function(err){
+			// 	console.error(err);
+			// })
+			// .fail(function(err){
+			// 	console.log(err);
+			// });
+			//3.使用deferred自定义promise对象
+			function getData(url) {
+				var defer = $.Deferred();
+				$.ajax({
+					type: 'get',
+					url: url,
+					dataType: 'json',
+					success: function(data) {
+						if (data) {
+							defer.resolve(data);
+						} else {
+							defer.reject('err happen');
+						}
+					},
 				});
-			});
-		}
+				return defer.promise();
+			}
+			// 4.这是第二种自定义promise对象写法，效果和上面一样
+			function loadData() {
+				return $.Deferred(function(deferred) {
+					if (Content) {
+						deferred.resolve(Content);
+						return;
+					}
+					$.get('content.json', function(data) {
+						if (data) {
+							Content = data;
+							deferred.resolve(data);
+						} else {
+							deferred.reject(null);
+						}
+					});
+				});
+			}
 
-		// getData('/getDetail')
-		// .done(function(data){
-		// 	getData('/getList')
-		// 	.done(function(data2){
-		// 		console.log(data);
-		// 		console.log(data2);
-		// 	});
-		// });
+			// getData('/getDetail')
+			// .done(function(data){
+			// 	getData('/getList')
+			// 	.done(function(data2){
+			// 		console.log(data);
+			// 		console.log(data2);
+			// 	});
+			// });
 
-		function fn1(){
-			var defer=$.Deferred();
-			setTimeout(function(){
-				console.log(111);
-				defer.resolve();
-			},2000);
-			return defer.promise();
-		}
-		function fn2(){
-			console.log(222);
-		}
+			function fn1() {
+				var defer = $.Deferred();
+				setTimeout(function() {
+					console.log(111);
+					defer.resolve();
+				}, 2000);
+				return defer.promise();
+			}
+			function fn2() {
+				console.log(222);
+			}
 
-		fn1()
-		.then(fn2);
+			fn1().then(fn2);
 
-		// //jquery中原型调用关系
-		jQuery = function( selector, context ) {
-			return new jQuery.fn.init( selector, context );
-		}
+			// //jquery中原型调用关系
+			jQuery = function(selector, context) {
+				return new jQuery.fn.init(selector, context);
+			};
 
-		jquery.fn=jquery.prototype={
-			jquery: version,
-			constructor: jQuery,
-			selector: ""
-			//...
-		}
+			jquery.fn = jquery.prototype = {
+				jquery: version,
+				constructor: jQuery,
+				selector: '',
+				//...
+			};
 
-		var init = jQuery.fn.init = function( selector, context ) {}
-		init.prototype = jQuery.fn;
+			var init = (jQuery.fn.init = function(selector, context) {});
+			init.prototype = jQuery.fn;
 
-		jQuery.extend = jQuery.fn.extend = function() {
-			//jQuery.extend中this对应的是jquery/$
-			//jQuery.fn.extend中this对应的是jquery()/$()
-		}
+			jQuery.extend = jQuery.fn.extend = function() {
+				//jQuery.extend中this对应的是jquery/$
+				//jQuery.fn.extend中this对应的是jquery()/$()
+			};
 
-		//模仿jquery面向对象转换为函数式操作
-		var aQuery = function(sel, cont) {
-       		return  new aQuery.prototype.init(sel, cont);
-		}
-		aQuery.prototype = {
-		    init: function(sel, cont) {
-		    	this.selector=sel;
-		    	this.context=cont;
-		        return this;
-		    },
-		    name: function() {},
-		    selector:null,
-		    context:null
-		}
-		aQuery.prototype.init.prototype=aQuery.prototype;//最关键的一步,用aQuery的原型替换init中的原型
+			//模仿jquery面向对象转换为函数式操作
+			var aQuery = function(sel, cont) {
+				return new aQuery.prototype.init(sel, cont);
+			};
+			aQuery.prototype = {
+				init: function(sel, cont) {
+					this.selector = sel;
+					this.context = cont;
+					return this;
+				},
+				name: function() {},
+				selector: null,
+				context: null,
+			};
+			aQuery.prototype.init.prototype = aQuery.prototype; //最关键的一步,用aQuery的原型替换init中的原型
 
-		//zepto中原型调用关系
-		var zepto = {};
-		zepto.Z = function(dom, selector) {
-			dom = dom || []
-			dom.__proto__ = $.fn//最关键部分，相当于jq的原型继承，继承$.fn，ie等低版本不支持__proto__ 
-			dom.selector = selector || ''
-			return dom
-		};
-		zepto.init = function(selector, context) {
-			//...
-			return zepto.Z(dom, selector);
-		};
-		var $ = function(selector, context){
-			return zepto.init(selector, context)
-		};
+			//zepto中原型调用关系
+			var zepto = {};
+			zepto.Z = function(dom, selector) {
+				dom = dom || [];
+				dom.__proto__ = $.fn; //最关键部分，相当于jq的原型继承，继承$.fn，ie等低版本不支持__proto__
+				dom.selector = selector || '';
+				return dom;
+			};
+			zepto.init = function(selector, context) {
+				//...
+				return zepto.Z(dom, selector);
+			};
+			var $ = function(selector, context) {
+				return zepto.init(selector, context);
+			};
 
-		//实例化后继承的原型
-		$.fn = {
-			//...
-		};
+			//实例化后继承的原型
+			$.fn = {
+				//...
+			};
 
-		zepto.Z.prototype = $.fn
-	});
-</script>
+			zepto.Z.prototype = $.fn;
+		});
+	</script>
 </head>
-<body>
-	
-</body>
+<body></body>
 </html>

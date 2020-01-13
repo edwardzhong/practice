@@ -1,191 +1,203 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>图片剪切</title>
-    <style>
-    body {
-        font: 14px "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Segoe UI", "Microsoft Yahei", Tahoma, Arial, STHeiti, sans-serif;
-        margin: 0;padding: 0;
-    }
-    .clearfix:after {
-        content: ".";
-        display: block;
-        visibility: visible;
-        clear: both;
-    }
-    .clearfix {
-        *zoom: 1;
-    }
-    ul li{list-style: none;float: left;padding-right: 5px;}
-    ul li img{width: 80px;height: 60px;}
-    .img-content{
-    	position: relative;
-    	margin: 10px;
-    }
-    .dialog{
-		position: absolute;
-		top: 0;left: 0;
-		background: rgba(0, 0, 0, 0.5);
-		z-index: 2;
-    }
-    .cut{
-    	position: absolute;
-    	top: 0;
-    	left: 0;
-    	z-index: 4;
-    	overflow: hidden;
-    	cursor: pointer;
-    }
-    .img-cut{
-    	position: absolute;
-    	top: 0;
-    	left: 0;
-    	z-index: 3;
-    }
-    .hand{
-    	position: absolute;
-    	width: 20px;
-    	height: 20px;
-    	background: rgba(0, 0, 0, 0.9);
-    	z-index: 5;
-    	cursor:pointer;
-    }
-    </style>
+	<title>图片剪切</title>
+	<style>
+		body {
+			font: 14px 'Helvetica Neue', Helvetica, 'Hiragino Sans GB', 'Segoe UI', 'Microsoft Yahei', Tahoma, Arial,
+				STHeiti, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+		.clearfix:after {
+			content: '.';
+			display: block;
+			visibility: visible;
+			clear: both;
+		}
+		.clearfix {
+			*zoom: 1;
+		}
+		ul li {
+			list-style: none;
+			float: left;
+			padding-right: 5px;
+		}
+		ul li img {
+			width: 80px;
+			height: 60px;
+		}
+		.img-content {
+			position: relative;
+			margin: 10px;
+		}
+		.dialog {
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 2;
+		}
+		.cut {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 4;
+			overflow: hidden;
+			cursor: pointer;
+		}
+		.img-cut {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 3;
+		}
+		.hand {
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			background: rgba(0, 0, 0, 0.9);
+			z-index: 5;
+			cursor: pointer;
+		}
+	</style>
 </head>
 <body>
-    <h2>Edit Images</h2>
-    <ul id="list" class="clearfix">
-        <li><img src="img/Desert.jpg" alt="" /></li>
-        <li><img src="img/Jellyfish.jpg" alt="" /></li>
-    </ul>
-    <script>
-    function addEvent (node, type, fn){
-        if(node.addEventListener){
-            node.addEventListener(type,fn, false);
-        } else if (node.attachEvent){
-            node['e'+type+fn]=fn;
-            node[type+fn]=function(){node['e'+type+fn](window.event);}
-            node.attachEvent( "on"+type,node[type+fn]);
-        } else{
-            node["on"+type]=fn;
-        }
-        return true;
-    }
-    var ul=document.getElementById('list');
-    addEvent(ul,'click',function(event){
-    	event=event||window.event;
-    	var target=event.target||event.srcElement;
-    	if(target.nodeName=='IMG'){
-    		new ImageEdit(target);
-    	}
-    });
-    function ImageEdit(img){
-    	var image=new Image(),
-    		wrap=document.createElement('div'),
-    		hand=document.createElement('div'),
-    		dialog=document.createElement('div'),
-    		cut=document.createElement('div');
+	<h2>Edit Images</h2>
+	<ul id="list" class="clearfix">
+		<li><img src="img/Desert.jpg" alt="" /></li>
+		<li><img src="img/Jellyfish.jpg" alt="" /></li>
+	</ul>
+	<script>
+		function addEvent(node, type, fn) {
+			if (node.addEventListener) {
+				node.addEventListener(type, fn, false);
+			} else if (node.attachEvent) {
+				node['e' + type + fn] = fn;
+				node[type + fn] = function() {
+					node['e' + type + fn](window.event);
+				};
+				node.attachEvent('on' + type, node[type + fn]);
+			} else {
+				node['on' + type] = fn;
+			}
+			return true;
+		}
+		var ul = document.getElementById('list');
+		addEvent(ul, 'click', function(event) {
+			event = event || window.event;
+			var target = event.target || event.srcElement;
+			if (target.nodeName == 'IMG') {
+				new ImageEdit(target);
+			}
+		});
+		function ImageEdit(img) {
+			var image = new Image(),
+				wrap = document.createElement('div'),
+				hand = document.createElement('div'),
+				dialog = document.createElement('div'),
+				cut = document.createElement('div');
 
-    	image.src=img.src;
-    	wrap.className='img-content';
-    	dialog.className='dialog';
-    	cut.className='cut';
-    	hand.className='hand';
+			image.src = img.src;
+			wrap.className = 'img-content';
+			dialog.className = 'dialog';
+			cut.className = 'cut';
+			hand.className = 'hand';
 
-    	cut.style.width=dialog.style.width=image.width+'px';
-    	cut.style.height=dialog.style.height=image.height+'px';
-    	cut.style.background='url("'+img.src+'") no-repeat left top';
-    	hand.style.top=(image.height-10)+'px';
-    	hand.style.left=(image.width-10)+'px';
-    	wrap.appendChild(image);
-    	wrap.appendChild(dialog);
-    	wrap.appendChild(cut);
-    	wrap.appendChild(hand);
-    	document.body.appendChild(wrap);
+			cut.style.width = dialog.style.width = image.width + 'px';
+			cut.style.height = dialog.style.height = image.height + 'px';
+			cut.style.background = 'url("' + img.src + '") no-repeat left top';
+			hand.style.top = image.height - 10 + 'px';
+			hand.style.left = image.width - 10 + 'px';
+			wrap.appendChild(image);
+			wrap.appendChild(dialog);
+			wrap.appendChild(cut);
+			wrap.appendChild(hand);
+			document.body.appendChild(wrap);
 
-    	this.hand=hand;
-    	this.cutLayer=cut;
-    	this.wrap=wrap;
-    	this.dialog=dialog;
-        this.bindEvent();
-    }
-    ImageEdit.prototype={
-    	bindEvent:function(){
-    		var self=this,
-    			wrap=self.wrap,
-    			cutLayer=self.cutLayer,
-    			hand=self.hand,
-    			dialog=self.dialog;
-    		cutLayer.onmousedown=function(event){
-    			var startX=event.clientX,
-    				startY=event.clientY,
-    				ol=cutLayer.offsetLeft,
-    				ot=cutLayer.offsetTop;
-    			document.onmousemove=function(event){
-	    			var disX=event.clientX-startX,
-	    				disY=event.clientY-startY,
-	    				left=ol+disX,
-	    				top=ot+disY,
-	    				wWidth=dialog.offsetWidth,
-	    				wHeight=wrap.offsetHeight,
-	    				width=cutLayer.offsetWidth,
-	    				height=cutLayer.offsetHeight;
+			this.hand = hand;
+			this.cutLayer = cut;
+			this.wrap = wrap;
+			this.dialog = dialog;
+			this.bindEvent();
+		}
+		ImageEdit.prototype = {
+			bindEvent: function() {
+				var self = this,
+					wrap = self.wrap,
+					cutLayer = self.cutLayer,
+					hand = self.hand,
+					dialog = self.dialog;
+				cutLayer.onmousedown = function(event) {
+					var startX = event.clientX,
+						startY = event.clientY,
+						ol = cutLayer.offsetLeft,
+						ot = cutLayer.offsetTop;
+					document.onmousemove = function(event) {
+						var disX = event.clientX - startX,
+							disY = event.clientY - startY,
+							left = ol + disX,
+							top = ot + disY,
+							wWidth = dialog.offsetWidth,
+							wHeight = wrap.offsetHeight,
+							width = cutLayer.offsetWidth,
+							height = cutLayer.offsetHeight;
 
-	    			if(left<0){
-	    				left=0;
-	    			}else if(left+width>wWidth){
-	    				left=wWidth-width;
-	    			}
-	    			if(top<0){
-	    				top=0;
-	    			}else if(top+height>wHeight){
-	    				top=wHeight-height;
-	    			}
+						if (left < 0) {
+							left = 0;
+						} else if (left + width > wWidth) {
+							left = wWidth - width;
+						}
+						if (top < 0) {
+							top = 0;
+						} else if (top + height > wHeight) {
+							top = wHeight - height;
+						}
 
-	    			cutLayer.style.left=left+'px';
-	    			cutLayer.style.top=top+'px';
-	    			cutLayer.style.backgroundPosition='-'+left+'px -'+top+'px';
-	    			hand.style.left=left+width-10+'px';
-	    			hand.style.top=top+height-10+'px';
-    			};
-    			document.onmouseup=function(event){
-    				document.onmousemove=null;
-    				document.onmouseup=null;
-    			}
-    		}
-    		hand.onmousedown=function(event){
-    			var ol=cutLayer.offsetLeft,
-    				ot=cutLayer.offsetTop;
-    			document.onmousemove=function(event){
-	    			var x=event.clientX-wrap.offsetLeft+(window.pageXOffset||document.body.scrollLeft),
-	    				y=event.clientY-wrap.offsetTop+(window.pageYOffset||document.body.scrollTop),
-	    				wWidth=dialog.offsetWidth,
-	    				wHeight=wrap.offsetHeight;
+						cutLayer.style.left = left + 'px';
+						cutLayer.style.top = top + 'px';
+						cutLayer.style.backgroundPosition = '-' + left + 'px -' + top + 'px';
+						hand.style.left = left + width - 10 + 'px';
+						hand.style.top = top + height - 10 + 'px';
+					};
+					document.onmouseup = function(event) {
+						document.onmousemove = null;
+						document.onmouseup = null;
+					};
+				};
+				hand.onmousedown = function(event) {
+					var ol = cutLayer.offsetLeft,
+						ot = cutLayer.offsetTop;
+					document.onmousemove = function(event) {
+						var x = event.clientX - wrap.offsetLeft + (window.pageXOffset || document.body.scrollLeft),
+							y = event.clientY - wrap.offsetTop + (window.pageYOffset || document.body.scrollTop),
+							wWidth = dialog.offsetWidth,
+							wHeight = wrap.offsetHeight;
 
-	    			if(x>wWidth){
-	    				x=wWidth;
-	    			}else if(x<10){
-	    				x=10;
-	    			}
+						if (x > wWidth) {
+							x = wWidth;
+						} else if (x < 10) {
+							x = 10;
+						}
 
-	    			if(y>wHeight){
-	    				y=wHeight;
-	    			}else if(y<10){
-	    				y=10;
-	    			}
-	    			cutLayer.style.width=x-ol+'px';
-	    			cutLayer.style.height=y-ot+'px';
-	    			hand.style.left=x-10+'px';
-	    			hand.style.top=y-10+'px';
-    			};
-    			document.onmouseup=function(event){
-    				document.onmousemove=null;
-    				document.onmouseup=null;
-    			}
-    		}
-    		return self;
-    	}
-    };
-    </script>
+						if (y > wHeight) {
+							y = wHeight;
+						} else if (y < 10) {
+							y = 10;
+						}
+						cutLayer.style.width = x - ol + 'px';
+						cutLayer.style.height = y - ot + 'px';
+						hand.style.left = x - 10 + 'px';
+						hand.style.top = y - 10 + 'px';
+					};
+					document.onmouseup = function(event) {
+						document.onmousemove = null;
+						document.onmouseup = null;
+					};
+				};
+				return self;
+			},
+		};
+	</script>
 </body>
 </html>

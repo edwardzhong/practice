@@ -1,169 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>search</title>
-	<style>
-	body{font: 14px Verdana,"Lucida Grande",Geneva,Arial,sans-serif;}
-	.form-item{
+<meta charset="UTF-8" />
+<title>search</title>
+<style>
+	body {
+		font: 14px Verdana, 'Lucida Grande', Geneva, Arial, sans-serif;
+	}
+	.form-item {
 		padding: 10px;
 	}
-	input[type=search],input[type=email]{
+	input[type='search'],
+	input[type='email'] {
 		margin-right: 1px;
 		padding: 4px;
-		border: 1px solid  #999;
-		border-radius:3px;
+		border: 1px solid #999;
+		border-radius: 3px;
 		width: 170px;
 	}
-	input[type=button]{
-		padding:4px 10px;
-		border: 1px solid  #2e6da4;
-		border-radius:4px;
+	input[type='button'] {
+		padding: 4px 10px;
+		border: 1px solid #2e6da4;
+		border-radius: 4px;
 		background: #337ab7;
 		color: #fff;
-		font-size:13px;
+		font-size: 13px;
 	}
-	input[type=button]:active{
+	input[type='button']:active {
 		background-color: #286090;
-  		border-color: #204d74;
+		border-color: #204d74;
 	}
-	ul,li{margin: 0;padding: 0;}
-	.suggest{
+	ul,
+	li {
+		margin: 0;
+		padding: 0;
+	}
+	.suggest {
 		display: none;
 		list-style: none;
-		border: 1px solid  #ddd;
+		border: 1px solid #ddd;
 		width: 178px;
 	}
-	.suggest li{
+	.suggest li {
 		padding: 2px 4px;
 		cursor: pointer;
 		overflow: hidden;
 	}
-	.suggest li.active{
+	.suggest li.active {
 		background-color: #eee;
 	}
-	</style>
-	<script src="../jquery.js"></script>
-	<script>
-	$(function(){
-		var mailArr=[
-			'@126.com',
-			'@163.com',
-			'@gmail.com',
-			'@qq.com',
-			'@sina.com',
-			'@sohu.com'
-		];
-		function Mail(){
-			this.input=document.getElementById('mail');
-			this.ul=document.getElementById('ul');
-			this.lis=[];
-			this.index=-1;
+</style>
+<script src="../jquery.js"></script>
+<script>
+	$(function() {
+		var mailArr = ['@126.com', '@163.com', '@gmail.com', '@qq.com', '@sina.com', '@sohu.com'];
+		function Mail() {
+			this.input = document.getElementById('mail');
+			this.ul = document.getElementById('ul');
+			this.lis = [];
+			this.index = -1;
 			this.bindEvent();
 		}
-		Mail.prototype={
-			bindEvent:function(){
-				var self=this;
-				var eventName='onkeyup';
-				if('oninput' in window){
-					eventName='oninput';
-				}else if('onpropertychange' in window){
-					eventName='onpropertychange';
+		Mail.prototype = {
+			bindEvent: function() {
+				var self = this;
+				var eventName = 'onkeyup';
+				if ('oninput' in window) {
+					eventName = 'oninput';
+				} else if ('onpropertychange' in window) {
+					eventName = 'onpropertychange';
 				}
-				self.input[eventName]=function(event){
-					if(this.value){
-						self.ul.style.display='block';
+				self.input[eventName] = function(event) {
+					if (this.value) {
+						self.ul.style.display = 'block';
 						self.showLis(this.value);
 					} else {
-						self.ul.style.display='';
+						self.ul.style.display = '';
 					}
 				};
-				self.ul.addEventListener('mouseover',function(event){
-					event=event||window.event;
-					var target=event.target||event.srcElement;
-					if(target.nodeName=='LI'){
-						self.index=target.index;
+				self.ul.addEventListener('mouseover', function(event) {
+					event = event || window.event;
+					var target = event.target || event.srcElement;
+					if (target.nodeName == 'LI') {
+						self.index = target.index;
 						self.activeLi();
 					}
 				});
-				self.ul.addEventListener('mousedown',function(event){
-					event=event||window.event;
-					var target=event.target||event.srcElement;
-					if(target.nodeName=='LI'){
-						self.ul.style.display='';
+				self.ul.addEventListener('mousedown', function(event) {
+					event = event || window.event;
+					var target = event.target || event.srcElement;
+					if (target.nodeName == 'LI') {
+						self.ul.style.display = '';
 					}
 				});
 				document.addEventListener('keydown', function(event) {
-					event=event||window.event;
-					if(!self.ul.style.display) return;
-					if(event.keyCode==38){//向上
-						if(self.index<0) return;
+					event = event || window.event;
+					if (!self.ul.style.display) return;
+					if (event.keyCode == 38) {
+						//向上
+						if (self.index < 0) return;
 						self.index--;
 						self.activeLi();
-					}else if(event.keyCode==40){//向下
-						if(self.index>=self.lis.length-1) return;
+					} else if (event.keyCode == 40) {
+						//向下
+						if (self.index >= self.lis.length - 1) return;
 						self.index++;
 						self.activeLi();
-					}else if(event.keyCode==13){//回车
-						self.ul.style.display='';
-						document.onkeydown=null;
-					}else if(event.keyCode==8){//退格
-						self.index=-1;
+					} else if (event.keyCode == 13) {
+						//回车
+						self.ul.style.display = '';
+						document.onkeydown = null;
+					} else if (event.keyCode == 8) {
+						//退格
+						self.index = -1;
 					}
-					console.log(event.keyCode);	
+					console.log(event.keyCode);
 				});
 			},
-			showLis:function(val){
-				var self=this,
-					eIndex=val.indexOf('@'),
-					reg=new RegExp('@'+val.substr(eIndex+1)),
-					li=null;
-				self.lis.length=0;
+			showLis: function(val) {
+				var self = this,
+					eIndex = val.indexOf('@'),
+					reg = new RegExp('@' + val.substr(eIndex + 1)),
+					li = null;
+				self.lis.length = 0;
 				self.ul.innerHTML = '';
-				if(val.indexOf('@')<0){
-					for(var i=0,len=mailArr.length;i<len;i++){
-						li=document.createElement('li');
-						li.innerText=val+mailArr[i];
-						li.index=i;
+				if (val.indexOf('@') < 0) {
+					for (var i = 0, len = mailArr.length; i < len; i++) {
+						li = document.createElement('li');
+						li.innerText = val + mailArr[i];
+						li.index = i;
 						this.ul.appendChild(li);
 						this.lis.push(li);
 					}
 				} else {
-					for(var i=0,len=mailArr.length;i<len;i++){
-						if(reg.test(mailArr[i])){
-							li=document.createElement('li');
-							li.innerText=val.substr(0,eIndex)+mailArr[i];
-							li.index=i;
+					for (var i = 0, len = mailArr.length; i < len; i++) {
+						if (reg.test(mailArr[i])) {
+							li = document.createElement('li');
+							li.innerText = val.substr(0, eIndex) + mailArr[i];
+							li.index = i;
 							this.ul.appendChild(li);
 							this.lis.push(li);
 						}
 					}
 				}
 			},
-			activeLi:function(){
-				var self=this;
+			activeLi: function() {
+				var self = this;
 				for (var i = 0; i < self.lis.length; i++) {
-					self.lis[i].className='';
-				};
-				if(self.index<0) return;
-				self.lis[self.index].className='active';
-				self.input.value=self.lis[self.index].innerText;
-			}
+					self.lis[i].className = '';
+				}
+				if (self.index < 0) return;
+				self.lis[self.index].className = 'active';
+				self.input.value = self.lis[self.index].innerText;
+			},
 		};
 
 		new Mail();
 	});
-	</script>
+</script>
 </head>
 <body>
 <div class="form-item">
-	<input type="search" name="" id="search" placeholder="input the keyword">
-	<input type="button" value="search">	
+	<input type="search" name="" id="search" placeholder="input the keyword" />
+	<input type="button" value="search" />
 </div>
 <div class="form-item">
-	<input type="email" name="" id="mail" placeholder="input the email">
-	<ul class="suggest" id="ul">
-	</ul>
+	<input type="email" name="" id="mail" placeholder="input the email" />
+	<ul class="suggest" id="ul"></ul>
 </div>
 </body>
 </html>

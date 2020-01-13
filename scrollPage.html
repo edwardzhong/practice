@@ -1,46 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>拖曳滑动切换页面</title>
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<style>
-		html,body,.container,.page{
-			width: 100%;
-			height: 100%;
-			padding: 0;
-			margin: 0;
-		}
-		.container{
-			position: relative;
-			overflow: hidden;
-		}
-		.page{
-			position: absolute;
-			top: 0;
-			left: 0;
-			text-align: center;
-			color: #555;
-		}
-		.page:nth-child(1){
-			background-color: rgba(0, 0, 0, .4);
-			display: block;
-		}
-		.page:nth-child(2){
-			background-color: rgba(0, 0, 0, .3);
-			display: none;
-		}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>拖曳滑动切换页面</title>
+<style>
+	html,
+	body,
+	.container,
+	.page {
+		width: 100%;
+		height: 100%;
+		padding: 0;
+		margin: 0;
+	}
+	.container {
+		position: relative;
+		overflow: hidden;
+	}
+	.page {
+		position: absolute;
+		top: 0;
+		left: 0;
+		text-align: center;
+		color: #555;
+	}
+	.page:nth-child(1) {
+		background-color: rgba(0, 0, 0, 0.4);
+		display: block;
+	}
+	.page:nth-child(2) {
+		background-color: rgba(0, 0, 0, 0.3);
+		display: none;
+	}
 
-		.page:nth-child(3){
-			background-color: rgba(0, 0, 0, .2);
-			display: none;
-		}
-		.page h2{
-			margin-top: 50%;
-		}
-/*		.restore{-webkit-transition:-webkit-transform .3s linear;}
-		.moving{-webkit-transition:-webkit-transform .2s linear;}*/
-	</style>
+	.page:nth-child(3) {
+		background-color: rgba(0, 0, 0, 0.2);
+		display: none;
+	}
+	.page h2 {
+		margin-top: 50%;
+	}
+	/*		.restore{-webkit-transition:-webkit-transform .3s linear;}
+.moving{-webkit-transition:-webkit-transform .2s linear;}*/
+</style>
 </head>
 <body>
 <div class="container">
@@ -55,116 +59,143 @@
 	</div>
 </div>
 <script>
+	var addCssRule = (function() {
+		// 创建一个 style， 返回其 stylesheet 对象
+		// 注意：IE6/7/8中使用 style.stylesheet/addRule，其它浏览器 style.sheet/insertRule
+		var sheet = (function() {
+			var head = document.head || document.getElementsByTagName('head')[0];
+			var style = document.createElement('style');
+			style.type = 'text/css';
+			head.appendChild(style);
+			return style.sheet;
+			// return style.sheet||style.stylesheet;//ie
+		})();
+		// 返回接口函数
+		return function(cssText) {
+			var cssRules = cssText.split('\r\n');
+			var len = !!sheet.cssRules ? sheet.cssRules.length : 0;
+			for (var i = 0; i < cssRules.length; i++) {
+				if (sheet.insertRule) {
+					sheet.insertRule(cssRules[i], len++);
+				}
+				// else if (sheet.addRule) {
+				//     sheet.addRule(selector, rules, index);//ie
+				// }
+			}
+		};
+	})();
+	// function loadStyleString(css) {
+	// 	var style = document.createElement("style");
+	// 	style.type = "text/css";
+	// 	try{
+	// 		style.appendChild(document.createTextNode(css));
+	// 	} catch (ex){
+	// 		style.styleSheet.cssText = css;
+	// 	}
+	// 	var head = document.getElementsByTagName("head")[0];
+	// 	head.appendChild(style);
+	// }
+	// loadStyleString("body{background-color:red}");
 
-var addCssRule = function() {
-  // 创建一个 style， 返回其 stylesheet 对象
-  // 注意：IE6/7/8中使用 style.stylesheet/addRule，其它浏览器 style.sheet/insertRule
-  var sheet=function() {
-    var head = document.head || document.getElementsByTagName('head')[0];
-    var style = document.createElement('style');
-    style.type = 'text/css';
-    head.appendChild(style);
-    return style.sheet;
-    // return style.sheet||style.stylesheet;//ie
-  }();
-  // 返回接口函数
-  return function(cssText) {
-    var cssRules=cssText.split('\r\n');
-    var len=!!sheet.cssRules?sheet.cssRules.length:0;
-    for(var i=0;i<cssRules.length;i++){
-      if (sheet.insertRule) {  
-          sheet.insertRule(cssRules[i], len++);
-      } 
-      // else if (sheet.addRule) {
-      //     sheet.addRule(selector, rules, index);//ie
-      // }
-    }
-  }
-}();
-// function loadStyleString(css) {
-// 	var style = document.createElement("style");
-// 	style.type = "text/css";
-// 	try{
-// 		style.appendChild(document.createTextNode(css));
-// 	} catch (ex){
-// 		style.styleSheet.cssText = css;
-// 	}
-// 	var head = document.getElementsByTagName("head")[0];
-// 	head.appendChild(style);
-// }
-// loadStyleString("body{background-color:red}");
-
-addCssRule('.restore{-webkit-transition:-webkit-transform .2s linear;}');
-addCssRule('.moving{-webkit-transition:-webkit-transform .2s linear;}');
+	addCssRule('.restore{-webkit-transition:-webkit-transform .2s linear;}');
+	addCssRule('.moving{-webkit-transition:-webkit-transform .2s linear;}');
 	//页面滚动效果
-	var con=document.getElementsByClassName('container')[0];
-	var pages=document.getElementsByClassName('page');
-	var len=pages.length,curr=0,prev=-1,next=1,act=0;
-	var isLock=false,sx=0,sy=0,mx=0,my=0,offset=0;
-	var touchStart=function(e){
-		if(isLock){return;}
-		var touches=e.changedTouches||e.targetTouches;
-		sx=touches[0].pageX;sy=touches[0].pageY;
-		con.addEventListener('touchmove', touchMove,false);
-	},
-	touchMove=function(e){
-		if(isLock){return;}
-		var touches=e.changedTouches||e.targetTouches;
-		mx=touches[0].pageX;my=touches[0].pageY;
-		offset=my-sy;
-		if(curr==0&&offset>0||curr==len-1&&offset<0){
-			con.removeEventListener('touchmove', touchMove,false);
-			return;
-		}
-		con.addEventListener('touchend', release,false);
-		con.addEventListener('touchcancel', release,false);
-		e.preventDefault();
-		e.stopPropagation();
-		if(offset>0){
-			act=prev;
-			pages[next]&&(pages[next].style.display='none');
-			pages[prev].style.cssText='display:block;top:-100%;';
-			pages[curr].style['-webkit-transform']=pages[prev].style['-webkit-transform']='translate3d(0,'+offset+'px,0)';
-		} else if(offset<0){
-			act=next;
-			pages[prev]&&(pages[prev].style.display='none');
-			pages[next].style.cssText='display:block;top:100%;';
-			pages[curr].style['-webkit-transform']=pages[next].style['-webkit-transform']='translate3d(0,'+offset+'px,0)';
-		}
-	},
-	release=function(e){
-		if(isLock){return;}
-		isLock=true;
-		con.addEventListener('touchmove', touchMove,false);
-		if(Math.abs(offset)<100){//小于50重置
-			pages[curr].className=pages[curr].className+' restore';
-			pages[act].className=pages[act].className+' restore';
-			pages[curr].style['-webkit-transform']=pages[act].style['-webkit-transform']='translate3d(0,0,0)';
-			setTimeout(function() {
-				pages[curr].className=pages[curr].className.replace(' restore','');
-				pages[act].className=pages[act].className.replace(' restore','');
-				pages[act].style.display='none';
-				offset=0;isLock=false;
-			}, 310);
-		} else {//进行切换
-			pages[curr].className=pages[curr].className+' moving';
-			pages[act].className=pages[act].className+' moving';
-			pages[curr].style['-webkit-transform']=pages[act].style['-webkit-transform']='translate3d(0,'+(offset<0?'-':'')+'100%,0)';
-			setTimeout(function() {
-				pages[curr].className=pages[curr].className.replace(' moving','');
-				pages[act].className=pages[act].className.replace(' moving','');
-				pages[curr].style.cssText='display:none;top:0;';
-				pages[curr].style['-webkit-transform']=pages[act].style['-webkit-transform']='translate3d(0,0,0)';
-				pages[act].style.top=0;
-				curr=act;prev=curr-1;next=curr+1;
-				offset=0;isLock=false;
-			}, 210);
-		}
-		con.removeEventListener('touchmove', touchMove,false);
-		con.removeEventListener('touchend', release,false);
-		con.removeEventListener('touchcancel', release,false);
-	};
-	con.addEventListener('touchstart', touchStart,false);
+	var con = document.getElementsByClassName('container')[0];
+	var pages = document.getElementsByClassName('page');
+	var len = pages.length,
+		curr = 0,
+		prev = -1,
+		next = 1,
+		act = 0;
+	var isLock = false,
+		sx = 0,
+		sy = 0,
+		mx = 0,
+		my = 0,
+		offset = 0;
+	var touchStart = function(e) {
+			if (isLock) {
+				return;
+			}
+			var touches = e.changedTouches || e.targetTouches;
+			sx = touches[0].pageX;
+			sy = touches[0].pageY;
+			con.addEventListener('touchmove', touchMove, false);
+		},
+		touchMove = function(e) {
+			if (isLock) {
+				return;
+			}
+			var touches = e.changedTouches || e.targetTouches;
+			mx = touches[0].pageX;
+			my = touches[0].pageY;
+			offset = my - sy;
+			if ((curr == 0 && offset > 0) || (curr == len - 1 && offset < 0)) {
+				con.removeEventListener('touchmove', touchMove, false);
+				return;
+			}
+			con.addEventListener('touchend', release, false);
+			con.addEventListener('touchcancel', release, false);
+			e.preventDefault();
+			e.stopPropagation();
+			if (offset > 0) {
+				act = prev;
+				pages[next] && (pages[next].style.display = 'none');
+				pages[prev].style.cssText = 'display:block;top:-100%;';
+				pages[curr].style['-webkit-transform'] = pages[prev].style['-webkit-transform'] =
+					'translate3d(0,' + offset + 'px,0)';
+			} else if (offset < 0) {
+				act = next;
+				pages[prev] && (pages[prev].style.display = 'none');
+				pages[next].style.cssText = 'display:block;top:100%;';
+				pages[curr].style['-webkit-transform'] = pages[next].style['-webkit-transform'] =
+					'translate3d(0,' + offset + 'px,0)';
+			}
+		},
+		release = function(e) {
+			if (isLock) {
+				return;
+			}
+			isLock = true;
+			con.addEventListener('touchmove', touchMove, false);
+			if (Math.abs(offset) < 100) {
+				//小于50重置
+				pages[curr].className = pages[curr].className + ' restore';
+				pages[act].className = pages[act].className + ' restore';
+				pages[curr].style['-webkit-transform'] = pages[act].style['-webkit-transform'] =
+					'translate3d(0,0,0)';
+				setTimeout(function() {
+					pages[curr].className = pages[curr].className.replace(' restore', '');
+					pages[act].className = pages[act].className.replace(' restore', '');
+					pages[act].style.display = 'none';
+					offset = 0;
+					isLock = false;
+				}, 310);
+			} else {
+				//进行切换
+				pages[curr].className = pages[curr].className + ' moving';
+				pages[act].className = pages[act].className + ' moving';
+				pages[curr].style['-webkit-transform'] = pages[act].style['-webkit-transform'] =
+					'translate3d(0,' + (offset < 0 ? '-' : '') + '100%,0)';
+				setTimeout(function() {
+					pages[curr].className = pages[curr].className.replace(' moving', '');
+					pages[act].className = pages[act].className.replace(' moving', '');
+					pages[curr].style.cssText = 'display:none;top:0;';
+					pages[curr].style['-webkit-transform'] = pages[act].style['-webkit-transform'] =
+						'translate3d(0,0,0)';
+					pages[act].style.top = 0;
+					curr = act;
+					prev = curr - 1;
+					next = curr + 1;
+					offset = 0;
+					isLock = false;
+				}, 210);
+			}
+			con.removeEventListener('touchmove', touchMove, false);
+			con.removeEventListener('touchend', release, false);
+			con.removeEventListener('touchcancel', release, false);
+		};
+	con.addEventListener('touchstart', touchStart, false);
 </script>
 </body>
 </html>

@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>跑马灯/轮播图</title>
+<meta charset="UTF-8" />
+<title>跑马灯/轮播图</title>
 <style>
     /* 跑马灯样式 */
-    .container{
+    .container {
         width: 400px;
         height: 20px;
         margin: 0 auto;
         overflow: hidden;
     }
-    .news{
+    .news {
         list-style: none;
         margin: 0;
     }
-    .news li{
+    .news li {
         float: left;
     }
     /*焦点图样式*/
-    .container{
+    .container {
         position: relative;
         width: 360px;
         height: 240px;
         margin: 0 auto;
         overflow: hidden;
     }
-    ul{
+    ul {
         list-style: none;
         margin: 0;
     }
-    .pages{
+    .pages {
         width: 100%;
         height: 100%;
     }
-    .pages li{
+    .pages li {
         display: none;
         position: absolute;
         left: 0;
@@ -42,29 +42,33 @@
         width: 100%;
         height: 100%;
     }
-    .pages img{
+    .pages img {
         width: 100%;
         height: 100%;
     }
-    .ctrl{
+    .ctrl {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
         bottom: 10px;
     }
-    .ctrl li{
+    .ctrl li {
         float: left;
         width: 20px;
         height: 20px;
         margin: 5px;
         border-radius: 50%;
-        background-color: rgba(0, 0, 0, .7);
+        background-color: rgba(0, 0, 0, 0.7);
     }
-    .ctrl li.active{
+    .ctrl li.active {
         background-color: #00acee;
     }
-    .restore{-webkit-transition:-webkit-transform .2s linear;}
-    .moving{-webkit-transition:-webkit-transform .2s linear;}
+    .restore {
+        -webkit-transition: -webkit-transform 0.2s linear;
+    }
+    .moving {
+        -webkit-transition: -webkit-transform 0.2s linear;
+    }
 </style>
 </head>
 <body>
@@ -94,146 +98,179 @@
 </div>
 <script src="js/Zepto.js"></script>
 <script>
-    var Msgs=[
+    var Msgs = [
         'aaa获得了大疆无人机 !',
         'bbb获得了苹果MacBook Pro !',
         'ccc获得了XBOX 360 !',
         'ddd获得了苹果IPhone7 Plus !',
-        'eee获得了小米电视 !'
+        'eee获得了小米电视 !',
     ];
 
-     /**
+    /**
      * 跑马灯，默认左移
      * @param    {Boolean}                isRight 是否右移
      */
-    function marquee(list,isRight){
-        var ul=$('.news_list'),
-            ulWidth=0,
-            speed=1,
-            marginLen=0,
-            left=0,
-            lis,html='';
+    function marquee(list, isRight) {
+        var ul = $('.news_list'),
+            ulWidth = 0,
+            speed = 1,
+            marginLen = 0,
+            left = 0,
+            lis,
+            html = '';
 
-        list.forEach(function(item,i){
-            html+='<li>'+item.nick+'获得'+_Awards[item.level-1].txt+'</li>';
+        list.forEach(function(item, i) {
+            html += '<li>' + item.nick + '获得' + _Awards[item.level - 1].txt + '</li>';
         });
         ul.html(html);
-        lis=ul.find('li');
+        lis = ul.find('li');
 
-        if(lis.length<=1&&$('#newBox').width()>=lis.first().length){return;}
-        lis.each(function(i,item){
-            ulWidth+=$(item).width(); 
-        });
-        ul.css('width',ulWidth+'px');
-        if(isRight){
-            marginLen=left=lis.last().width()-ulWidth;
-            lis.first().css({'marginLeft':left+'px'});
+        if (lis.length <= 1 && $('#newBox').width() >= lis.first().length) {
+            return;
         }
-        ~function(){
-            var first=ul.find('li').first(),
-                last=ul.find('li').last();
-            if(isRight&&left-marginLen>=last.width()){
-                left=marginLen;
+        lis.each(function(i, item) {
+            ulWidth += $(item).width();
+        });
+        ul.css('width', ulWidth + 'px');
+        if (isRight) {
+            marginLen = left = lis.last().width() - ulWidth;
+            lis.first().css({ marginLeft: left + 'px' });
+        }
+        ~(function() {
+            var first = ul.find('li').first(),
+                last = ul.find('li').last();
+            if (isRight && left - marginLen >= last.width()) {
+                left = marginLen;
                 ul.prepend(last);
-                first.css('marginLeft','0');
-            } else if(!isRight&&left>=first.width()){
-                ul.append(first.css('marginLeft','0'));
-                left=0;
+                first.css('marginLeft', '0');
+            } else if (!isRight && left >= first.width()) {
+                ul.append(first.css('marginLeft', '0'));
+                left = 0;
             } else {
-                left+=speed;
+                left += speed;
             }
-            ul.find('li').first().css({'marginLeft':(isRight?'':'-')+ left+'px'});
-            mqTimer=requestAnimationFrame(arguments.callee);
-        }();
+            ul.find('li')
+                .first()
+                .css({ marginLeft: (isRight ? '' : '-') + left + 'px' });
+            mqTimer = requestAnimationFrame(arguments.callee);
+        })();
     }
     marquee(Msgs);
     /**
      * 返回浏览器特有css前缀
      */
-    var webkit=function(){
-        var css3_div=document.createElement("div");
-        css3_div.style.cssText='-webkit-transition:all .1s; -moz-transition:all .1s; -o-transition:all .1s; -ms-transition:all .1s; transition:all .1s;';
-        if(css3_div.style.webkitTransition){
+    var webkit = (function() {
+        var css3_div = document.createElement('div');
+        css3_div.style.cssText =
+            '-webkit-transition:all .1s; -moz-transition:all .1s; -o-transition:all .1s; -ms-transition:all .1s; transition:all .1s;';
+        if (css3_div.style.webkitTransition) {
             return '-webkit-';
-        }else if(css3_div.style.MozTransition){
+        } else if (css3_div.style.MozTransition) {
             return '-moz-';
-        }else if(css3_div.style.oTransition){
+        } else if (css3_div.style.oTransition) {
             return '-o-';
-        }else if(css3_div.style.msTransition){
+        } else if (css3_div.style.msTransition) {
             return '-ms-';
-        }else{
+        } else {
             return '';
         }
-    }();
+    })();
 
     /**
      * 左右循环滑动(本店热销模块)
      * @Author   jeffzhong(p_jdjfzhong)
      * @DateTime 2016-07-12T13:59:53+0800
      */
-    function touchSlide(){
-        var container=$('#slideCon'),
-            lis=container.find('.pages li'),
-            navs=container.find('.ctrl li'),
-            len=lis.length,curr=0,prev=-1,next=1,act=0,
-            isLock=false,startX=0,offset=0;
-        lis=[].slice.call(lis);
-        var _touchStart=function(e){
-            if(isLock){return;}
-            var touchers=e.changedTouches||e.targetTouches;
-            startX=touchers[0].pageX;
-            container.on('touchmove',_touchMove);
-        },
-        _touchMove=function(e){
-            if(isLock){return;}
-            var touchers=e.changedTouches||e.targetTouches,
-                endX=touchers[0].pageX;
-            offset=endX-startX;
-            container.on('touchend',_touchRelease);
-            container.on('touchcancel',_touchRelease);
-            e.stopPropagation(); 
-            if(offset>0){
-                act=prev<0?len-1:prev;
-            } else if(offset<0){
-                act=next>=len?0:next;
-            }
-            lis[act].style.cssText='display:block;left:'+(offset<0?'':'-')+'100%;';
-            lis[curr].style[webkit+'transform']=lis[act].style[webkit+'transform']='translate3d('+offset+'px,0,0)';
-        },
-        _touchRelease=function(e){
-            if(isLock){return;}
-            isLock=true;
-            if(Math.abs(offset)<100){//小于100重置
-                $(lis[curr]).addClass('restore');
-                $(lis[act]).addClass('restore');
-                lis[curr].style[webkit+'transform']=lis[act].style[webkit+'transform']='translate3d(0,0,0)';
-                setTimeout(function() {
-                    $(lis[curr]).removeClass('restore');
-                    $(lis[act]).removeClass('restore');
-                    lis[act].style.display='none';
-                    offset=0;isLock=false;
-                }, 310);
-            } else {//进行切换
-                $(lis[curr]).addClass('moving');
-                $(lis[act]).addClass('moving');
-                lis[curr].style[webkit+'transform']=lis[act].style[webkit+'transform']='translate3d('+(offset<0?'-':'')+'100%,0,0)';
-                setTimeout(function() {
-                    $(lis[curr]).removeClass('moving');
-                    $(lis[act]).removeClass('moving');
-                    lis[curr].style.cssText='display:none;left:0;';
-                    lis[curr].style[webkit+'transform']=lis[act].style[webkit+'transform']='translate3d(0,0,0)';
-                    lis[act].style.left=0;
-                    curr=act;prev=curr-1;next=curr+1;
-                    offset=0;isLock=false;
-                    navs.eq(curr).addClass('cur').siblings().removeClass('cur');//底部导航点位置
-                }, 210);
-            }
-            container.off('touchmove',_touchMove);
-            container.off('touchend',_touchRelease);
-            container.off('touchcancel',_touchRelease);
-        };
-        lis[0].style.display='block';
-        if(len>1){container.on('touchstart',_touchStart); }
+    function touchSlide() {
+        var container = $('#slideCon'),
+            lis = container.find('.pages li'),
+            navs = container.find('.ctrl li'),
+            len = lis.length,
+            curr = 0,
+            prev = -1,
+            next = 1,
+            act = 0,
+            isLock = false,
+            startX = 0,
+            offset = 0;
+        lis = [].slice.call(lis);
+        var _touchStart = function(e) {
+                if (isLock) {
+                    return;
+                }
+                var touchers = e.changedTouches || e.targetTouches;
+                startX = touchers[0].pageX;
+                container.on('touchmove', _touchMove);
+            },
+            _touchMove = function(e) {
+                if (isLock) {
+                    return;
+                }
+                var touchers = e.changedTouches || e.targetTouches,
+                    endX = touchers[0].pageX;
+                offset = endX - startX;
+                container.on('touchend', _touchRelease);
+                container.on('touchcancel', _touchRelease);
+                e.stopPropagation();
+                if (offset > 0) {
+                    act = prev < 0 ? len - 1 : prev;
+                } else if (offset < 0) {
+                    act = next >= len ? 0 : next;
+                }
+                lis[act].style.cssText = 'display:block;left:' + (offset < 0 ? '' : '-') + '100%;';
+                lis[curr].style[webkit + 'transform'] = lis[act].style[webkit + 'transform'] =
+                    'translate3d(' + offset + 'px,0,0)';
+            },
+            _touchRelease = function(e) {
+                if (isLock) {
+                    return;
+                }
+                isLock = true;
+                if (Math.abs(offset) < 100) {
+                    //小于100重置
+                    $(lis[curr]).addClass('restore');
+                    $(lis[act]).addClass('restore');
+                    lis[curr].style[webkit + 'transform'] = lis[act].style[webkit + 'transform'] =
+                        'translate3d(0,0,0)';
+                    setTimeout(function() {
+                        $(lis[curr]).removeClass('restore');
+                        $(lis[act]).removeClass('restore');
+                        lis[act].style.display = 'none';
+                        offset = 0;
+                        isLock = false;
+                    }, 310);
+                } else {
+                    //进行切换
+                    $(lis[curr]).addClass('moving');
+                    $(lis[act]).addClass('moving');
+                    lis[curr].style[webkit + 'transform'] = lis[act].style[webkit + 'transform'] =
+                        'translate3d(' + (offset < 0 ? '-' : '') + '100%,0,0)';
+                    setTimeout(function() {
+                        $(lis[curr]).removeClass('moving');
+                        $(lis[act]).removeClass('moving');
+                        lis[curr].style.cssText = 'display:none;left:0;';
+                        lis[curr].style[webkit + 'transform'] = lis[act].style[webkit + 'transform'] =
+                            'translate3d(0,0,0)';
+                        lis[act].style.left = 0;
+                        curr = act;
+                        prev = curr - 1;
+                        next = curr + 1;
+                        offset = 0;
+                        isLock = false;
+                        navs.eq(curr)
+                            .addClass('cur')
+                            .siblings()
+                            .removeClass('cur'); //底部导航点位置
+                    }, 210);
+                }
+                container.off('touchmove', _touchMove);
+                container.off('touchend', _touchRelease);
+                container.off('touchcancel', _touchRelease);
+            };
+        lis[0].style.display = 'block';
+        if (len > 1) {
+            container.on('touchstart', _touchStart);
+        }
     }
 </script>
 </body>

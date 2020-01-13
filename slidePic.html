@@ -1,66 +1,134 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>pc版本焦点图(scrollLeft和left版本)</title>
-	<style>
-	body{font:small Arial,sans-serif;background: #aaa;}
-	.clearfix:after{content: ".";display: block;height: 0;clear: both;visibility: hidden;}
-	.clearfix{zoom:1;}
-	.main{margin: 0 auto;width: 1000px;}
-	.wrap{background: rgba(255,255,255,0.7);padding: 15px;}
-	.slide-div{background: #fff;}
-	.slide-div .left{float: left;width: 30px;font-size: 30px;cursor: pointer;margin-top: 50px;}
-	.slide-div .right{float: right;width: 30px;font-size: 30px;cursor: pointer;margin-top: 50px;}
-	.slide-div .center{margin: 0 40px;}
-	.slideWrap{position: relative; overflow: hidden;}
-	.slideWrap ul{margin: 0;padding: 0;list-style-type: none;position: relative;left:0;}
-	.slideWrap li{margin: 0;padding: 0;float: left;}
-	.slideWrap .intro-left{width: 440px;float: left;margin-right: 10px;}
-	.slideWrap .intro-right{width: 440px;float: left;}
-	.slideWrap img{width: 110px;height: 110px;display: block;float: left;border: 2px solid #aaa;border-radius: 5px;}
-	.slideWrap .intro{margin-left: 120px;word-break:break-all;}
-	</style>
-	<script src="js/jquery.min.js"></script>
-	<script>
-	$(function(){
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>pc版本焦点图(scrollLeft和left版本)</title>
+<style>
+	body {
+		font: small Arial, sans-serif;
+		background: #aaa;
+	}
+	.clearfix:after {
+		content: '.';
+		display: block;
+		height: 0;
+		clear: both;
+		visibility: hidden;
+	}
+	.clearfix {
+		zoom: 1;
+	}
+	.main {
+		margin: 0 auto;
+		width: 1000px;
+	}
+	.wrap {
+		background: rgba(255, 255, 255, 0.7);
+		padding: 15px;
+	}
+	.slide-div {
+		background: #fff;
+	}
+	.slide-div .left {
+		float: left;
+		width: 30px;
+		font-size: 30px;
+		cursor: pointer;
+		margin-top: 50px;
+	}
+	.slide-div .right {
+		float: right;
+		width: 30px;
+		font-size: 30px;
+		cursor: pointer;
+		margin-top: 50px;
+	}
+	.slide-div .center {
+		margin: 0 40px;
+	}
+	.slideWrap {
+		position: relative;
+		overflow: hidden;
+	}
+	.slideWrap ul {
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+		position: relative;
+		left: 0;
+	}
+	.slideWrap li {
+		margin: 0;
+		padding: 0;
+		float: left;
+	}
+	.slideWrap .intro-left {
+		width: 440px;
+		float: left;
+		margin-right: 10px;
+	}
+	.slideWrap .intro-right {
+		width: 440px;
+		float: left;
+	}
+	.slideWrap img {
+		width: 110px;
+		height: 110px;
+		display: block;
+		float: left;
+		border: 2px solid #aaa;
+		border-radius: 5px;
+	}
+	.slideWrap .intro {
+		margin-left: 120px;
+		word-break: break-all;
+	}
+</style>
+<script src="js/jquery.min.js"></script>
+<script>
+	$(function() {
 		scrollMove();
 	});
 	//使用scrollLeft进行移动
-	function scrollMove(){
-		var ul=$('.slideWrap ul'),
-			lis=ul.children('li'),
-			len=lis.length,
-			i=0,timer=null,
-			w=parseInt($(lis[0]).css('width'),10);
+	function scrollMove() {
+		var ul = $('.slideWrap ul'),
+			lis = ul.children('li'),
+			len = lis.length,
+			i = 0,
+			timer = null,
+			w = parseInt($(lis[0]).css('width'), 10);
 
-		ul.css('width',w*len+'px');
-		$('.left').click(function(){
+		ul.css('width', w * len + 'px');
+		$('.left').click(function() {
 			i--;
 			action();
 		});
-		$('.right').click(function(){
+		$('.right').click(function() {
 			i++;
 			action();
 		});
-		$('.slideWrap').mouseover(function(){
-			clearInterval(timer);
-		}).mouseout(function(){
-			next();
-		});
-		function action(){
-			if(i==len){
-				i=0;
+		$('.slideWrap')
+			.mouseover(function() {
+				clearInterval(timer);
+			})
+			.mouseout(function() {
+				next();
+			});
+		function action() {
+			if (i == len) {
+				i = 0;
 			}
-			if(i<0){
-				i=len-1;
+			if (i < 0) {
+				i = len - 1;
 			}
 			clearInterval(timer);
-			$(".slideWrap").animate({ scrollLeft: i * w }, "slow");
+			$('.slideWrap').animate({ scrollLeft: i * w }, 'slow');
 			next();
 		}
-		function next(){
-			timer=setInterval(function(){
+		function next() {
+			timer = setInterval(function() {
 				i++;
 				action();
 			}, 1000);
@@ -68,51 +136,54 @@
 		next();
 	}
 	//使用left进行移动
-	function move(){
-		var ul=$('.slideWrap ul'),
-			lis=ul.children('li'),
-			len=lis.length,
-			i=0,timer=null,
-			w=parseInt($(lis[0]).css('width'),10);
+	function move() {
+		var ul = $('.slideWrap ul'),
+			lis = ul.children('li'),
+			len = lis.length,
+			i = 0,
+			timer = null,
+			w = parseInt($(lis[0]).css('width'), 10);
 
-		ul.css('width',w*len+'px');
-		
-		$('.left').click(function(){
+		ul.css('width', w * len + 'px');
+
+		$('.left').click(function() {
 			i++;
 			action();
 		});
-		$('.right').click(function(){
+		$('.right').click(function() {
 			i--;
 			action();
 		});
-		$('.slideWrap').mouseover(function(){
-			clearInterval(timer);
-		}).mouseout(function(){
-			next();
-		});
-		function action(){
-			if(i>0){
-				i=-(len-1);
+		$('.slideWrap')
+			.mouseover(function() {
+				clearInterval(timer);
+			})
+			.mouseout(function() {
+				next();
+			});
+		function action() {
+			if (i > 0) {
+				i = -(len - 1);
 			}
-			if(i==-len){
-				i=0;
+			if (i == -len) {
+				i = 0;
 			}
 			clearInterval(timer);
-			ul.animate({'left':w*i},400);
+			ul.animate({ left: w * i }, 400);
 			next();
 		}
-		function next(){
-			timer=setInterval(function(){
+		function next() {
+			timer = setInterval(function() {
 				i--;
 				action();
 			}, 2000);
 		}
 		next();
 	}
-	</script>
+</script>
 </head>
 <body>
-	<div class="main">
+<div class="main">
 	<div class="wrap">
 		<div class="slide-div">
 			<div class="left">&lt;</div>
@@ -126,16 +197,20 @@
 								<img src="" alt="" />
 								<div class="intro">
 									<h3>111111</h3>
-									<p>dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
-										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds<br />dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds</p>
+									<p>
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds<br />dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds
+									</p>
 								</div>
 							</div>
 							<div class="intro-right">
 								<img src="" alt="" />
 								<div class="intro">
 									<h3>dsdsdsdsdsds</h3>
-									<p>dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
-										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds</p>
+									<p>
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds
+									</p>
 								</div>
 							</div>
 						</li>
@@ -144,16 +219,20 @@
 								<img src="" alt="" />
 								<div class="intro">
 									<h3>22222</h3>
-									<p>dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
-										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds<br />dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds</p>
+									<p>
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds<br />dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds
+									</p>
 								</div>
 							</div>
 							<div class="intro-right">
 								<img src="" alt="" />
 								<div class="intro">
 									<h3>dsdsdsdsdsds</h3>
-									<p>dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
-										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds</p>
+									<p>
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds
+									</p>
 								</div>
 							</div>
 						</li>
@@ -162,34 +241,42 @@
 								<img src="" alt="" />
 								<div class="intro">
 									<h3>33333</h3>
-									<p>dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
-										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds<br />dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds</p>
+									<p>
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds<br />dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds
+									</p>
 								</div>
 							</div>
 							<div class="intro-right">
 								<img src="" alt="" />
 								<div class="intro">
 									<h3>dsdsdsdsdsds</h3>
-									<p>dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
-										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds</p>
+									<p>
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds
+									</p>
 								</div>
 							</div>
 						</li>
-												<li>
+						<li>
 							<div class="intro-left">
 								<img src="" alt="" />
 								<div class="intro">
 									<h3>444444444444</h3>
-									<p>dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
-										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds<br />dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds</p>
+									<p>
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds<br />dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds
+									</p>
 								</div>
 							</div>
 							<div class="intro-right">
 								<img src="" alt="" />
 								<div class="intro">
 									<h3>dsdsdsdsdsds</h3>
-									<p>dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
-										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds</p>
+									<p>
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds <br />
+										dsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsds
+									</p>
 								</div>
 							</div>
 						</li>
@@ -198,6 +285,6 @@
 			</div>
 		</div>
 	</div>
-	</div>
+</div>
 </body>
 </html>

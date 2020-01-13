@@ -1,63 +1,69 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>焦点图2</title>
-	<style>
-	.wrap{
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>焦点图2</title>
+<style>
+	.wrap {
 		position: relative;
 		width: 550px;
 		height: 300px;
 		margin: 0 auto;
 		overflow: hidden;
 	}
-	.wrap img{
+	.wrap img {
 		position: absolute;
 		width: 400px;
 		height: 300px;
-		cursor:pointer;
+		cursor: pointer;
 		transition: all 0.5s ease-out;
 	}
-	.wrap img:nth-child(1){
-		top: 0;left: 0;
+	.wrap img:nth-child(1) {
+		top: 0;
+		left: 0;
 	}
-	.wrap img:nth-child(2){
-		top: 0;left: 50px;
+	.wrap img:nth-child(2) {
+		top: 0;
+		left: 50px;
 	}
-	.wrap img:nth-child(3){
-		top: 0;left: 100px;
+	.wrap img:nth-child(3) {
+		top: 0;
+		left: 100px;
 	}
-	.wrap img:nth-child(4){
-		top: 0;left: 150px;
+	.wrap img:nth-child(4) {
+		top: 0;
+		left: 150px;
 	}
-	</style>
-	<script src="./js/jquery.min.js"></script>
-	<script>
-	$(function(){
-		var i,index=0,
-			wrap=$('.wrap'),
-			imgs=wrap.children('img'),
-			l=imgs.length;
+</style>
+<script src="./js/jquery.min.js"></script>
+<script>
+	$(function() {
+		var i,
+			index = 0,
+			wrap = $('.wrap'),
+			imgs = wrap.children('img'),
+			l = imgs.length;
 		wrap.on('mouseover', 'img', function(event) {
-			index=$(this).index();
-			for(i=0;i<l;i++){
-				if(i<=index){
-					imgs.eq(i).css({'left':i*50+'px'});
-				}else{
-					imgs.eq(i).css({'left':(550-(l-i)*50)+'px'});
+			index = $(this).index();
+			for (i = 0; i < l; i++) {
+				if (i <= index) {
+					imgs.eq(i).css({ left: i * 50 + 'px' });
+				} else {
+					imgs.eq(i).css({ left: 550 - (l - i) * 50 + 'px' });
 				}
 			}
-			
 		});
 	});
-	</script>
+</script>
 </head>
 <body>
-	<div class="wrap">
-		<img src="./img/actleaveabc3.jpg" alt="" />
-		<img src="./img/actleaveabc1.jpg" alt="" />
-		<img src="./img/actleavechhomrong10.jpg" alt="" />
-		<img src="./img/actleavechhomrong2.jpg" alt="" />
-	</div>
+<div class="wrap">
+	<img src="./img/actleaveabc3.jpg" alt="" />
+	<img src="./img/actleaveabc1.jpg" alt="" />
+	<img src="./img/actleavechhomrong10.jpg" alt="" />
+	<img src="./img/actleavechhomrong2.jpg" alt="" />
+</div>
 </body>
 </html>

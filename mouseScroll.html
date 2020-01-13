@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>鼠标滚轮</title>
+<meta charset="UTF-8" />
+<title>鼠标滚轮</title>
 </head>
 <body>
 <p>
@@ -14,29 +14,30 @@
     <input type="text" id="detail" />
 </p>
 <script type="text/javascript">
-var oTxt = document.getElementById("txt");
-/***********************
- * 函数：判断滚轮滚动方向
- * 作者：walkingp
- * 参数：event
- * 返回：滚轮方向 1：向上 -1：向下
- *************************/
-var scrollFunc = function(e) {
+    var oTxt = document.getElementById('txt');
+    /***********************
+     * 函数：判断滚轮滚动方向
+     * 作者：walkingp
+     * 参数：event
+     * 返回：滚轮方向 1：向上 -1：向下
+     *************************/
+    var scrollFunc = function(e) {
         var direct = 0;
         e = e || window.event;
 
-        var t1 = document.getElementById("wheelDelta");
-        var t2 = document.getElementById("detail");
-        if (e.wheelDelta) { //IE/Opera/Chrome
+        var t1 = document.getElementById('wheelDelta');
+        var t2 = document.getElementById('detail');
+        if (e.wheelDelta) {
+            //IE/Opera/Chrome
             t1.value = e.wheelDelta;
-        } else if (e.detail) { //Firefox
+        } else if (e.detail) {
+            //Firefox
             t2.value = e.detail;
         }
-    }
+    };
     /*注册事件*/
-document.addEventListener('mousewheel', scrollFunc, false);
-// window.onmousewheel = document.onmousewheel = scrollFunc; //IE/Opera/Chrome/Safari
+    document.addEventListener('mousewheel', scrollFunc, false);
+    // window.onmousewheel = document.onmousewheel = scrollFunc; //IE/Opera/Chrome/Safari
 </script>
-    
 </body>
 </html>
