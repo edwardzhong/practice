@@ -42,33 +42,34 @@
 </head>
 <body>
 	<h2>选择器</h2>
-	<h3>兄弟选择器</h3>
-	<p>h3 + p { color: #f00 } 只有挨着的 p 会应用样式 </p>
-	<p>h3 ~ p { color: #f00 } 所有同级的 p 都会应用样式 </p>
+	<h3>父子兄弟选择器</h3>
+	<p>p > span { color: #00f } //父元素的直接后继子级应用样式 </p>
+	<p>h3 + p { color: #f00 } //只有挨着的 p 会应用样式 </p>
+	<p>h3 ~ p { color: #f00 } //所有同级的 p 都会应用样式 </p>
 	
 	<h3>简单属性选择器</h3>
-	<p>a[title]{color: #0f0 } 有 title 属性的链接<br> *[title]{color:#00f;} 包含 title 的所有元素 </p>
+	<p>a[title]{color: #0f0 } //有 title 属性的链接<br> *[title]{color:#00f;} //包含 title 的所有元素 </p>
 	<a href="#" title="简单属性选择器">简单属性选择器</a>
 
 	<h3>具体属性选择器</h3>
-	<p>a[href="http://www.google.hk/"]{color:#0aa;}</p>
-	<p>input[type="text"]{background-color: #ff0;}</p>
+	<p>a[href="http://www.google.hk/"]{color:#0aa;} //href值为 xxx 的链接</p>
+	<p>input[type="text"]{background-color: #ff0;} //type值为 text 的控件</p>
 	<a href="http://www.google.hk/">google</a><br>
 	<input type="text" value="属性选择器">
 	
 	<h3>正则匹配选择器</h3>
-	<p>input[class^="txt"]{border:1px solid #f00;} class 以 txt 开头的所有元素</p>
-	<p>input[class$="er"]{border:1px solid #f00;} class 以 er 结尾的所有元素</p>
-	<p>input[class*="txt"]{border:1px solid #f00;} class 包含 txt 的所有元素</p>
+	<p>input[class^="txt"]{border:1px solid #f00;} //class 以 txt 开头的所有元素</p>
+	<p>input[class$="er"]{border:1px solid #f00;} //class 以 er 结尾的所有元素</p>
+	<p>input[class*="txt"]{border:1px solid #f00;} //class 包含 txt 的所有元素</p>
 	<input type="text" class="txt-name" value="name">
 	<input type="email" class="txt-mail" value="email">
 			
 	<h3>伪元素/状态选择器</h3>
-	<p>.tip:before{} before 伪元素</p>
-	<p>.tip:after{} after 伪元素</p>
-	<p>input:checked{} checked 状态的元素</p>
-	<p>p:first-letter{font-size: 20px;} 第一个字符</p>
-	<p>p:first-line{color:#00f;} 第一行</p>
+	<p>.tip:before{} //before 伪元素</p>
+	<p>.tip:after{} //after 伪元素</p>
+	<p>input:checked{} //checked 状态的元素</p>
+	<p>p:first-letter{font-size: 20px;} //第一个字符</p>
+	<p>p:first-line{color:#00f;} //第一行</p>
 	<p class="line">伪元素选择器</p>
 
 	<h3>链接的状态顺序</h3>

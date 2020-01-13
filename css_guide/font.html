@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>字体</title>
+<title>font & word</title>
 <style>
 	body{
 		font:italic 14px Helvetica,Arial,"Microsoft Yahei",sans-serif;
@@ -25,7 +25,7 @@
 </style>
 </head>
 <body>
-	<h2>字体属性</h2>
+	<h2>字体和字符</h2>
 	<h3>font</h3>
 	<p>font: italic 14px Helvetica,Arial,"Microsoft Yahei",sans-serif;</p>
 	<p>font属性前三个值可以采用任意顺序，后两个值必须font-size在前，font-family在后，同时必须存在</p>
@@ -38,7 +38,15 @@
 	<h3>vertial-align</h3>
 	<p>垂直对齐文本，不影响块级元素中内容对齐，但可影响单元表格中元素的垂直对齐，正值使元素上升，负值使元素下降</p>
 	<h3>word-spacing</h3></p>
-	<p>字间隔</p>
+	<p>单词间距</p>
+	<div>
+		<p style="word-spacing: 10px;">word spacing</p>
+	</div>
+	<h3>letter-spacing</h3>
+	<p>字与字间距</p>
+	<div>
+		<p style="letter-spacing: 5px;">letter spacing</p>
+	</div>
 	<h3>text-transform</h3>
 	<p>
 		<span>文本转换 </span><br>
@@ -54,7 +62,7 @@
 		<p style="text-decoration:blink">blink</p>
 	</p>
 	<h3>white-space</h3>
-	<p>处理空白符<p>
+	<p>控制空白字符的显示<p>
 	<div>
 		<strong>nowrap</strong>
 		<div class="wp" style="white-space:nowrap;">nowrap文本不换行强制在一行显示</div>
@@ -67,6 +75,24 @@
 		<div class="wp" style="white-space:pre-line;">pre-line，会合并文本中的     空白符，但保留回车，
 			且文本会换行</div>
 	</div>
-
+	<h3>word-break</h3>
+	<p>控制单词如何被拆分换行</p>
+	<div>
+		<strong>normal，浏览器默认</strong>
+		<p class="wp" style="width: 120px;word-break: normal;">This   is a incomprehensibilities long word.</p>
+		<strong>keep-all，英文单词强制一行显示，只有空格可以触发自动换行</strong>
+		<p class="wp" style="width: 120px;word-break: keep-all;">This   is a incomprehensibilities long word.</p>
+		<strong>break-all，英文单词强制内部换行，所有单词碰到边界一律拆分换行</strong>
+		<p class="wp" style="width: 120px;word-break: break-all;">This   is a incomprehensibilities long word.</p>
+	</div>
+	<h3>word-wrap/overflow-wrap</h3>
+	<p>控制长度超过一行的单词是否被拆分换行，又叫做overflow-wrap</p>
+	<p>word-wrap 属性原本属于微软的一个私有属性，在 CSS3 现在的文本规范草案中已经被重名为 overflow-wrap 。 word-wrap 现在被当作 overflow-wrap 的 “别名”。</p>
+	<div>
+		<strong>normal</strong>
+		<p class="wp" style="width: 100px;word-wrap:normal;">This   is a incomprehensibilities long word.</p>
+		<strong>break-word，只有当一个单词一整行都显示不下时，才会拆分换行该单词</strong>
+		<p class="wp" style="width: 100px;word-wrap:break-word">This   is a incomprehensibilities long word.</p>
+	</div>
 </body>
 </html>
