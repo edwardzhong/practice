@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>nth-child & nth-of-type</title>
+		<style>
+            body{
+                padding: 20px;
+            }
+			.ul {
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				width: 680px;
+				height: 46px;
+				padding: 0;
+				background-color: #fff;
+				border: 4px solid #202020;
+				border-radius: 10px;
+			}
+			.ul > *{
+                position: relative;
+                display: block;
+                width: 30px;
+				height: 30px;
+				background: #000;
+				border: 2px solid #000;
+                box-shadow: inset 3px 3px 10px #747474;
+				cursor: pointer;
+            }
+            .ul span {
+                border-radius: 30px;
+            }
+			.ul > *:hover{
+				background-color: #298eb2;
+				box-shadow: -3px -3px 10px rgba(0, 0, 0, 0.4), inset 0 0 10px #000;
+			}
+			.ul> *:before {
+				position: absolute;
+				left: 6px;
+				top: 50px;
+				color: #000;
+			}
+			.ul>*:nth-child(1):before {
+				content: '1';
+			}
+			.ul>*:nth-child(1):before {
+				content: '1';
+			}
+			.ul>*:nth-child(2):before {
+				content: '2';
+			}
+			.ul>*:nth-child(3):before {
+				content: '3';
+			}
+			.ul>*:nth-child(4):before {
+				content: '4';
+			}
+			.ul>*:nth-child(5):before {
+				content: '5';
+			}
+			.ul>*:nth-child(6):before {
+				content: '6';
+			}
+			.ul>*:nth-child(7):before {
+				content: '7';
+			}
+			.ul>*:nth-child(8):before {
+				content: '8';
+			}
+			.ul>*:nth-child(9):before {
+				content: '9';
+			}
+			.ul>*:nth-child(10):before {
+				content: '10';
+			}
+			.ul>*:nth-child(11):before {
+				content: '11';
+			}
+			code {
+                display: block;
+                margin-top: 50px;
+                width: 800px;
+                padding: 0 10px;
+				white-space: pre;
+				background-color: #202020;
+				border: 1px solid #888;
+				color: #fff;
+			}
+			h1 {
+                color: #555;
+			}
+			h2 {
+				color: #9fcf77;
+            }
+            p{
+                color: #666;
+            }
+			#one span:nth-child(8) {
+				background-color: #298eb2;
+			}
+			#one span:nth-child(8):hover {
+				background-color: #eb008b;
+            }
+            #two span:nth-child(n+6) {
+                background-color: #298EB2;
+            }
+            #two span:nth-child(n+6):hover {
+                background-color: #eb008b;
+            }
+            #three span:nth-child(-n+9) {
+                background-color: #298EB2;
+            }
+            #three span:nth-child(-n+9):hover {
+                background-color: #eb008b;
+            }
+            #four span:nth-child(n+4):nth-child(-n+8) {
+                background-color: #298EB2;
+            }
+            #four span:nth-child(n+4):nth-child(-n+8):hover {
+                background-color: #eb008b;
+            }
+            #five span:nth-child(n+2):nth-child(odd):nth-child(-n+9){
+                background-color: #298EB2;
+            }
+            #five span:nth-child(n+2):nth-child(odd):nth-child(-n+9):hover{
+                background-color: #eb008b;   
+            }
+            #six span:nth-child(3n+1):nth-child(even) {
+                background-color: #298EB2;
+            }
+            #six span:nth-child(3n+1):nth-child(even):hover {
+                background-color: #eb008b;
+            }
+            #seven span:nth-of-type(3) {
+                background-color: #298EB2;
+            }
+            #seven div:nth-of-type(4) {
+                background-color: #E17149;
+            }
+            #eight span:nth-of-type(n+3) {
+                background-color: #298EB2;
+            }
+
+            #eight div:nth-of-type(2n+2) {
+                background-color: #E17149;
+            }
+            #nine span:nth-of-type(-n+4) {
+                background-color: #298EB2;
+            }
+
+            #nine div:nth-of-type(-n+5) {
+                background-color: #E17149;
+            }
+            #ten span:nth-of-type(n+3):nth-of-type(-n+6) {
+                background-color: #298EB2;
+            }
+            
+            #ten div:nth-of-type(n+1):nth-of-type(-n+3) {
+                background-color: #E17149;
+            }
+            #eleven span:nth-of-type(n+3):nth-of-type(odd):nth-of-type(-n+6) {
+                background-color: #298EB2;
+            }
+
+            #eleven div:nth-of-type(n+1):nth-of-type(even):nth-of-type(-n+3) {
+                background-color: #E17149;
+            }
+		</style>
+	</head>
+	<body>
+		<h1>using nth-child</h1>
+		<h2>:nth-child(8)</h2>
+		<p>选择第8个元素</p>
+		<div class="ul" id="one">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<code>
+li:nth-child(8) span { 
+    background-color: #298EB2; 
+}
+        </code>
+
+		<h2>:nth-child(n+6)</h2>
+		<p>选择第6个及以上的元素</p>
+		<div class="ul" id="two">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<code>
+li:nth-child(n+6) span {
+    background-color: #298EB2;
+}
+        </code>
+        
+		<h2>:nth-child(-n+9)</h2>
+		<p>选择第9个及以下的元素</p>
+		<div class="ul" id="three">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<code>
+li:nth-child(-n+9) span {
+    background-color: #298EB2;
+}
+        </code>
+        
+		<h2>nth-child(n+4):nth-child(-n+8)</h2>
+		<p>选择第4-8个元素</p>
+		<div class="ul" id="four">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<code>
+li:nth-child(n+4):nth-child(-n+8) span {
+    background-color: #298EB2;
+}
+        </code>
+        
+		<h2>nth-child(n+2):nth-child(odd):nth-child(-n+9)</h2>
+		<p>选择第2-9个元素中的奇数元素</p>
+		<div class="ul" id="five">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<code>
+li:nth-child(n+2):nth-child(odd):nth-child(-n+9) span {
+    background-color: #298EB2;
+}
+        </code>
+        
+		<h2>nth-child(3n+1):nth-child(even)</h2>
+		<p>间隔3个元素，即1，4，7，10 元素中的偶数元素</p>
+		<div class="ul" id="six">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<code>
+li:nth-child(3n+1):nth-child(even) span {
+    background-color: #298EB2;
+}
+        </code>
+        
+<h1>using nth-of-type</h1>
+<h2>:nth-of-type(3)</h2>
+<p>选择相同类型的第3个元素</p>
+<div class="ul" id="seven">
+    <span></span>
+    <div></div>
+    <span></span>
+    <div></div>
+    <span></span>
+    <div></div>
+    <span></span>
+    <div></div>
+    <span></span>
+    <div></div>
+    <span></span>
+</div>
+<code>
+span:nth-of-type(3) {
+    background-color: #298EB2;
+}
+div:nth-of-type(4) {
+    background-color: #E17149:
+}
+</code>
+
+<h2>span:nth-of-type(n+3) <br/>
+div:nth-of-type(2n+2)</h2>
+<p>正向范围选择</p>
+<div class="ul" id="eight">
+    <span></span>
+    <div></div>
+    <span></span>
+    <div></div>
+    <span></span>
+    <div></div>
+    <span></span>
+    <div></div>
+    <span></span>
+    <div></div>
+    <span></span>
+</div>
+<code>
+span:nth-of-type(n+3) {
+    background-color: #298EB2;
+}
+
+div:nth-of-type(2n+2) {
+    background-color: #E17149:
+}
+</code>
+
+<h2>span:nth-of-type(-n+4) <br/>
+    div:nth-of-type(-n+5)</h2>
+    <p>负向范围选择</p>
+    <div class="ul" id="nine">
+        <span></span>
+        <div></div>
+        <span></span>
+        <div></div>
+        <span></span>
+        <div></div>
+        <span></span>
+        <div></div>
+        <span></span>
+        <div></div>
+        <span></span>
+    </div>
+    <code>
+span:nth-of-type(-n+4) {
+    background-color: #298EB2;
+}
+
+div:nth-of-type(-n+5) {
+    background-color: #E17149;
+}
+    </code>
+
+    <h2>span:nth-of-type(n+3):nth-of-type(-n+6) <br/>
+        div:nth-of-type(n+1):nth-of-type(-n+3)</h2>
+        <p>复杂范围选择</p>
+        <div class="ul" id="ten">
+            <span></span>
+            <div></div>
+            <span></span>
+            <div></div>
+            <span></span>
+            <div></div>
+            <span></span>
+            <div></div>
+            <span></span>
+            <div></div>
+            <span></span>
+        </div>
+        <code>
+span:nth-of-type(n+3):nth-of-type(-n+6) {
+    background-color: #298EB2;
+}
+
+div:nth-of-type(n+1):nth-of-type(-n+3) {
+    background-color: #E17149;
+}
+        </code>
+
+        <h2>span:nth-of-type(n+3):nth-of-type(odd):nth-of-type(-n+6) <br/>
+            div:nth-of-type(n+1):nth-of-type(even):nth-of-type(-n+3)</h2>
+            <p>增加奇偶的复杂范围选择</p>
+            <div class="ul" id="eleven">
+                <span></span>
+                <div></div>
+                <span></span>
+                <div></div>
+                <span></span>
+                <div></div>
+                <span></span>
+                <div></div>
+                <span></span>
+                <div></div>
+                <span></span>
+            </div>
+            <code>
+span:nth-of-type(n+3):nth-of-type(odd):nth-of-type(-n+6) {
+    background-color: #298EB2;
+}
+
+div:nth-of-type(n+1):nth-of-type(even):nth-of-type(-n+3) {
+    background-color: #E17149;
+}
+            </code>
+	</body>
+</html>
