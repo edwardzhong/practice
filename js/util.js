@@ -688,10 +688,13 @@ function offset(node) {
 	return pos;
 }
 
+//取得一个样式的计算样式
 function getStyle(el, name) {
-	if (!name) return false;
-	name = camelize(name);
+	name = name.replace(/\-(\w)/g, function(match, l) {
+		return l.toUpperCase();
+	});
 	if (window.getComputedStyle) {
+		//getComputedStyle第二个参数为对付伪类，如placeholder
 		return el.ownerDocument.getComputedStyle(el, null)[name];
 	} else {
 		return el.currentStyle[name];
