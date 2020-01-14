@@ -643,6 +643,14 @@ function getWinSize() {
 	};
 }
 
+// 滚动条位置
+function getScrollPos() {
+	return {
+		left: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+		top: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop,
+	};
+}
+
 //获得文档的大小 包括滚动高度（区别于视口）,取所有属性中最大值
 function getPageSize() {
 	var root = document.documentElement;
@@ -661,14 +669,6 @@ function getPageSize() {
 			document.body.scrollHeight,
 			document.body.offsetHeight,
 		),
-	};
-}
-
-// 滚动条位置
-function getScrollPos() {
-	return {
-		left: window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
-		top: window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop,
 	};
 }
 
