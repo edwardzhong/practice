@@ -690,8 +690,8 @@ function offset(node) {
 
 //取得一个样式的计算样式
 function getStyle(el, name) {
-	name = name.replace(/\-(\w)/g, function(match, l) {
-		return l.toUpperCase();
+	name = name.replace(/\-(\w)/g, function(_, m) {
+		return m.toUpperCase();
 	});
 	if (window.getComputedStyle) {
 		//getComputedStyle第二个参数为对付伪类，如placeholder
@@ -718,8 +718,22 @@ function shareUrl(type, opts) {
     return configs[type](opts);
 }
 
-function isMobile() {
+
+ // 是否移动端
+ function isMobile() {
 	return /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
+}
+
+// wx/qq/h5判断环境
+function getEnv() {
+	var ua = navigator.userAgent.toLowerCase();
+	if (/micromessenger(\/[\d\.]+)*/.test(ua)) {
+		return 'weixin';
+	} else if (/qq\/(\/[\d\.]+)*/.test(ua) || /qzone\//.test(ua)) {
+		return 'qq';
+	} else {
+		return 'h5';
+	}
 }
 
 //密码必须包含数字,字母,符号

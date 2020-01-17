@@ -5,9 +5,23 @@
  * Time: 下午8:38
  */
 
+ // 是否移动端
 function isMobile() {
 	return /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
 }
+
+// wx/qq/h5判断环境
+function getEnv() {
+	var ua = navigator.userAgent.toLowerCase();
+	if (/micromessenger(\/[\d\.]+)*/.test(ua)) {
+		return 'weixin';
+	} else if (/qq\/(\/[\d\.]+)*/.test(ua) || /qzone\//.test(ua)) {
+		return 'qq';
+	} else {
+		return 'h5';
+	}
+}
+
 var browser = (function() {
 	var u = navigator.userAgent;
 	return {
@@ -25,6 +39,7 @@ var browser = (function() {
 		iPhone: u.indexOf('iPhone') > -1,
 		iPad: u.indexOf('iPad') > -1,
 		winPhone: u.indexOf('Windows Phone') > -1,
+		weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
 	};
 })();
 
@@ -42,30 +57,6 @@ function getBrowser() {
 		return 'Camino'; //Camino浏览器
 	} else if (u.indexOf('Gecko/') > -1) {
 		return 'Gecko'; //Gecko浏览器
-	}
-}
-
-// 判断环境
-function getEnv() {
-	var ua = navigator.userAgent.toLowerCase();
-	if (/micromessenger(\/[\d\.]+)*/.test(ua)) {
-		return 'weixin';
-	} else if (/qq\/(\/[\d\.]+)*/.test(ua) || /qzone\//.test(ua)) {
-		return 'qq';
-	} else if (u.indexOf('chrome') > -1) {
-		return 'Chrome';
-	} else if (u.indexOf('msie') > 0) {
-		return 'MSIE'; //IE浏览器
-	} else if (u.indexOf('firefox') > 0) {
-		return 'Firefox'; //Firefox浏览器
-	} else if (u.indexOf('safari') > 0) {
-		return 'Safari'; //Safan浏览器
-	} else if (u.indexOf('camino') > 0) {
-		return 'Camino'; //Camino浏览器
-	} else if (u.indexOf('gecko/') > 0) {
-		return 'Gecko'; //Gecko浏览器
-	} else {
-		return 'h5';
 	}
 }
 
@@ -132,7 +123,7 @@ var animationend = (function() {
 	return ret;
 })();
 
-//动态插入一条样式规则
+//动态插入样式规则
 //insertCSSRule('.restore{-webkit-transition:-webkit-transform .3s linear;}');
 function insertCSSRule(rule) {
 	if (styleElement) {
@@ -152,7 +143,7 @@ function insertCSSRule(rule) {
 	}
 }
 
-//删除一条样式规则
+//删除样式规则
 function deleteCSSRule(ruleName, keyframes) {
 	var prop = keyframes ? 'name' : 'selectorText';
 	var name = keyframes ? '@keyframes' : 'cssRule'; //调试用
@@ -430,8 +421,8 @@ function jsonp(url, callback, callbackName) {
 }
 //取得一个样式的计算样式
 function getStyle(el, name) {
-	name = name.replace(/\-(\w)/g, function(match, l) {
-		return l.toUpperCase();
+	name = name.replace(/\-(\w)/g, function(_, m) {
+		return m.toUpperCase();
 	});
 	if (window.getComputedStyle) {
 		//getComputedStyle第二个参数为对付伪类，如placeholder
