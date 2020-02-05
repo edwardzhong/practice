@@ -268,6 +268,16 @@
     .con .footer{
         width: 100vw;
     }
+    .con2{
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+    }
+    .footer2{
+        width: 100vw;
+        height: 100px;
+        margin: auto;
+    }
 </style>
 </head>
 <body>
@@ -514,6 +524,23 @@
 <div class="con wrap">
     <div class="main"> main </div>
     <div class="footer">this is footer</div>
+</div>
+<h4>flex 结合 margin:auto 使元素居中</h4>
+<p>只使用margin-top: auto 能实现上面的贴底功能</p>
+<code>
+.con2{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+.footer2{
+    width: 100px;
+    height: 100px;
+    margin: auto;
+}
+</code>
+<div class="con2 wrap">
+    <div class="footer2"></div>
 </div>
 </body>
 </html>
