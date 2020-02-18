@@ -18,7 +18,6 @@
 * [瀑布流图片加载](https://github.com/edwardzhong/practice/blob/master/imgfall.html)
 * [简单烟花效果](https://github.com/edwardzhong/practice/blob/master/smoke.html)
 * [实现3D标签云](https://github.com/edwardzhong/practice/blob/master/3dtags.html)
-* [纯CSS实现导航栏下划线跟随效果](https://github.com/edwardzhong/practice/blob/master/underlineEffect.html)
 
 ### 学习
 * [Object.defineProperties实现mvvm](https://github.com/edwardzhong/practice/blob/master/mvvm.html)
@@ -52,6 +51,9 @@
 5. [grid布局](https://github.com/edwardzhong/practice/blob/master/layout/grid.html)
 6. [三角形](https://github.com/edwardzhong/practice/blob/master/layout/angle.html)
 7. [checked伪类实现纯 CSSTab 切换](https://github.com/edwardzhong/practice/blob/master/layout/tab.html)
+8. [纯CSS实现导航栏下划线跟随效果](https://github.com/edwardzhong/practice/blob/master/layout/underlineEffect.html)
+9. [tab动画切换](https://github.com/edwardzhong/practice/blob/master/layout/nav.html)
+10. [scroll-behavior 动画tab切换](https://github.com/edwardzhong/practice/blob/master/layout/scrolltab.html)
 
 ### css权威指南
 1. [块级元素](https://github.com/edwardzhong/practice/blob/master/css_guide/block.html)
