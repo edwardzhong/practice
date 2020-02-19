@@ -54,6 +54,7 @@
 8. [纯CSS实现导航栏下划线跟随效果](https://github.com/edwardzhong/practice/blob/master/layout/underlineEffect.html)
 9. [tab动画切换](https://github.com/edwardzhong/practice/blob/master/layout/nav.html)
 10. [scroll-behavior 动画tab切换](https://github.com/edwardzhong/practice/blob/master/layout/scrolltab.html)
+11. [justify-text](https://github.com/edwardzhong/practice/blob/master/layout/justifyText.html)
 
 ### css权威指南
 1. [块级元素](https://github.com/edwardzhong/practice/blob/master/css_guide/block.html)
