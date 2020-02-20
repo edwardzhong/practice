@@ -50,11 +50,10 @@
 4. [flex布局](https://github.com/edwardzhong/practice/blob/master/layout/flex.html)
 5. [grid布局](https://github.com/edwardzhong/practice/blob/master/layout/grid.html)
 6. [三角形](https://github.com/edwardzhong/practice/blob/master/layout/angle.html)
-7. [checked伪类实现纯 CSSTab 切换](https://github.com/edwardzhong/practice/blob/master/layout/tab.html)
-8. [纯CSS实现导航栏下划线跟随效果](https://github.com/edwardzhong/practice/blob/master/layout/underlineEffect.html)
-9. [tab动画切换](https://github.com/edwardzhong/practice/blob/master/layout/nav.html)
-10. [scroll-behavior 动画tab切换](https://github.com/edwardzhong/practice/blob/master/layout/scrolltab.html)
-11. [justify-text](https://github.com/edwardzhong/practice/blob/master/layout/justifyText.html)
+7. [纯CSS实现导航栏下划线跟随效果](https://github.com/edwardzhong/practice/blob/master/layout/underlineEffect.html)
+8. [checked伪类实现纯 CSSTab 切换](https://github.com/edwardzhong/practice/blob/master/layout/tab.html)
+9. [scroll-behavior 动画tab切换](https://github.com/edwardzhong/practice/blob/master/layout/scrolltab.html)
+10. [justify-text](https://github.com/edwardzhong/practice/blob/master/layout/justifyText.html)
 
 ### css权威指南
 1. [块级元素](https://github.com/edwardzhong/practice/blob/master/css_guide/block.html)

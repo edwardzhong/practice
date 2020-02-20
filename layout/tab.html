@@ -1,119 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<title>使用 checked 伪类实现纯 CSS Tab 切换</title>
-<style>
-    h2{
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>使用 checked 伪类实现纯 CSS Tab 切换</title>
+    <style>
+      h2 {
         text-align: center;
-    }
-    .container {
+      }
+      .container {
         position: relative;
         width: 400px;
+        height: 300px;
         margin: 50px auto;
-    }
-
-    input {
-        display: none;
-    }
-
-    .nav {
-        position: relative;
+        border: 1px solid #efefef;
         overflow: hidden;
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-    }
+      }
 
-    li {
-        width: 200px;
-        float: left;
+      input[name='nav'] {
+        display: none;
+      }
+      nav {
+        display: flex;
+        width: 100%;
+      }
+      nav label {
+        display: inline-block;
+        width: 100%;
+        background-color: hsl(150, 50%, 50%);
+        color: #fff;
         text-align: center;
-        background: #ddd;
-    }
-
-    li label {
-        display: block;
-        width: 200px;
-        line-height: 36px;
-        font-size: 18px;
-        cursor: pointer;
-    }
-
-    .content {
-        position: relative;
-        overflow: hidden;
-        width: 400px;
-        height: 100px;
-        border: 1px solid #999;
-        box-sizing: border-box;
         padding: 10px;
-    }
-
-    .content1,
-    .content2 {
-        display: none;
+        cursor: pointer;
+      }
+      nav label:hover {
+        opacity: 0.8;
+      }
+      nav label + label {
+        border-left: 1px solid #efefef;
+      }
+      .content {
+        display: flex;
+        height: 100%;
+        width: 400%;
+        transition: all 0.3s ease-in-out;
+      }
+      .content div {
+        box-sizing: border-box;
         width: 100%;
         height: 100%;
-    }
+        text-align: center;
+        padding: 50px 0;
+      }
 
-    .nav1:checked ~ .nav li {
-        background: #ddd;
-        color: #000;
-    }
-    .nav1:checked ~ .nav li:first-child {
-        background: #ff7300;
-        color: #fff;
-    }
-
-    .nav2:checked ~ .nav li {
-        background: #ddd;
-        color: #000;
-    }
-    .nav2:checked ~ .nav li:last-child {
-        background: #ff7300;
-        color: #fff;
-    }
-
-    .nav1:checked ~ .content > div {
-        display: none;
-    }
-    .nav1:checked ~ .content > div:first-child {
-        display: block;
-    }
-
-    .nav2:checked ~ .content > div {
-        display: none;
-    }
-    .nav2:checked ~ .content > div:last-child {
-        display: block;
-    }
-
-    .active {
-        background: #ff7300;
-        color: #fff;
-    }
-
-    .default {
-        display: block;
-    }
-</style>
-</head>
-<body>
+      input:nth-child(1):checked ~ nav label:nth-child(1),
+      input:nth-child(2):checked ~ nav label:nth-child(2),
+      input:nth-child(3):checked ~ nav label:nth-child(3),
+      input:nth-child(4):checked ~ nav label:nth-child(4) {
+        background-color: hsl(0, 50%, 50%);
+      }
+      input:nth-child(1):checked ~ .content {
+        transform: translateX(0);
+      }
+      input:nth-child(2):checked ~ .content {
+        transform: translateX(-25%);
+      }
+      input:nth-child(3):checked ~ .content {
+        transform: translateX(-50%);
+      }
+      input:nth-child(4):checked ~ .content {
+        transform: translateX(-75%);
+      }
+    </style>
+  </head>
+  <body>
     <h2>使用 checked 伪类实现纯 CSS Tab 切换</h2>
     <div class="container">
-        <input class="nav1" id="li1" type="radio" name="nav" />
-        <input class="nav2" id="li2" type="radio" name="nav" />
-        <ul class="nav">
-            <li class="active"><label for="li1">列表1</label></li>
-            <li><label for="li2">列表2</label></li>
-        </ul>
-        <div class="content">
-            <div class="content1 default">列表1内容:123456</div>
-            <div class="content2">列表2内容:abcdefgkijkl</div>
-        </div>
+      <input id="nav1" type="radio" name="nav" checked />
+      <input id="nav2" type="radio" name="nav" />
+      <input id="nav3" type="radio" name="nav" />
+      <input id="nav4" type="radio" name="nav" />
+      <nav>
+        <label for="nav1">111</label>
+        <label for="nav2">222</label>
+        <label for="nav3">333</label>
+        <label for="nav4">444</label>
+      </nav>
+      <div class="content">
+        <div>内容111</div>
+        <div>内容222</div>
+        <div>内容333</div>
+        <div>内容444</div>
+      </div>
     </div>
-</body>
+  </body>
 </html>
