@@ -10,7 +10,6 @@
         text-align: center;
       }
       .container {
-        position: relative;
         width: 400px;
         height: 300px;
         margin: 50px auto;
@@ -26,7 +25,7 @@
         width: 100%;
       }
       nav label {
-        display: inline-block;
+        display: block;
         width: 100%;
         background-color: hsl(150, 50%, 50%);
         color: #fff;
@@ -40,13 +39,16 @@
       nav label + label {
         border-left: 1px solid #efefef;
       }
-      .content {
+      ul {
         display: flex;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
         height: 100%;
         width: 400%;
         transition: all 0.3s ease-in-out;
       }
-      .content div {
+      ul li {
         box-sizing: border-box;
         width: 100%;
         height: 100%;
@@ -60,16 +62,16 @@
       input:nth-child(4):checked ~ nav label:nth-child(4) {
         background-color: hsl(0, 50%, 50%);
       }
-      input:nth-child(1):checked ~ .content {
+      input:nth-child(1):checked ~ ul {
         transform: translateX(0);
       }
-      input:nth-child(2):checked ~ .content {
+      input:nth-child(2):checked ~ ul {
         transform: translateX(-25%);
       }
-      input:nth-child(3):checked ~ .content {
+      input:nth-child(3):checked ~ ul {
         transform: translateX(-50%);
       }
-      input:nth-child(4):checked ~ .content {
+      input:nth-child(4):checked ~ ul {
         transform: translateX(-75%);
       }
     </style>
@@ -87,11 +89,11 @@
         <label for="nav3">333</label>
         <label for="nav4">444</label>
       </nav>
-      <div class="content">
-        <div>内容111</div>
-        <div>内容222</div>
-        <div>内容333</div>
-        <div>内容444</div>
+      <ul>
+        <li>内容111</li>
+        <li>内容222</li>
+        <li>内容333</li>
+        <li>内容444</li>
       </div>
     </div>
   </body>
