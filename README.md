@@ -10,7 +10,6 @@
 * [pc版拖拽效果](https://github.com/edwardzhong/practice/blob/master/dragDrop.html)
 * [触摸版拖拽](https://github.com/edwardzhong/practice/blob/master/touchDrag.html)
 * [拖曳滑动切换页面](https://github.com/edwardzhong/practice/blob/master/scrollPage.html)
-* [原生手风琴效果和延时实现mouseEnter功能](https://github.com/edwardzhong/practice/blob/master/qqEffect.html)
 * [输入邮箱自动补全](https://github.com/edwardzhong/practice/blob/master/search.html)
 * [模仿微博输入](https://github.com/edwardzhong/practice/blob/master/weibo.html)
 * [pc版剪切图片效果](https://github.com/edwardzhong/practice/blob/master/imageEdit.html)
@@ -54,6 +53,7 @@
 8. [checked伪类实现纯 CSSTab 切换](https://github.com/edwardzhong/practice/blob/master/layout/tab.html)
 9. [scroll-behavior 动画tab切换](https://github.com/edwardzhong/practice/blob/master/layout/scrolltab.html)
 10. [justify-text](https://github.com/edwardzhong/practice/blob/master/layout/justifyText.html)
+11. [focus-within](https://github.com/edwardzhong/practice/blob/master/layout/focuswithin.html)
 
 ### css权威指南
 1. [块级元素](https://github.com/edwardzhong/practice/blob/master/css_guide/block.html)
