@@ -1,54 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>focus-winthin向上冒泡</title>
-  <style>
-    .container{
-      margin: 50px auto;
-      width: 470px;
-      font-size: 16px;
-    }
-    h2{
-      font-size: 20px;
-      color:#333;
-    }
-    p {
-      visibility: hidden;
-      opacity: 0;
-      color: hsl(200,80%,50%);
-    }
-    .container:focus-within p{
-      visibility: visible;
-      opacity: 1;
-      transition: all .3s ease-in-out;
-    }
-    input {
-      outline: none;
-      width: 100%;
-      padding: 12px;
-      border:1px solid hsl(200,0%,70%);
-      border-radius: 6px;
-      font-size: 16px;
-    }
-    input:hover{
-      border-color:hsl(200,100%,50%) ;
-    }
-    input:focus{
-      box-shadow: 0 0 2px hsla(200,100%,50%,.7);
-    }
-    input:invalid{
-      border-color: hsl(0, 88%, 66%);
-      box-shadow: 0 0 2px hsla(0, 79%, 63%, 0.7);
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h2>点击输入框,触发父元素focus-within,显示提示文案</h2>
-    <p>请输入用户名，8-20位英文或数字</p>
-    <input type="text" placeholder="请输入用户名" pattern="\w{8,20}">
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>focus-winthin向上冒泡</title>
+    <style>
+      .container {
+        margin: 50px auto;
+        width: 470px;
+        font-size: 16px;
+      }
+      h2 {
+        font-size: 20px;
+        color: #333;
+      }
+      p {
+        visibility: hidden;
+        opacity: 0;
+        color: hsl(200, 80%, 50%);
+      }
+      /* 接受到子元素 input 的 focus 冒泡 */
+      .container:focus-within p {
+        visibility: visible;
+        opacity: 1;
+        transition: all 0.3s ease-in-out;
+      }
+      input {
+        outline: none;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid hsl(200, 0%, 70%);
+        border-radius: 6px;
+        font-size: 16px;
+      }
+      input:hover {
+        border-color: hsl(200, 100%, 50%);
+      }
+      input:focus {
+        box-shadow: 0 0 2px hsla(200, 100%, 50%, 0.7);
+      }
+      input:invalid {
+        border-color: hsl(0, 88%, 66%);
+        box-shadow: 0 0 2px hsla(0, 79%, 63%, 0.7);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>点击输入框,触发父元素focus-within,显示提示文案</h2>
+      <p>请输入用户名，8-20位英文或数字</p>
+      <input type="text" placeholder="请输入用户名" pattern="\w{8,20}" />
+    </div>
+  </body>
 </html>
