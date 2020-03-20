@@ -6,9 +6,9 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>nth-child & nth-of-type</title>
 		<style>
-            body{
-                padding: 20px;
-            }
+			body{
+					padding: 20px;
+			}
 			.ul {
 				display: flex;
 				justify-content: space-around;
@@ -21,18 +21,18 @@
 				border-radius: 10px;
 			}
 			.ul > *{
-                position: relative;
-                display: block;
-                width: 30px;
+				position: relative;
+				display: block;
+				width: 30px;
 				height: 30px;
 				background: #000;
 				border: 2px solid #000;
-                box-shadow: inset 3px 3px 10px #747474;
+				box-shadow: inset 3px 3px 10px #747474;
 				cursor: pointer;
-            }
-            .ul span {
-                border-radius: 30px;
-            }
+			}
+			.ul span {
+					border-radius: 30px;
+			}
 			.ul > *:hover{
 				background-color: #298eb2;
 				box-shadow: -3px -3px 10px rgba(0, 0, 0, 0.4), inset 0 0 10px #000;
@@ -80,10 +80,10 @@
 				content: '11';
 			}
 			code {
-                display: block;
-                margin-top: 50px;
-                width: 800px;
-                padding: 0 10px;
+				display: block;
+				margin-top: 50px;
+				width: 800px;
+				padding: 0 10px;
 				white-space: pre;
 				background-color: #202020;
 				border: 1px solid #888;
@@ -91,84 +91,84 @@
 				font-family: monospace;
 			}
 			h1 {
-                color: #555;
+				color: #555;
 			}
 			h2 {
 				color: #9fcf77;
-            }
-            p{
-                color: #666;
-            }
+			}
+			p{
+					color: #666;
+			}
 			#one span:nth-child(8) {
 				background-color: #298eb2;
 			}
 			#one span:nth-child(8):hover {
 				background-color: #eb008b;
-            }
-            #two span:nth-child(n+6) {
-                background-color: #298EB2;
-            }
-            #two span:nth-child(n+6):hover {
-                background-color: #eb008b;
-            }
-            #three span:nth-child(-n+9) {
-                background-color: #298EB2;
-            }
-            #three span:nth-child(-n+9):hover {
-                background-color: #eb008b;
-            }
-            #four span:nth-child(n+4):nth-child(-n+8) {
-                background-color: #298EB2;
-            }
-            #four span:nth-child(n+4):nth-child(-n+8):hover {
-                background-color: #eb008b;
-            }
-            #five span:nth-child(n+2):nth-child(odd):nth-child(-n+9){
-                background-color: #298EB2;
-            }
-            #five span:nth-child(n+2):nth-child(odd):nth-child(-n+9):hover{
-                background-color: #eb008b;   
-            }
-            #six span:nth-child(3n+1):nth-child(even) {
-                background-color: #298EB2;
-            }
-            #six span:nth-child(3n+1):nth-child(even):hover {
-                background-color: #eb008b;
-            }
-            #seven span:nth-of-type(3) {
-                background-color: #298EB2;
-            }
-            #seven div:nth-of-type(4) {
-                background-color: #E17149;
-            }
-            #eight span:nth-of-type(n+3) {
-                background-color: #298EB2;
-            }
+			}
+			#two span:nth-child(n+6) {
+				background-color: #298EB2;
+			}
+			#two span:nth-child(n+6):hover {
+				background-color: #eb008b;
+			}
+			#three span:nth-child(-n+9) {
+				background-color: #298EB2;
+			}
+			#three span:nth-child(-n+9):hover {
+				background-color: #eb008b;
+			}
+			#four span:nth-child(n+4):nth-child(-n+8) {
+				background-color: #298EB2;
+			}
+			#four span:nth-child(n+4):nth-child(-n+8):hover {
+				background-color: #eb008b;
+			}
+			#five span:nth-child(n+2):nth-child(odd):nth-child(-n+9){
+				background-color: #298EB2;
+			}
+			#five span:nth-child(n+2):nth-child(odd):nth-child(-n+9):hover{
+				background-color: #eb008b;   
+			}
+			#six span:nth-child(3n+1):nth-child(even) {
+				background-color: #298EB2;
+			}
+			#six span:nth-child(3n+1):nth-child(even):hover {
+				background-color: #eb008b;
+			}
+			#seven span:nth-of-type(3) {
+				background-color: #298EB2;
+			}
+			#seven div:nth-of-type(4) {
+				background-color: #E17149;
+			}
+			#eight span:nth-of-type(n+3) {
+				background-color: #298EB2;
+			}
 
-            #eight div:nth-of-type(2n+2) {
-                background-color: #E17149;
-            }
-            #nine span:nth-of-type(-n+4) {
-                background-color: #298EB2;
-            }
+			#eight div:nth-of-type(2n+2) {
+				background-color: #E17149;
+			}
+			#nine span:nth-of-type(-n+4) {
+				background-color: #298EB2;
+			}
 
-            #nine div:nth-of-type(-n+5) {
-                background-color: #E17149;
-            }
-            #ten span:nth-of-type(n+3):nth-of-type(-n+6) {
-                background-color: #298EB2;
-            }
-            
-            #ten div:nth-of-type(n+1):nth-of-type(-n+3) {
-                background-color: #E17149;
-            }
-            #eleven span:nth-of-type(n+3):nth-of-type(odd):nth-of-type(-n+6) {
-                background-color: #298EB2;
-            }
+			#nine div:nth-of-type(-n+5) {
+				background-color: #E17149;
+			}
+			#ten span:nth-of-type(n+3):nth-of-type(-n+6) {
+				background-color: #298EB2;
+			}
+			
+			#ten div:nth-of-type(n+1):nth-of-type(-n+3) {
+				background-color: #E17149;
+			}
+			#eleven span:nth-of-type(n+3):nth-of-type(odd):nth-of-type(-n+6) {
+				background-color: #298EB2;
+			}
 
-            #eleven div:nth-of-type(n+1):nth-of-type(even):nth-of-type(-n+3) {
-                background-color: #E17149;
-            }
+			#eleven div:nth-of-type(n+1):nth-of-type(even):nth-of-type(-n+3) {
+				background-color: #E17149;
+			}
 		</style>
 	</head>
 	<body>
