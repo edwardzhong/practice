@@ -594,7 +594,7 @@ function ajax(option) {
 	}
 
 	var param = JSON.stringify(opt.data)
-		.replace(/[\{\}\"]/g, '')
+		.replace(/[{}"]/g, '')
 		.replace(/:/g, '=')
 		.replace(/,/g, '&');
 	var url = opt.method == 'GET' && opt.data ? opt.url + '?' + param : opt.url;
