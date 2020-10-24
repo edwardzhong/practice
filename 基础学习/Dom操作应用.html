@@ -1,132 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Dom操作应用</title>
-  </head>
-  <style>
-    table {
-      border: 1px solid #aaa;
-      border-collapse: collapse;
-    }
-    table th,
-    td {
-      border: 1px solid #aaa;
-      padding: 2px 10px;
-    }
-  </style>
-  <script>
-    // childNodes
-    // childrens: 不包含文本节点(只算第一层),所有浏览器兼容
+<head>
+<meta charset="UTF-8" />
+<title>Dom操作应用</title>
+</head>
+<style>
+table {
+  border: 1px solid #aaa;
+  border-collapse: collapse;
+}
+table th,
+td {
+  border: 1px solid #aaa;
+  padding: 2px 10px;
+}
+</style>
+<script>
+// childNodes
+// childrens: 不包含文本节点(只算第一层),所有浏览器兼容
 
-    // parentNode
-    // offsetParent
+// parentNode
+// offsetParent
 
-    // firstChild  last...  next... pervrious... (ie6,7)
-    // firstElementChild  last...  next... pervrious...(高版本)
-    window.onload = function() {
-      var tb = document.getElementById('tb'),
-        tRows = tb.tBodies[0].rows,
-        len = tRows.length,
-        i;
-      var name = document.getElementById('name'),
-        age = document.getElementById('age'),
-        kw = document.getElementById('kw'),
-        btn = document.getElementById('add'),
-        search = document.getElementById('search');
-      var id = tRows.length + 1;
-      btn.onclick = function() {
-        var tr = document.createElement('tr');
-        var td = document.createElement('td');
-        td.appendChild(document.createTextNode(id++));
-        tr.appendChild(td);
+// firstChild  last...  next... pervrious... (ie6,7)
+// firstElementChild  last...  next... pervrious...(高版本)
+window.onload = function () {
+  var tb = document.getElementById('tb'),
+    tRows = tb.tBodies[0].rows,
+    len = tRows.length,
+    i;
+  var name = document.getElementById('name'),
+    age = document.getElementById('age'),
+    kw = document.getElementById('kw'),
+    btn = document.getElementById('add'),
+    search = document.getElementById('search');
+  var id = tRows.length + 1;
+  btn.onclick = function () {
+    var tr = document.createElement('tr');
+    var td = document.createElement('td');
+    td.appendChild(document.createTextNode(id++));
+    tr.appendChild(td);
 
-        td = document.createElement('td');
-        td.appendChild(document.createTextNode(name.value));
-        tr.appendChild(td);
+    td = document.createElement('td');
+    td.appendChild(document.createTextNode(name.value));
+    tr.appendChild(td);
 
-        td = document.createElement('td');
-        td.appendChild(document.createTextNode(age.value));
-        tr.appendChild(td);
+    td = document.createElement('td');
+    td.appendChild(document.createTextNode(age.value));
+    tr.appendChild(td);
 
-        td = document.createElement('td');
-        var a = document.createElement('a');
-        a.href = 'javascript:';
-        a.appendChild(document.createTextNode('删除'));
-        td.appendChild(a);
-        tr.appendChild(td);
+    td = document.createElement('td');
+    var a = document.createElement('a');
+    a.href = 'javascript:';
+    a.appendChild(document.createTextNode('删除'));
+    td.appendChild(a);
+    tr.appendChild(td);
 
-        a.onclick = function() {
-          tb.tBodies[0].removeChild(this.parentNode.parentNode);
-        };
-        tb.tBodies[0].appendChild(tr);
-      };
-
-      search.onclick = function() {
-        for (i = 0; i < len; i++) {
-          var searchName = tRows[i].cells[1].innerHTML.toLowerCase();
-          if (searchName.search(kw.value.toLowerCase()) >= 0) {
-            tRows[i].style.background = 'yellow';
-          } else {
-            tRows[i].style.background = '';
-          }
-        }
-      };
-      var oldColor = '';
-      for (i = 0; i < len; i++) {
-        tRows[i].onmouseover = function() {
-          oldColor = this.style.background;
-          this.style.background = '#0f0';
-        };
-        tRows[i].onmouseout = function() {
-          this.style.background = oldColor;
-        };
-        if (i % 2 == 0) {
-          tRows[i].style.background = '';
-        } else {
-          tRows[i].style.background = '#ccc';
-        }
-      }
+    a.onclick = function () {
+      tb.tBodies[0].removeChild(this.parentNode.parentNode);
     };
-  </script>
-  <body>
-    name:<input type="text" id="name" />age:<input type="text" id="age" /> <button id="add">添加</button><br />
-    keyword: <input type="text" id="kw" /><button id="search">搜索</button>
-    <table id="tb">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>姓名</th>
-          <th>年龄</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>alex</td>
-          <td>21</td>
-          <td><a href="javascript:">删除</a></td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>david</td>
-          <td>27</td>
-          <td><a href="javascript:">删除</a></td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>bob</td>
-          <td>23</td>
-          <td><a href="javascript:">删除</a></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>john</td>
-          <td>24</td>
-          <td><a href="javascript:">删除</a></td>
-        </tr>
-      </tbody>
-    </table>
-  </body>
+    tb.tBodies[0].appendChild(tr);
+  };
+
+  search.onclick = function () {
+    for (i = 0; i < len; i++) {
+      var searchName = tRows[i].cells[1].innerHTML.toLowerCase();
+      if (searchName.search(kw.value.toLowerCase()) >= 0) {
+        tRows[i].style.background = 'yellow';
+      } else {
+        tRows[i].style.background = '';
+      }
+    }
+  };
+  var oldColor = '';
+  for (i = 0; i < len; i++) {
+    tRows[i].onmouseover = function () {
+      oldColor = this.style.background;
+      this.style.background = '#0f0';
+    };
+    tRows[i].onmouseout = function () {
+      this.style.background = oldColor;
+    };
+    if (i % 2 == 0) {
+      tRows[i].style.background = '';
+    } else {
+      tRows[i].style.background = '#ccc';
+    }
+  }
+};
+</script>
+<body>
+name:<input type="text" id="name" />age:<input type="text" id="age" /> <button id="add">添加</button><br />
+keyword: <input type="text" id="kw" /><button id="search">搜索</button>
+<table id="tb">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>姓名</th>
+      <th>年龄</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>alex</td>
+      <td>21</td>
+      <td><a href="javascript:">删除</a></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>david</td>
+      <td>27</td>
+      <td><a href="javascript:">删除</a></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>bob</td>
+      <td>23</td>
+      <td><a href="javascript:">删除</a></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>john</td>
+      <td>24</td>
+      <td><a href="javascript:">删除</a></td>
+    </tr>
+  </tbody>
+</table>
+</body>
 </html>

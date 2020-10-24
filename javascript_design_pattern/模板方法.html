@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>模板方法</title>
 <script>
 	// //模板方法，添加钩子函数
@@ -47,49 +47,53 @@
 	// };
 	// var coffee=new coffeeWithHook();
 	// coffee.init();
-	
+
 	//好莱坞原则，达到继承的效果
-	var Beverage=function(param){
-		var boilWater=function(){
+	var Beverage = function (param) {
+		var boilWater = function () {
 			console.log('boil water');
 		};
-		var brew=param.brew||function(){
-			throw new Error('必须传递brew方法');
-		};
-		var pourInCup=param.pourInCup||function(){
-			throw new Error('必须传递pourInCup方法');
-		};
-		var addCondiments=param.addCondiments||function(){
-			throw new Error('必须传递addCondiments方法');
-		};
+		var brew =
+			param.brew ||
+			function () {
+				throw new Error('必须传递brew方法');
+			};
+		var pourInCup =
+			param.pourInCup ||
+			function () {
+				throw new Error('必须传递pourInCup方法');
+			};
+		var addCondiments =
+			param.addCondiments ||
+			function () {
+				throw new Error('必须传递addCondiments方法');
+			};
 
-		var F=function(){};
-		F.prototype.init=function(){
+		var F = function () {};
+		F.prototype.init = function () {
 			boilWater();
 			brew();
 			pourInCup();
 			addCondiments();
-		}
+		};
 		return F;
 	};
 
-	var Coffee=Beverage({
-		brew:function(){
+	var Coffee = Beverage({
+		brew: function () {
 			console.log('用沸水冲泡咖啡');
 		},
-		pourInCup:function(){
+		pourInCup: function () {
 			console.log('把咖啡倒进杯子');
 		},
-		addCondiments:function(){
+		addCondiments: function () {
 			console.log('加糖和牛奶');
-		}
+		},
 	});
 
 	var coffee = new Coffee();
 	coffee.init();
 </script>
 </head>
-<body>
-	
-</body>
+<body></body>
 </html>

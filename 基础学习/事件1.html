@@ -1,38 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>事件1</title>
-	<style>
-	div{height: 20px;width: 20px;position: absolute;background-color: #f00;}
-	</style>
-	<script>
-	function getPos(evt){
-		var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
-		return {y:scrollTop+evt.clientY,x:evt.clientX};
+<meta charset="UTF-8" />
+<title>事件1</title>
+<style>
+	div {
+		height: 20px;
+		width: 20px;
+		position: absolute;
+		background-color: #f00;
 	}
-	window.onload=function(){
-		var divs=document.getElementsByTagName('div');
-		document.onmousemove=function(evt){
-			var evt=evt||window.event;
-			var pos=getPos(evt);
-			for(var i=divs.length-1;i>0;i--){
-				divs[i].style.top=divs[i-1].offsetTop+'px';
-				divs[i].style.left=divs[i-1].offsetLeft+'px';
+</style>
+<script>
+	function getPos(evt) {
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		return { y: scrollTop + evt.clientY, x: evt.clientX };
+	}
+	window.onload = function () {
+		var divs = document.getElementsByTagName('div');
+		document.onmousemove = function (evt) {
+			var evt = evt || window.event;
+			var pos = getPos(evt);
+			for (var i = divs.length - 1; i > 0; i--) {
+				divs[i].style.top = divs[i - 1].offsetTop + 'px';
+				divs[i].style.left = divs[i - 1].offsetLeft + 'px';
 			}
-			divs[0].style.top=pos.y+'px';
-			divs[0].style.left=pos.x+'px';
+			divs[0].style.top = pos.y + 'px';
+			divs[0].style.left = pos.x + 'px';
 		};
 	};
-	</script>
+</script>
 </head>
 <body>
-	<h2>鼠标跟随</h2>
-	<div></div>
-	<div></div>
-	<div></div>
-	<div></div>
-	<div></div>
-	<div></div>
+<h2>鼠标跟随</h2>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
 </body>
 </html>

@@ -94,44 +94,44 @@
 </style>
 <script src="../js/animate.js"></script>
 <script>
-	window.onload = function() {
-		var div = document.getElementsByTagName("div")[0],
-			clickDiv = getElementsByClassName("click")[0],
-			leftDiv = getElementsByClassName("left")[0],
-			topDiv = getElementsByClassName("top")[0];
-		div.onmouseover = function() {
-			move(this, { width: 300, height: 200 }, function() {
+	window.onload = function () {
+		var div = document.getElementsByTagName('div')[0],
+			clickDiv = getElementsByClassName('click')[0],
+			leftDiv = getElementsByClassName('left')[0],
+			topDiv = getElementsByClassName('top')[0];
+		div.onmouseover = function () {
+			move(this, { width: 300, height: 200 }, function () {
 				move(div, { opacity: 30 });
 			});
 		};
-		div.onmouseout = function() {
-			move(this, { opacity: 100 }, function() {
+		div.onmouseout = function () {
+			move(this, { opacity: 100 }, function () {
 				move(div, { width: 100, height: 100 });
 			});
 		};
 
 		//
-		clickDiv.onclick = function() {
-			if (getStyle(leftDiv, "right") == "-100px") {
-				move(leftDiv, { right: 0 }, function() {
+		clickDiv.onclick = function () {
+			if (getStyle(leftDiv, 'right') == '-100px') {
+				move(leftDiv, { right: 0 }, function () {
 					move(topDiv, { top: 0 });
 				});
 			} else {
-				move(topDiv, { top: 100 }, function() {
+				move(topDiv, { top: 100 }, function () {
 					move(leftDiv, { right: -100 });
 				});
 			}
 		};
 		//焦点图
-		var pic = getElementsByClassName("pic")[0],
-			as = getElementsByClassName("num")[0].getElementsByTagName( "a" ),
+		var pic = getElementsByClassName('pic')[0],
+			as = getElementsByClassName('num')[0].getElementsByTagName('a'),
 			len = as.length;
 
 		var now = 0,
 			i;
 		for (i = 0; i < len; i++) {
 			as[i].index = i;
-			as[i].onclick = function() {
+			as[i].onclick = function () {
 				if (this.index == now) {
 					return;
 				}
@@ -143,9 +143,9 @@
 		function tab() {
 			move(pic, { top: -now * 300 });
 			for (i = 0; i < len; i++) {
-				as[i].style.backgroundColor = "#f0f";
+				as[i].style.backgroundColor = '#f0f';
 			}
-			as[now].style.backgroundColor = "#0f0";
+			as[now].style.backgroundColor = '#0f0';
 		}
 		function next() {
 			now++;
@@ -155,21 +155,21 @@
 			tab();
 		}
 		var tt = setInterval(next, 1000);
-		pic.onmouseover = function() {
+		pic.onmouseover = function () {
 			clearInterval(tt);
 		};
-		pic.onmouseout = function() {
+		pic.onmouseout = function () {
 			tt = setInterval(next, 1000);
 		};
 
-		var msg = document.getElementById("msg"),
-			send = document.getElementById("send"),
-			ul = getElementsByClassName("weibo")[0];
-		send.onclick = function() {
+		var msg = document.getElementById('msg'),
+			send = document.getElementById('send'),
+			ul = getElementsByClassName('weibo')[0];
+		send.onclick = function () {
 			if (!msg.value) {
 				return;
 			}
-			var li = document.createElement("li");
+			var li = document.createElement('li');
 			li.appendChild(document.createTextNode(msg.value));
 			if (ul.children.length > 0) {
 				ul.insertBefore(li, ul.firstElementChild);
@@ -177,9 +177,9 @@
 				ul.appendChild(li);
 			}
 			var offsetHieght = li.offsetHeight;
-			li.style.height = "0";
-			li.style.opacity = "0";
-			move(li, { height: offsetHieght }, function() {
+			li.style.height = '0';
+			li.style.opacity = '0';
+			move(li, { height: offsetHieght }, function () {
 				move(li, { opacity: 100 });
 			});
 		};
@@ -187,45 +187,45 @@
 </script>
 </head>
 <body>
-	<div></div>
-	<div class="nav">
-		<div class="top"></div>
-		<div class="left"></div>
-		<div style="position:absolute;width:100px;height:30px;bottom:0;right:0;background-color:#fff;" >
-			<div class="click"></div>
-		</div>
+<div></div>
+<div class="nav">
+	<div class="top"></div>
+	<div class="left"></div>
+	<div style="position: absolute; width: 100px; height: 30px; bottom: 0; right: 0; background-color: #fff">
+		<div class="click"></div>
 	</div>
-	<div class="slide">
-		<ul class="pic">
-			<li>
-				<img src="../Images/Chrysanthemum.jpg" width="400" alt="" />
-			</li>
-			<li><img src="../Images/Desert.jpg" width="400" alt="" /></li>
-			<li>
-				<img src="../Images/Hydrangeas.jpg" width="400" alt="" />
-			</li>
-			<li>
-				<img src="../Images/Jellyfish.jpg" width="400" alt="" />
-			</li>
-			<li><img src="../Images/Koala.jpg" width="400" alt="" /></li>
-			<li>
-				<img src="../Images/Lighthouse.jpg" width="400" alt="" />
-			</li>
-			<li><img src="../Images/Penguins.jpg" width="400" alt="" /></li>
-			<li><img src="../Images/Tulips.jpg" width="400" alt="" /></li>
-		</ul>
-		<ul class="num">
-			<li><a href="javascript:">1</a></li>
-			<li><a href="javascript:">2</a></li>
-			<li><a href="javascript:">3</a></li>
-			<li><a href="javascript:">4</a></li>
-			<li><a href="javascript:">5</a></li>
-			<li><a href="javascript:">6</a></li>
-			<li><a href="javascript:">7</a></li>
-		</ul>
-	</div>
-	<textarea id="msg" cols="30" rows="4" class="input_msg"></textarea >
-	<button id="send">发送</button>
-	<ul class="weibo"></ul>
+</div>
+<div class="slide">
+	<ul class="pic">
+		<li>
+			<img src="../Images/Chrysanthemum.jpg" width="400" alt="" />
+		</li>
+		<li><img src="../Images/Desert.jpg" width="400" alt="" /></li>
+		<li>
+			<img src="../Images/Hydrangeas.jpg" width="400" alt="" />
+		</li>
+		<li>
+			<img src="../Images/Jellyfish.jpg" width="400" alt="" />
+		</li>
+		<li><img src="../Images/Koala.jpg" width="400" alt="" /></li>
+		<li>
+			<img src="../Images/Lighthouse.jpg" width="400" alt="" />
+		</li>
+		<li><img src="../Images/Penguins.jpg" width="400" alt="" /></li>
+		<li><img src="../Images/Tulips.jpg" width="400" alt="" /></li>
+	</ul>
+	<ul class="num">
+		<li><a href="javascript:">1</a></li>
+		<li><a href="javascript:">2</a></li>
+		<li><a href="javascript:">3</a></li>
+		<li><a href="javascript:">4</a></li>
+		<li><a href="javascript:">5</a></li>
+		<li><a href="javascript:">6</a></li>
+		<li><a href="javascript:">7</a></li>
+	</ul>
+</div>
+<textarea id="msg" cols="30" rows="4" class="input_msg"></textarea>
+<button id="send">发送</button>
+<ul class="weibo"></ul>
 </body>
 </html>

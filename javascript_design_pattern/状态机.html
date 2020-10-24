@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>状态</title>
-	<style>
-	button{
+<meta charset="UTF-8" />
+<title>状态</title>
+<style>
+	button {
 		padding: 10px 20px;
-		border:1px solid #ccc;
+		border: 1px solid #ccc;
 		background-color: #eee;
 	}
-	</style>
+</style>
 </head>
 <body>
-
 <script>
 	// // 版本1 js版状态机
 	// var Light = function(){
@@ -49,46 +48,46 @@
 	// light.init();
 
 	// 使用delegate实现状态机
-	var delegate=function(client,delegation){
+	var delegate = function (client, delegation) {
 		return {
-			btnPress:function(){
-				return delegation.btnPress.apply(client,arguments);
-			}
-		}
+			btnPress: function () {
+				return delegation.btnPress.apply(client, arguments);
+			},
+		};
 	};
-	var FSM={
-		off:{
-			btnPress:function(){
-				console.log('关灯')
+	var FSM = {
+		off: {
+			btnPress: function () {
+				console.log('关灯');
 				this.button.innerHTML = '下一次开灯';
-				this.currState=this.onState;
-			}
+				this.currState = this.onState;
+			},
 		},
-		on:{
-			btnPress:function(){
-				console.log('开灯')
+		on: {
+			btnPress: function () {
+				console.log('开灯');
 				this.button.innerHTML = '下一次关灯';
-				this.currState=this.offState;
-			}
-		}
+				this.currState = this.offState;
+			},
+		},
 	};
-	var Light=function(){
-		this.offState=delegate(this,FSM.off);
-		this.onState=delegate(this,FSM.on);
-		this.currState=this.offState;
-		this.button=null;
+	var Light = function () {
+		this.offState = delegate(this, FSM.off);
+		this.onState = delegate(this, FSM.on);
+		this.currState = this.offState;
+		this.button = null;
 	};
-	Light.prototype.init=function(){
-		var button=document.createElement('button'),
-			self=this;
+	Light.prototype.init = function () {
+		var button = document.createElement('button'),
+			self = this;
 		button.innerHTML = '已关灯';
-		this.button=document.body.appendChild(button);
-		this.button.onclick=function(){
+		this.button = document.body.appendChild(button);
+		this.button.onclick = function () {
 			self.currState.btnPress();
-		}
+		};
 	};
 
-	var light=new Light();
+	var light = new Light();
 	light.init();
 </script>
 </body>

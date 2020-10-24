@@ -1,49 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>排序</title>
-	<script>
-	window.onload=function(){
-		document.getElementsByTagName('button')[0].onclick=function(){
-			var ul=document.getElementsByTagName('ul')[0],
-				lis=ul.getElementsByTagName('li'),
-				len=lis.length,
-				i,arr=[];
-			for(i=0;i<len;i++){
+<meta charset="UTF-8" />
+<title>排序</title>
+<script>
+	window.onload = function () {
+		document.getElementsByTagName('button')[0].onclick = function () {
+			var ul = document.getElementsByTagName('ul')[0],
+				lis = ul.getElementsByTagName('li'),
+				len = lis.length,
+				i,
+				arr = [];
+			for (i = 0; i < len; i++) {
 				arr.push(lis[i]);
 			}
-			arr.sort(function(item1,item2){
-				var val1=parseInt(item1.innerHTML,10),
-					val2=parseInt(item2.innerHTML,10);
-				return val1-val2;
+			arr.sort(function (item1, item2) {
+				var val1 = parseInt(item1.innerHTML, 10),
+					val2 = parseInt(item2.innerHTML, 10);
+				return val1 - val2;
 			});
-			for(i=0;i<len;i++){
+			for (i = 0; i < len; i++) {
 				ul.appendChild(arr[i]);
 			}
 		};
 
-		var aa={a:'1',b:1,c:2};
-		var msg=''
-		switch(true){
-			case !aa.a:msg='none';break;
-			case aa.b>0:msg='lt';break;
-			
-			default:break;
+		var aa = { a: '1', b: 1, c: 2 };
+		var msg = '';
+		switch (true) {
+			case !aa.a:
+				msg = 'none';
+				break;
+			case aa.b > 0:
+				msg = 'lt';
+				break;
+
+			default:
+				break;
 		}
 		console.log(msg);
 	};
-
-	</script>
+</script>
 </head>
 <body>
-	<button>排序</button>
-	<ul>
-		<li>34</li>
-		<li>3</li>
-		<li>56</li>
-		<li>23</li>
-		<li>8</li>
-	</ul>
+<button>排序</button>
+<ul>
+	<li>34</li>
+	<li>3</li>
+	<li>56</li>
+	<li>23</li>
+	<li>8</li>
+</ul>
 </body>
 </html>

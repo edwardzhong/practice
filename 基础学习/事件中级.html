@@ -1,69 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>事件中级</title>
 <style>
-	#div{width: 100px;height: 100px;background-color: #f00;position: absolute;}
+	#div {
+		width: 100px;
+		height: 100px;
+		background-color: #f00;
+		position: absolute;
+	}
 </style>
 <script>
-	window.onload=function(){
-		var txt=document.getElementById('txt');
+	window.onload = function () {
+		var txt = document.getElementById('txt');
 
-		txt.onkeydown=function(evt){
-			var evt=evt||event;
-			if(evt.keyCode==9&&(evt.keyCode>48||evt.keyCode<57)){
+		txt.onkeydown = function (evt) {
+			var evt = evt || event;
+			if (evt.keyCode == 9 && (evt.keyCode > 48 || evt.keyCode < 57)) {
 				return false;
 			}
 		};
 
-		var div=document.getElementById('div');
-		div.onmousedown=function(evt){
-			var evt=evt||event;
-			var disX= evt.clientX-div.offsetLeft,
-				disY=evt.clientY-div.offsetTop;
+		var div = document.getElementById('div');
+		div.onmousedown = function (evt) {
+			var evt = evt || event;
+			var disX = evt.clientX - div.offsetLeft,
+				disY = evt.clientY - div.offsetTop;
 
-			if(div.setCapture){//作用就是将后续的mouse事件都发送给这个对象，releaseCapture就是将鼠标事件还回去，由 document、window、object之类的自行来处理。这样就保证了在拖动的过程中，不会由于经过了其它的元素而受到干扰。
-				div.onmousemove=mouseMove;
-				div.onmouseup=mouseUp;
+			if (div.setCapture) {
+				//作用就是将后续的mouse事件都发送给这个对象，releaseCapture就是将鼠标事件还回去，由 document、window、object之类的自行来处理。这样就保证了在拖动的过程中，不会由于经过了其它的元素而受到干扰。
+				div.onmousemove = mouseMove;
+				div.onmouseup = mouseUp;
 				div.setCapture();
-			}else{
-				document.onmousemove=mouseMove;
-				document.onmouseup=mouseUp;
+			} else {
+				document.onmousemove = mouseMove;
+				document.onmouseup = mouseUp;
 			}
 
-			function mouseMove(ev){
-				var ev=ev||event;
-				var l=ev.clientX-disX,
-					t=ev.clientY-disY;
-				if(l<50){//磁性吸附
-					l=0;
-				}else if(l>document.documentElement.clientWidth-div.offsetWidth){
-					l=document.documentElement.clientWidth-div.offsetWidth;
+			function mouseMove(ev) {
+				var ev = ev || event;
+				var l = ev.clientX - disX,
+					t = ev.clientY - disY;
+				if (l < 50) {
+					//磁性吸附
+					l = 0;
+				} else if (l > document.documentElement.clientWidth - div.offsetWidth) {
+					l = document.documentElement.clientWidth - div.offsetWidth;
 				}
-				if(t<50){
-					t=0;
-				}else if(t>document.documentElement.clientHeight-div.offsetHeight){
-					t=document.documentElement.clientHeight-div.offsetHeight;
+				if (t < 50) {
+					t = 0;
+				} else if (t > document.documentElement.clientHeight - div.offsetHeight) {
+					t = document.documentElement.clientHeight - div.offsetHeight;
 				}
-				div.style.left=l+'px';
-				div.style.top=t+'px';
+				div.style.left = l + 'px';
+				div.style.top = t + 'px';
 			}
-			function mouseUp(){
-				this.onmousemove=null;
-				this.onmouseup=null;
-				if(this.releaseCapture){
+			function mouseUp() {
+				this.onmousemove = null;
+				this.onmouseup = null;
+				if (this.releaseCapture) {
 					this.releaseCapture();
 				}
 			}
 			return false;
-		}
-	}
+		};
+	};
 </script>
 </head>
 <body>
-	<h2>磁性吸附</h2>
-	<input type="text" name="" id="txt">
-	<div id="div"></div>
+<h2>磁性吸附</h2>
+<input type="text" name="" id="txt" />
+<div id="div"></div>
 </body>
 </html>
