@@ -36,6 +36,7 @@ function Map(type, vertexNum, edges) {
 		}
 	}
 }
+
 Map.prototype = {
 	bTravel: function (callback) {
 		//广度优先遍历
@@ -223,36 +224,6 @@ Map.prototype = {
 	kruskal: function () {},
 };
 
-function drawMap(map) {
-	var draw = canvasDraw(),
-		edges = map.edges,
-		num = map.vertexNum,
-		mapR = 200,
-		r = 20,
-		x = 0,
-		y = 0,
-		i = 0,
-		j = 0,
-		angle = 360 / num,
-		list = [];
-	for (var i = 0; i < num; i++) {
-		x = mapR * Math.cos((angle * i * Math.PI) / 180);
-		y = mapR * Math.sin((angle * i * Math.PI) / 180);
-		list.push({ x: x, y: y });
-		draw.round(x, y, r, i);
-	}
-	for (i = 0; i < num; i++) {
-		for (j = i; j < num; j++) {
-			if (!edges[i][j]) continue;
-			var x1 = list[i].x,
-				y1 = list[i].y,
-				x2 = list[j].x,
-				y2 = list[j].y;
-			draw.line(x1, y1, x2, y2);
-		}
-	}
-}
-
 var map = new Map(0, 5, [
 	{ start: 0, end: 1, weight: 1 },
 	{ start: 0, end: 2, weight: 3 },
@@ -265,4 +236,5 @@ map.bTravel(function (i, weight) {
 	var w = weight ? ':' + weight + '-->' : '-->';
 	console.log(i + w);
 });
+
 map.dijkstra(1);

@@ -126,7 +126,7 @@ function quickSort(low, high) {
 }
 
 // 上浮
-function swim(k, l) {
+function swim(k) {
 	while (k > 0 && arr[Math.floor(k / 2)] < arr[k]) {
 		swap(k, Math.floor(k / 2));
 		k = Math.floor(k / 2);
