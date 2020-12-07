@@ -97,33 +97,58 @@ function merge(low, mid, high) {
 		rArr = arr.slice(j, high + 1);
 
 	for (; i <= high; i++) {
-		if (l == j - low) arr[i] = rArr[r++]; //左半部分已空
-		else if (r == high - mid) arr[i] = lArr[l++]; //右半部分已空
+		if (l == j - low) arr[i] = rArr[r++];
+		//左半部分已空
+		else if (r == high - mid) arr[i] = lArr[l++];
+		//右半部分已空
 		else if (lArr[l] > rArr[r]) arr[i] = rArr[r++];
 		else arr[i] = lArr[l++];
 	}
 }
 
+// 快速排序
+function quickSort(low, high) {
+	if (low >= high) return;
+	const i = partition(low, high);
+	quickSort(low, i - 1);
+	quickSort(i + 1, high);
+}
+
+function partition(low, high) {
+	let i = low,
+		j = high,
+		k = arr[low];
+		
+	while (true) {
+		for (i++; arr[i] < k && i < high; i++);
+		for (; arr[j] > k; j--);
+		if (i >= j) break;
+		swap(i, j);
+	}
+	swap(j, low);
+	return j;
+}
+
 /**
- * 快速排序
+ * 三向切分快速排序
  * @param  {[type]} low  [description]
  * @param  {[type]} high [description]
  */
-function quickSort(low, high) {
-	if (low >= high) return;
-	let i = low,
-		k = low + 1,
-		j = high,
-		key = arr[low];
+// function quickSort(low, high) {
+// 	if (low >= high) return;
+// 	let i = low,
+// 		k = low + 1,
+// 		j = high,
+// 		key = arr[low];
 
-	while (k <= j) {
-		if (arr[k] < key) swap(k++, i++); //小于切分，与切分元素交换后，左边届和游标向右推进
-		else if (arr[k] > key) swap(k, j--); //大于切分，与右侧元素交换后，右边界往左推进
-		else k++; // 等于切分，游标直接向右推进
-	}
-	quickSort(low, i - 1);
-	quickSort(j + 1, high);
-}
+// 	while (k <= j) {
+// 		if (arr[k] < key) swap(k++, i++); //小于切分，与切分元素交换后，左边届和游标向右推进
+// 		else if (arr[k] > key) swap(k, j--); //大于切分，与右侧元素交换后，右边界往左推进
+// 		else k++; // 等于切分，游标直接向右推进
+// 	}
+// 	quickSort(low, i - 1);
+// 	quickSort(j + 1, high);
+// }
 
 // 上浮
 function swim(k) {
@@ -150,7 +175,11 @@ function sink(k, l) {
  */
 function pileSort() {
 	let N = arr.length - 1;
-	for ( let i = Math.floor(N / 2); i >= 0; i--) //构建二叉堆
+	for (
+		let i = Math.floor(N / 2);
+		i >= 0;
+		i-- //构建二叉堆
+	)
 		sink(i, N);
 	while (N) {
 		// 下沉排序，将堆中最大的元素删除后，放入堆缩小后数组空出来的位置
@@ -217,7 +246,8 @@ function cockTailSort() {
 // shellSort();
 // mergeSort(0, arr.length-1);
 // quickSort(0,arr.length-1);
-pileSort();
+// pileSort();
 // oddEvenSort();
 // cockTailSort();
+quickSort(0, arr.length-1);
 console.log(arr);
