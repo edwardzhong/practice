@@ -275,47 +275,14 @@ function inherit(parent, child) {
 	return child;
 }
 
-//克隆对象
-function cloneObj(obj) {
-	// Handle the 3 simple types, and null or undefined
-	if (null == obj || 'object' != typeof obj) return obj;
-	var copy;
-	// Handle Date
-	if (obj instanceof Date) {
-		copy = new Date();
-		copy.setTime(obj.getTime());
-		return copy;
-	}
-
-	// Handle Array
-	if (obj instanceof Array) {
-		copy = [];
-		for (var i = 0, len = obj.length; i < len; ++i) {
-			copy[i] = clone(obj[i]);
-		}
-		return copy;
-	}
-
-	// Handle Object
-	if (obj instanceof Object) {
-		copy = {};
-		for (var attr in obj) {
-			if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
-		}
-		return copy;
-	}
-
-	throw new Error("Unable to copy obj! Its type isn't supported.");
-}
-
 /**
  * deep copy
  * @param {Object} p
  * @param {Object} c
  */
 function deepCopy(p, c) {
-	if (null == p || 'object' != typeof p) return p;
-	var c = c || {};
+	if (!p || typeof p != 'object') return p;
+	c = c || {};
 	for (var i in p) {
 		if (typeof p[i] === 'object') {
 			c[i] = p[i].constructor === Array ? [] : {};
@@ -329,8 +296,8 @@ function deepCopy(p, c) {
 
 //将word-word转为wordWord
 function camelize(s) {
-	return s.replace(/\-(\w)/g, function(strMatch, p1) {
-		return p1.toUpperCase();
+	return s.replace(/\-(\w)/g, function(match, g) {
+		return g.toUpperCase();
 	});
 }
 

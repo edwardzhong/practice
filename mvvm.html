@@ -6,16 +6,16 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 <title>mvvm</title>
 <style>
-    input{
+    input {
         padding: 5px;
         border: 1px solid #ccc;
         border-radius: 4px;
         outline: none;
     }
-    div{
+    div {
         padding: 10px;
     }
-    button{
+    button {
         border: 1px solid #ccc;
         border-radius: 4px;
         padding: 5px 30px;
@@ -26,7 +26,7 @@
 <body>
     <div id="vm" data-ctr="ctr">
         <input data-model="name" />
-        <input type="text" data-model="age">
+        <input type="text" data-model="age" />
         <div>{{ name }}</div>
         <div>{{ age }}</div>
         <button data-click="say">sayhi</button>
@@ -35,51 +35,57 @@
     // 使用 Object.defineProperties 原理实现 mvvm 双向数据流动，非常简单饿样例
     // data-model : 双向绑定属性
     // {{xxx}} : 监控属性
-    var SUBSCRIBE = {};//更新 html 的视图依赖
-    var VMODEL = {};//视图get/set对象
+    var SUBSCRIBE = {}; //更新 html 的视图依赖
+    var VMODEL = {}; //视图get/set对象
     const mvvm = {
         define(name, factory) {
             let scope = {};
             //收集所有定义
             factory(scope);
-            model = modelFactory(name,scope);
+            model = modelFactory(name, scope);
             factory(model);
             model._id = name;
             VMODEL[name] = model;
         },
-        scan(id) { // 扫描html,收集依赖, 执行绑定
-            let root = document.getElementById("vm");
+        scan(id) {
+            // 扫描html,收集依赖, 执行绑定
+            let root = document.getElementById('vm');
             let model = {};
             let sub = {};
-            walkAttributes(root,function(node, owner) {
-                if(node.nodeType == 2){ //属性
-                    if(node.name == 'data-ctr'){// 需要根据控制器名称区分视图对象
+            walkAttributes(root, function (node, owner) {
+                if (node.nodeType == 2) {
+                    //属性
+                    if (node.name == 'data-ctr') {
+                        // 需要根据控制器名称区分视图对象
                         sub = SUBSCRIBE[node.value] = {};
                         model = VMODEL[node.value];
-                    } 
-                    if(node.name == 'data-model') { // 事件关联视图set
+                    }
+                    if (node.name == 'data-model') {
+                        // 事件关联视图set
                         // input text|password|...
-                        owner.oninput = function (e){
+                        owner.oninput = function (e) {
                             model[node.value] = e.target.value;
-                        }
+                        };
                         owner.value = model[node.value];
                     }
-                    if(node.name == 'data-click'){
-                        owner.onclick = function(e) {//挂载视图中的事件
+                    if (node.name == 'data-click') {
+                        owner.onclick = function (e) {
+                            //挂载视图中的事件
                             model[node.value] && model[node.value]();
-                        }
+                        };
                     }
-                } 
-                if( node.nodeType == 1 && !node.childElementCount && /{{([^}]+)}}/.test(node.innerText)) { //文本节点
+                }
+                if (node.nodeType == 1 && !node.childElementCount && /{{([^}]+)}}/.test(node.innerText)) {
+                    //文本节点
                     let name = RegExp.$1.trim();
-                    sub[name]=sub[name]||[];
-                    sub[name].push(function(val){
+                    sub[name] = sub[name] || [];
+                    sub[name].push(function (val) {
                         node.innerText = val;
                     });
                     sub[name].slice(-1)[0](model[name]);
                 }
             });
-        }
+        },
     };
 
     function modelFactory(name, scope) {
@@ -89,7 +95,7 @@
         let normalProperties = {}; //普通属性
         for (let [k, v] of Object.entries(scope)) {
             sModel[k] = v;
-            if (typeof v == "function") {
+            if (typeof v == 'function') {
                 normalProperties[k] = v;
             } else {
                 //监控属性
@@ -98,7 +104,7 @@
         }
 
         //转成访问控制器
-        vModel = Object.defineProperties( vModel, withValue(properties) );
+        vModel = Object.defineProperties(vModel, withValue(properties));
 
         return Object.assign(vModel, normalProperties);
     }
@@ -111,7 +117,7 @@
                 get: access[i],
                 set: access[i],
                 enumerable: true,
-                configurable: true
+                configurable: true,
             };
         }
         return descriptors;
@@ -119,15 +125,17 @@
 
     function createAccess(name, key, sModel) {
         let preValue = sModel[key];
-        let accessor = function(newValue) {
-            if (arguments.length) {//set
+        let accessor = function (newValue) {
+            if (arguments.length) {
+                //set
                 if (newValue !== preValue) {
                     sModel[key] = newValue;
-                    SUBSCRIBE[name][key].forEach(fn=>{
+                    SUBSCRIBE[name][key].forEach(fn => {
                         fn(newValue);
                     });
                 }
-            } else { //get
+            } else {
+                //get
                 return sModel[key];
             }
         };
@@ -139,7 +147,7 @@
         fn(root, parentNode);
         if (root.attributes) {
             for (var i = 0; i < root.attributes.length; i++) {
-                walkAttributes( root.attributes[i], fn, root );
+                walkAttributes(root.attributes[i], fn, root);
             }
         }
         if (root.nodeType == 1) {
@@ -152,12 +160,12 @@
     }
 
     /* === 使用方式 === */
-    mvvm.define('ctr',function(vm){
+    mvvm.define('ctr', function (vm) {
         vm.name = 'alex';
         vm.age = '16';
-        vm.say = function(){
-            alert('hello! '+ vm.name);
-        }
+        vm.say = function () {
+            alert('hello! ' + vm.name);
+        };
     });
     mvvm.scan('vm');
 </script>
