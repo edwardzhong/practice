@@ -294,6 +294,19 @@ function deepCopy(p, c) {
 	return c;
 }
 
+function deepClone(obj) {
+	var ret;
+	if (typeof obj == 'object') {
+		ret = obj.constructor == Array ? [] : {};
+		for (var i in obj) {
+			ret[i] = typeof obj == 'object' ? deepClone(obj[i]) : obj[i];
+		}
+	} else {
+		ret = obj;
+	}
+	return ret;
+}
+
 //将word-word转为wordWord
 function camelize(s) {
 	return s.replace(/\-(\w)/g, function(match, g) {
