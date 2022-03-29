@@ -573,10 +573,12 @@ function ajax(option) {
 		throw new Error('创建xmlhttp对象异常');
 	}
 
-	var param = JSON.stringify(opt.data)
-		.replace(/[{}"]/g, '')
-		.replace(/:/g, '=')
-		.replace(/,/g, '&');
+	var arr = [];
+	for (var v in opt.data) {
+		arr.push('&' + v + '=');
+		arr.push(opt.data[v]);
+	}
+	var param = arr.join('').substr(1);
 	var url = opt.method == 'GET' && opt.data ? opt.url + '?' + param : opt.url;
 	// xhr.responseType = 'json';
 	xhr.open(opt.method, url, opt.async);
