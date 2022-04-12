@@ -10,6 +10,17 @@ function isMobile() {
 	return /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
 }
 
+/**
+ * 是否为移动端
+ */
+ function isMobile() {
+    const u = navigator.userAgent;
+    const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1 || navigator.platform.search(/linux/i) > 0; //android终端
+    const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);  //ios终端
+    if (isAndroid || isiOS) return true;
+    return false;
+}
+
 // wx/qq/h5判断环境
 function getEnv() {
 	var ua = navigator.userAgent.toLowerCase();
