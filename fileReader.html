@@ -1,73 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>html5 FileReader</title>
     <style>
-      .container {
-        width: 200px;
-        height: 200px;
-        margin: 50px auto;
-      }
-      .wrap {
-        position: relative;
-        width: 100px;
-        height: 100px;
-        border: 1px solid #efefef;
-        border-radius: 4px;
-        overflow: hidden;
-      }
-      input[type='file'] {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        z-index: 9;
-        cursor: pointer;
-      }
-      img {
-        border: none;
-        width: 100%;
-        height: 100%;
-      }
+        .container {
+            width: 200px;
+            height: 200px;
+            margin: 50px auto;
+        }
+
+        .wrap {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #efefef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        input[type='file'] {
+            display: none;
+        }
+
+        img {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <h2>图片上传</h2>
-      <div class="wrap">
-        <img alt="" />
-        <input type="file" name="file" id="uploadFile" />
-      </div>
+        <h2>图片上传</h2>
+        <div id="upload" class="wrap">
+            <img alt="" />
+        </div>
     </div>
     <script>
-      const input = document.getElementById('uploadFile');
-      const img = document.getElementsByTagName('img')[0];
+        const img = document.getElementsByTagName('img')[0];
+        document.getElementById('upload').onclick = () => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            // inputFile.setAttribute('multiple', 'multiple');
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (['image/jpg', 'image/jpeg', 'image/png', 'image/gif'].indexOf(file.type) < 0) {
+                    alert('只能上传jpg, png 和 gif格式的图片');
+                    return;
+                }
+                if (file.size > 4 * 1024 * 1024) {
+                    //不能大于4M
+                    alert('您上传的图片太大了,不能超过4M哦!');
+                    return;
+                }
+                if (!window.FileReader) {
+                    alert('浏览器不支持上传');
+                    return;
+                }
 
-      input.onchange = function(e) {
-        const file = e.target.files[0];
-        if (['image/jpg', 'image/jpeg', 'image/png'].indexOf(file.type) < 0) {
-          alert('只能上传jpg和png格式的图片');
-          return;
+                const objectURL = URL.createObjectURL(file);
+                img.onload = () => {
+                    URL.revokeObjectURL(objectURL);
+                }
+                img.src = objectURL;
+
+                // const reader = new FileReader();
+                // //加载完成后显示图片
+                // reader.onloadend = function (e) {
+                //     img.src = e.target.result;
+                // };
+                // reader.readAsDataURL(file);
+                document.body.removeChild(input);
+            };
+            document.body.appendChild(input);
+            input.click();
         }
-        if (file.size > 4 * 1024 * 1024) {
-          //不能大于4M
-          alert('您上传的图片太大了，不能超过4M哦！');
-          return;
-        }
-        if (!window.FileReader) {
-          alert('浏览器不支持上传');
-          return;
-        }
-        const reader = new FileReader();
-        //加载完成后显示图片
-        reader.onloadend = function(e) {
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      };
     </script>
-  </body>
+</body>
 </html>

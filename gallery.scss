@@ -1,0 +1,45 @@
+@import "_variables";
+@import "_normalize";
+@import "_base";
+
+$n: 10;
+
+.container {
+    position: relative;
+    width: 1100px;
+    height: 600px;
+    perspective: 300px;
+    perspective-origin: center;
+    .pic {
+        position: absolute;
+        left: 300px;
+        top: 200px;
+        width: 200px;
+        height: 200px;
+        background: #f00;
+        &:nth-child(even) {
+            left: 600px;
+        }
+        @for $i from 1 through $n {
+            &:nth-child(#{$i}) {
+                animation: foward 6s linear #{($i - 1)}s infinite;
+                animation-fill-mode: both;
+            }
+        }
+    }
+}
+
+@keyframes foward {
+    0% {
+        opacity: 1;
+        transform: translateZ(-600px);
+    }
+    90% {
+        opacity: 0.9;
+        transform: translateZ(150px);
+    }
+    100% {
+        opacity: 0.3;
+        transform: translateZ(200px);
+    }
+}
